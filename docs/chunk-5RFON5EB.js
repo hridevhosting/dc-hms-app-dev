@@ -1,4 +1,4 @@
-import{b as t,c as m}from"./chunk-5JUHOLWQ.js";import{z as a}from"./chunk-N4ANQEKW.js";import{Q as s,V as l}from"./chunk-ZPID5U3R.js";var p={nik_Path_Report_Item_GetList:"nik_Path_Report_Item_GetList_v2"};var y=(()=>{class o{constructor(e,i){this._httpClient=e,this._commonServices=i}getPathTestListByCaseIdAndPatientId(e,i){let r=`
+import{b as t,c as m}from"./chunk-6XXP7TRA.js";import{z as a}from"./chunk-N4ANQEKW.js";import{Q as s,V as l}from"./chunk-ZPID5U3R.js";var p={nik_Path_Report_Item_GetList:"nik_Path_Report_Item_GetList_v2"};var y=(()=>{class o{constructor(e,i){this._httpClient=e,this._commonServices=i}getPathTestListByCaseIdAndPatientId(e,i){let r=`
     select * from dbo.tblBillDetail
     where
     BillNo =

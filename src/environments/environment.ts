@@ -12,7 +12,7 @@ export const environment = {
   navigatedScreenName: '',
   hospitalName:'Critizone',
   accessablePlatforms: [
-    // 'windows',
+    'windows',
     'andriod',
     'iphone',
     'ipad',
