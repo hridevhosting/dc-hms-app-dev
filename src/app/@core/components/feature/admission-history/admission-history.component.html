@@ -1,0 +1,124 @@
+<div class="row" *ngIf="!isNote.includes('note')">
+  <ng-container *ngFor="let report of admissionList">
+    <div class="col-12 mb-2"
+      *ngIf="(report.Remarks.toLowerCase() !== 'doctor notes' && report.Remarks.toLowerCase() !== 'sister notes')">
+      <div class="card shadow-8 rounded-5 p-3 w-100" (click)="showAttributeListDialog(report)">
+        <div class="flex flex-row gap-2 h-100 w-100 align-items-center">
+          <img src="assets/images/medical-history.png" height="45px" alt="">
+          <div class="flex flex-column w-100">
+            <h6>{{report.ProcName}}</h6>
+            <div class="flex justify-content-between w-100">
+              <small><strong>{{report.ProcDate | date: 'dd/MM/yyyy hh:mm a'}}</strong></small>
+              <small><strong>{{report.CreatedBy ? report.CreatedBy : '?' | uppercase }}</strong></small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div class="row" *ngIf="isNote.includes('note')">
+  <div class="col-12 text-end mb-2">
+    <button type="button" class="btn btn-primary" (click)="loadLastAppointmentId()">Add New +</button>
+  </div>
+  <ng-container *ngIf="!showNotesListModal">
+    <ng-container *ngFor="let report of admissionList">
+      <div class="col-12 mb-2">
+        <div class="card shadow-8 rounded-5 p-3 w-100" (click)="loadNotesListByNoteTypeAppointmentId(report.ProcName)">
+          <div class="flex flex-row gap-2 h-100 w-100 align-items-center">
+            <img src="assets/images/medical-history.png" height="45px" alt="">
+            <div class="flex flex-column w-100">
+              <h6>{{report.ProcName}}</h6>
+              <div class="flex justify-content-between w-100">
+                <small><strong>{{isNote | uppercase}}</strong></small>
+                <small><strong>({{report.noofentries }})</strong></small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+  <div class="col-12" style="max-width: 50dvw !important;" *ngIf="notesList.length && showNotesListModal">
+    <ng-container *ngFor="let note of notesList">
+      <div class="card shadow-lg border-0 p-2 mb-2 w-100">
+        <div class="d-flex flex-column gap-1">
+          <strong>
+            {{note.CreatedBy | uppercase}}
+          </strong>
+          <div class="d-flex flex-row justify-content-between">
+            <strong>
+              {{note.ProcDate | date:'dd/MMM/yy'}}
+            </strong>
+            <strong>
+              {{note.Remarks | uppercase}}
+            </strong>
+          </div>
+          <strong class="d-flex flex-wrap">
+            {{note.data}}
+          </strong>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+<p-overlayPanel #op>
+  <div class="flex flex-column gap-3 w-auto">
+    <button type="button" class="btn btn-sm p-button p-button-raised btn-info">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/details.png" style="color: white;" height="20px" alt="" srcset="">
+        Details
+      </strong>
+    </button>
+    <!-- <button type="button" class="btn btn-sm p-button p-button-raised btn-info" (click)="showBillDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/bills.png" style="color: white;" height="20px" alt="" srcset="">
+        Bills
+      </strong>
+    </button>
+    <button type="button" class="btn btn-sm p-button p-button-raised btn-info" (click)="showPathBillDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/path_ipd_icon.png" style="color: white;" height="20px" alt="" srcset="">
+        Path Bills
+      </strong>
+    </button>
+    <button type="button" class="btn btn-sm p-button p-button-raised btn-info" (click)="showBedAllocationDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/bed_allocation_ipd.png" style="color: white;" height="20px" alt="" srcset="">
+        Bed Allocation
+      </strong>
+    </button>
+    <button type="button" class="btn btn-sm p-button p-button-raised btn-info"
+      (click)="showAdmissionHistoryForIpdPatientDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_summary.png" style="color: white;" height="20px" alt="" srcset="">
+        Dicharge Summary
+      </strong>
+    </button> -->
+    <!-- <button type="button" class="btn btn-sm p-button p-button-raised btn-info">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/edit_appoinment.png" style="color: white;" height="20px" alt="" srcset="">
+        Edit Admission
+      </strong>
+    </button> -->
+    <!-- <button type="button" class="btn btn-sm p-button p-button-raised btn-info">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/attached_files.png" style="color: white;" height="20px" alt="" srcset="">
+        Attached Files
+      </strong>
+    </button> -->
+    <!-- <button type="button" class="btn btn-sm p-button p-button-raised btn-info">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_patient.png" style="color: white;" height="20px" alt="" srcset="">
+        Discharge Patient
+      </strong>
+    </button> -->
+  </div>
+</p-overlayPanel>
+
+<!-- <p-dialog header="Notes List" [modal]="true" [(visible)]="showNotesListModal"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }">
+  <div style="min-height: 60dvh !important;">
+
+  </div>
+</p-dialog> -->

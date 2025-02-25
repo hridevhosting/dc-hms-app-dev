@@ -1,0 +1,13 @@
+export class BillItemCharge {
+  BillNo: string = '0';
+  Code: string = '0';
+  HeadDesc: string = '';
+  Date: string = '';
+  Rate: string = '0';
+  Unit: string = '1';
+  Amount: string = '0';
+  Notes: string = '';
+  SeqNo: string = '0';
+  Active: string = '1';
+  RateId: string = '0';
+  source: string = '';}

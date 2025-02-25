@@ -1,0 +1,250 @@
+<div class="d-flex flex-column gap-1" style="min-height: 60% !important;">
+  <div class="d-flex justify-content-between">
+    <div class="d-flex flex-row gap-1">
+      <button type="button" class="btn btn-warning" (click)="returnBackOption()" *ngIf="!isMenuShow">
+        <strong class="text-nowrap d-flex align-items-center gap-2"><i class="bi bi-arrow-left"></i></strong>
+      </button>
+      <button type="button" class="btn btn-primary" (click)="showList()">
+        <strong class="text-nowrap d-flex align-items-center gap-2"><i class="bi bi-plus-circle-fill"></i> List</strong>
+      </button>
+    </div>
+    <div class="d-flex flex-row gap-1">
+      <button type="button" class="btn btn-primary" (click)="showAddUpdateMenu()">
+        <strong class="text-nowrap d-flex align-items-center gap-2"><i class="bi bi-plus-circle-fill"></i> Add
+          Menu</strong>
+      </button>
+      <button type="button" class="btn btn-secondary ">
+        <strong class="text-nowrap d-flex align-items-center gap-2"><i class="bi bi-node-plus-fill"></i> Add Sub
+          Menu</strong>
+      </button>
+    </div>
+  </div>
+  <div class="d-flex flex-wrap gap-2 p-2 justify-content-start">
+    <ng-container *ngIf="showingMenuName.toLowerCase().trim()==='menu'">
+      <ng-container *ngFor="let menu of reportCollectionSidebarMenuList">
+        <div class="menu shadow-lg" (click)="setSelectedMenuSubMenuList(menu)">
+          {{menu.ListItem}}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showingMenuName.toLowerCase().trim()==='submenu'">
+      <ng-container *ngFor="let subMenu of selectedMenu.ListParam">
+        <div class="menu shadow-lg" (click)="setSelectedSubMenuDetail(subMenu)">
+          {{subMenu.subMenuName}}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showingMenuName.toLowerCase().trim()==='micromenu'">
+      <ng-container *ngFor="let subMenu of selectedSubMenu.subMenuArray">
+        <div class="menu shadow-lg" (click)="setSelectedMicroMenuDetail(subMenu)">
+          {{subMenu.subMenuName}}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showingMenuName.toLowerCase().trim()==='microtypemenu'">
+      <ng-container *ngFor="let subMenu of selectedMicroMenu.subMenuArray">
+        <div class="menu shadow-lg" (click)="setSelectedMicroTypeMenuDetail(subMenu)">
+          {{subMenu.microMenuName}}
+        </div>
+      </ng-container>
+    </ng-container>
+    <ng-container *ngIf="showingMenuName.toLowerCase().trim()==='query'">
+      <div class="d-flex flex-column gap-2 w-100">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <strong>Query</strong>
+          <strong><i>({{selectedMicroTypeMenu.microMenuName}})</i></strong>
+          <button type="button" class="btn btn-success shadow-lg" (click)="updateMenuDetailWithSubMenuDetail()">
+            <strong class="text-nowrap">Save Menu Detail</strong>
+          </button>
+        </div>
+        <textarea name="" id="" rows="15" [(ngModel)]="selectedMicroTypeMenu.microMenuQuery"
+          class="form-control"></textarea>
+      </div>
+    </ng-container>
+  </div>
+
+  <ng-container *ngIf="isAddUpdateMenu || isAddUpdateSubMenu || isDirectAddSubMenu">
+    <div class="d-flex flex-row gap-2 w-100">
+
+      <div class="card border-0 rounded-0 p-2 shadow-lg d-flex flex-column gap-2 w-50" style="min-height: 60vh;">
+
+        <div class="d-flex flex-row gap-2">
+          <select name="" id="" class="form-select form-select-sm">
+            <option value="">Select Menu...</option>
+            <option value=""></option>
+          </select>
+          <select name="" id="" class="form-select form-select-sm">
+            <option value="">Select Sub Menu...</option>
+            <option value=""></option>
+          </select>
+          <select name="" id="" class="form-select form-select-sm">
+            <option value="">Select Micro Menu...</option>
+            <option value=""></option>
+          </select>
+          <select name="" id="" class="form-select form-select-sm">
+            <option value="">Select Micro Menu Type...</option>
+            <option value=""></option>
+          </select>
+        </div>
+
+        <ng-container *ngIf="isAddUpdateSubMenu">
+          <div class="d-flex flex-column gap-2">
+            <div *ngIf="!addUpdateMenuDetail.ListParam.length"
+              class="d-flex justify-content-center p-3 bg-indigo-200 text-white border-1 border-indigo-900 rounded-5 shadow-lg">
+              <strong><i>Please enter sub menu name & it`s query!</i></strong>
+            </div>
+            <ng-container *ngIf="addUpdateSubMenuDetail.subMenuArray">
+              <table class="table table-sm">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Sub Menu Report Name</th>
+                    <th class="text-center">Query</th>
+                    <th class="text-center">Edit</th>
+                    <th class="text-center">Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of addMicroSubMenuDetail.subMenuArray; index as i">
+                    <td>{{i+1}}</td>
+                    <td>{{item.microMenuName}}</td>
+                    <td class="text-center">
+                      <i *ngIf="item.microMenuQuery.length" style="color: green;" class="bi bi-check-circle-fill"></i>
+                      <i *ngIf="!item.microMenuQuery.length" style="color: red;" class="bi bi-x-circle-fill"></i>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-warning rounded-5">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-sm btn-danger rounded-5">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+      <div class="card border-0 rounded-0 p-2 shadow-lg d-flex flex-column w-50">
+        <ng-container *ngIf="isAddUpdateMenu">
+          <ng-container>
+            <div class="d-flex flex-row gap-3">
+              <div class="d-flex flex-column">
+                <div class="d-flex flex-row justify-content-between">
+                  <strong>Menu Name</strong>
+                  <button type="button" class="btn btn-sm rounded-5 btn-success text-nowrap"
+                    (click)="verifyAddUpdateMenuDetailBeforeSaving()"
+                    *ngIf="isAddUpdateSubMenu && addUpdateMenuDetail.ListParam.length > 0">Save Menu</button>
+                </div>
+                <div class="d-flex flex-row gap-2">
+                  <input type="text" class="form-control" placeholder="Enter menu name here..."
+                    [(ngModel)]="addUpdateMenuDetail.ListItem" *ngIf="!isDirectAddSubMenu">
+                  <select name="" id="" class="form-select" [(ngModel)]="addUpdateMenuDetail.ListItem"
+                    *ngIf="isDirectAddSubMenu">
+                    <option value="">Please select menu...</option>
+                    <option value=""></option>
+                  </select>
+                  <button type="button" class="btn btn-success" (click)="isAddUpdateSubMenu = true"
+                    *ngIf="!isAddUpdateSubMenu && addUpdateMenuDetail.ListItemId == -1 && addUpdateMenuDetail.ListItem.length > 0">Add</button>
+
+                </div>
+              </div>
+              <div class="d-flex flex-column" *ngIf="isAddUpdateSubMenu">
+                <strong class="text-nowrap">Sub Menu Name</strong>
+                <div class="d-flex flex-row gap-2 w-100">
+                  <input type="text" class="form-control" placeholder="Enter sub nemu name here..."
+                    [(ngModel)]="addUpdateSubMenuDetail.subMenuName">
+                  <button type="button" class="btn btn-success text-nowrap" (click)="addSubMenuDetail()"
+                    *ngIf="addUpdateSubMenuDetail.subMenuName && addUpdateSubMenuDetail.subMenuArray.length">
+                    <i class="bi bi-plus-circle-fill"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+          <div class="d-flex flex-column">
+
+            <div class="d-flex flex-row justify-content-between gap-2">
+              <div class="d-flex flex-column" *ngIf="addUpdateSubMenuDetail.subMenuName.length > 0">
+                <strong class="text-nowrap">Report Name</strong>
+                <div class="d-flex flex-row gap-2 w-100">
+                  <input type="text" class="form-control" placeholder="Enter sub nemu name here..."
+                    [(ngModel)]="addMicroSubMenuDetail.subMenuName">
+                  <button type="button" class="btn btn-success text-nowrap" (click)="addMicroMenuDetail()"
+                    *ngIf="addUpdateSubMenuDetail.subMenuName && addMicroSubMenuDetail.subMenuName && addMicroSubMenuDetail.subMenuArray.length">
+                    <i class="bi bi-plus-circle-fill"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="d-flex flex-column" *ngIf="addUpdateSubMenuDetail.subMenuName.length > 0">
+                <strong class="text-nowrap">Report Type</strong>
+                <div class="d-flex flex-row gap-2 w-100">
+                  <input type="text" class="form-control" placeholder="Enter sub nemu name here..."
+                    [(ngModel)]="addMicroSubMenuTypeDetail.microMenuName"
+                    [disabled]="!addMicroSubMenuDetail.subMenuName.length">
+                  <button type="button" class="btn btn-success text-nowrap" (click)="addMicroMenuTypeDetail()"
+                    *ngIf="addUpdateSubMenuDetail.subMenuName && addMicroSubMenuDetail.subMenuName && addMicroSubMenuTypeDetail.microMenuName && addMicroSubMenuTypeDetail.userAccessList.length">
+                    <i class="bi bi-plus-circle-fill"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="d-flex flex-column" *ngIf="addUpdateSubMenuDetail.subMenuName.length > 0">
+                <strong class="text-nowrap">User Access</strong>
+                <div class="d-flex flex-row gap-2 w-100">
+                  <div class="dropdown w-100">
+                    <button class="btn bg-transparent border-1 border-secondary dropdown-toggle w-100" type="button"
+                      data-bs-toggle="dropdown" [disabled]="!addMicroSubMenuTypeDetail.microMenuQuery.length"
+                      aria-expanded="false">
+                      Select User
+                    </button>
+                    <ul class="dropdown-menu" *ngIf="userlist.length" style="overflow-y: auto; max-height: 30dvh;">
+                      <li class="hover-effect p-2 d-flex flex-row gap-2" (click)="userAccessCheckboxAll.click()">
+                        <input #userAccessCheckboxAll type="checkbox" role="checkbox" name="" id=""
+                          [checked]="check_IsUserAdded(0)"
+                          (click)="addDeleteUserAccess(0,userAccessCheckboxAll.checked)">
+                        <strong>All</strong>
+                      </li>
+                      <li class="hover-effect p-2 d-flex flex-row gap-2" *ngFor="let user of userlist"
+                        (click)="userAccessCheckbox.click()">
+                        <input #userAccessCheckbox type="checkbox" role="checkbox" name="" id=""
+                          [checked]="check_IsUserAdded(user.UserId)"
+                          (click)="addDeleteUserAccess(user.UserId,userAccessCheckbox.checked)">
+                        <strong>{{user.UserName | uppercase}}</strong>
+                      </li>
+                    </ul>
+                  </div>
+                  <!-- <select class="form-select" name="" id="" *ngIf="userlist.length">
+                    <option value="">All</option>
+                    <option value="{{user.UserId}}">
+                      <div class="d-flex flex-row gap-2">
+                        <input #userAccessCheckbox type="checkbox" role="checkbox" name="" id=""
+                          [checked]="check_IsUserAdded(user.UserId)"
+                          (click)="addDeleteUserAccess(user.UserId,userAccessCheckbox.checked)">
+                        <strong>{{user.UserName | uppercase}}</strong>
+                      </div>
+                    </option>
+                  </select> -->
+                  <label for="" *ngIf="!userlist.length"><strong style="color: red;">User list not
+                      fetched!</strong></label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="isAddUpdateMenu && isAddUpdateSubMenu">
+          <div class="d-flex flex-column gap-1">
+            <strong>Query <small *ngIf="!addMicroSubMenuTypeDetail.microMenuName" style="color: red;"><i> - (Please add
+                  report name first...)</i></small></strong>
+            <textarea name="" id="" rows="14" class="form-control" placeholder="Provide query to perform..."
+              [disabled]="!addMicroSubMenuTypeDetail.microMenuName"
+              [(ngModel)]="addMicroSubMenuTypeDetail.microMenuQuery"></textarea>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </ng-container>
+</div>

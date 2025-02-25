@@ -1,0 +1,435 @@
+<ng-container *ngIf="true">
+  <div class="mt-2" style="min-width: 50%;" *ngIf="patientDetails">
+
+    <div class="d-flex flex-column">
+      <div class="d-flex flex-column form-filed ">
+        <label class="d-flex justify-content-between" for="">
+          <strong>Patient Name</strong>
+          <strong style="color: red;">UHID No: {{patientDetails.RegNo}}</strong>
+        </label>
+        <div class="d-flex flex-row ">
+          <select name="" id="" class="form-select w-10rem" [(ngModel)]="patientDetails.Salutation">
+            <option value="">Salutation</option>
+            <option value="Mr">Mr.</option>
+            <option value="Miss">Miss.</option>
+            <option value="Mrs">Mrs.</option>
+          </select>
+          <input type="text" name="" id="" class="form-control" placeholder="Enter patient name here..."
+          [(ngModel)]="patientDetails.EntityName">
+        </div>
+      </div>
+      <div class="d-flex flex-row gap-1 w-100 mt-3">
+        <div class="d-flex flex-column form-filed" style="width: 20%;">
+          <label for="">
+            <strong>Date of Birth</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <input type="date" name="" id="" class="form-control">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 15%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>Age</strong>
+            <strong style="color: red;">(Yr)</strong>
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="text" name="" id="" class="form-control" placeholder="Patient Age..."
+              [(ngModel)]="patientDetails.PrimaryId1">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 15%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>Weight</strong>
+            <strong style="color: red;">(Kg)</strong>
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="text" name="" id="" class="form-control">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label for="">
+            <strong>Gender</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <select name="" id="" class="form-select" [(ngModel)]="patientDetails.PrimaryFld2">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Rather not say</option>
+            </select>
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label for="">
+            <strong>Category</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <select name="" id="" class="form-select" [(ngModel)]="patientDetails.ExternalCategory">
+              <option value="">Select Status</option>
+              <option value="{{data.ListItem}}" *ngFor="let data of patientCategoryList">{{data.ListItem | uppercase}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column form-filed mt-3">
+        <label class="d-flex justify-content-between" for="">
+          <strong>Address</strong>
+          <!-- <strong style="color: red;">UHID No: </strong> -->
+        </label>
+        <div class="d-flex flex-row ">
+          <textarea name="" id="" rows="3" class="form-control" [(ngModel)]="patientDetails.PrimaryFld4"></textarea>
+        </div>
+      </div>
+      <div class="d-flex flex-row gap-1 w-100 mt-3">
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label for="">
+            <strong>City</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <input type="text" name="" id="" class="form-control">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>State</strong>
+            <!-- <strong style="color: red;">(Yr)</strong> -->
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="text" name="" id="" class="form-control" [(ngModel)]="patientDetails.State">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>Country</strong>
+            <!-- <strong style="color: red;">(Kg)</strong> -->
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="text" name="" id="" class="form-control" [(ngModel)]="patientDetails.Country">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 25%;">
+          <label for="">
+            <strong>Pincode</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <input type="text" name="" id="" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-row gap-1 w-100 mt-3">
+        <div class="d-flex flex-column form-filed" style="width: 33.3%;">
+          <label for="">
+            <strong>Contact No</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <input type="text" name="" id="" class="form-control" [(ngModel)]="patientDetails.PrimaryFld1">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 33.3%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>WhatsApp No</strong>
+            <!-- <strong style="color: red;">(Yr)</strong> -->
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="text" name="" id="" class="form-control" [(ngModel)]="patientDetails.PrimaryFld1">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 33.4%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>Marital Status</strong>
+            <!-- <strong style="color: red;">(Kg)</strong> -->
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <select name="" id="" class="form-select" [(ngModel)]="patientDetails.MaritalStatus">
+              <option value="">Select Status</option>
+              <option value="{{data.ListItem}}" *ngFor="let data of maritalStatusList">{{data.ListItem | uppercase}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-row gap-1 w-100 mt-3">
+        <div class="d-flex flex-column form-filed" style="width: 50%;">
+          <label for="">
+            <strong>Addhar Card No</strong>
+          </label>
+          <div class="d-flex flex-row ">
+            <input type="text" name="" id="" class="form-control" placeholder="Enter Addhar No here"
+          [(ngModel)]="patientDetails.AadharCard">
+          </div>
+        </div>
+        <div class="d-flex flex-column form-filed" style="width: 50%;">
+          <label class="d-flex justify-content-between" for="">
+            <strong>Email Id</strong>
+            <!-- <strong style="color: red;">(Yr)</strong> -->
+          </label>
+          <div class="d-flex flex-row align-items-end">
+            <input type="email" name="" id="" class="form-control">
+          </div>
+        </div>
+      </div>
+      <div class="d-flex flex-column form-filed mt-3">
+        <label class="d-flex justify-content-between" for="">
+          <strong>Additional Details</strong>
+          <!-- <strong style="color: red;">UHID No: </strong> -->
+        </label>
+        <div class="d-flex flex-row ">
+          <textarea name="" id="" class="form-control" rows="3" [(ngModel)]="patientDetails.AdditionalDetails"></textarea>
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex flex-column text-center">
+        <strong class="rounded-5 p-1" style="color: #FFF80A; background-color: #9384D1;"><i>If Cashless!</i></strong>
+        <div class="d-flex flex-row gap-1 w-100 mt-3">
+          <div class="d-flex flex-column form-filed" style="width: 50%;">
+            <label for="">
+              <strong>Payer</strong>
+            </label>
+            <div class="d-flex flex-row ">
+              <select name="" id="" class="form-select" [(ngModel)]="patientDetails.Payer">
+                <option value="">Select Status</option>
+                <option value="{{data.ListItem}}" *ngFor="let data of payerList">{{data.ListItem | uppercase}}</option>
+              </select>
+            </div>
+          </div>
+          <div class="d-flex flex-column form-filed" style="width: 50%;">
+            <label for="">
+              <strong>TPA</strong>
+            </label>
+            <div class="d-flex flex-row ">
+              <select name="" id="" class="form-select" [(ngModel)]="patientDetails.TPA">
+                <option value="">Select Status</option>
+                <option value="{{data.ListItem}}" *ngFor="let data of tpaList">{{data.ListItem | uppercase}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row gap-1 w-100 mt-3">
+          <div class="d-flex flex-column form-filed" style="width: 60%;">
+            <label for="">
+              <strong>Alias</strong>
+            </label>
+            <div class="d-flex flex-row ">
+              <input type="text" name="" id="" class="form-control" placeholder="Enter alias here"
+              [(ngModel)]="patientDetails.AlternateName">
+            </div>
+          </div>
+          <div class="d-flex flex-column form-filed" style="width: 30%;">
+            <label for="">
+              <strong style="color: red;">Reg. Date</strong>
+            </label>
+            <div class="d-flex flex-row ">
+              <input type="date" name="" id="" class="form-control" [(ngModel)]="patientDetails.CreatedAt">
+            </div>
+          </div>
+          <button type="button" class="btn btn-success shadow-lg" disabled>
+            Save Admission
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</ng-container>
+
+
+<!-- Mobile View -->
+<ng-container *ngIf="false">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 mt-5 mt-lg-1 mt-xl-1" style="position: relative;">
+        <div style="position: absolute; top: 0; left: 5%;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+            class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+            <path
+              d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+          </svg>
+        </div>
+        <div class="d-flex justify-content-center">
+          <div class="card border-0 rounded-5 shadow-lg p-3">
+            <img src="assets/images/default_person_image.png" alt="person_image" srcset=""
+              class="person-profile-photo-image">
+          </div>
+        </div>
+      </div>
+      <div class="col-12 mt-5">
+        <div class="d-flex flex-column gap-1 ">
+          <div class="d-flex justify-content-center justify-content-lg-center justify-content-xl-center flex-wrap">
+            <h1><strong>Hrishikesh Prakash Barange</strong></h1>
+          </div>
+          <div class="d-flex justify-content-center justify-content-lg-center justify-content-xl-center flex-wrap">
+            <h6><strong><span class="text-danger">UHID No: </span> <span class="text-warning"
+                  style="font-weight: 800;">AH/UHID/2024.07.01.12.04</span></strong></h6>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="d-flex justify-content-around">
+          <div class="d-flex flex-row align-items-center gap-2 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cake2-fill"
+              viewBox="0 0 16 16">
+              <path
+                d="m2.899.804.595-.792.598.79A.747.747 0 0 1 4 1.806v4.886q-.532-.09-1-.201V1.813a.747.747 0 0 1-.1-1.01ZM13 1.806v4.685a15 15 0 0 1-1 .201v-4.88a.747.747 0 0 1-.1-1.007l.595-.792.598.79A.746.746 0 0 1 13 1.806m-3 0a.746.746 0 0 0 .092-1.004l-.598-.79-.595.792A.747.747 0 0 0 9 1.813v5.17q.512-.02 1-.055zm-3 0v5.176q-.512-.018-1-.054V1.813a.747.747 0 0 1-.1-1.01l.595-.79.598.789A.747.747 0 0 1 7 1.806" />
+              <path
+                d="M4.5 6.988V4.226a23 23 0 0 1 1-.114V7.16c0 .131.101.24.232.25l.231.017q.498.037 1.02.055l.258.01a.25.25 0 0 0 .26-.25V4.003a29 29 0 0 1 1 0V7.24a.25.25 0 0 0 .258.25l.259-.009q.52-.018 1.019-.055l.231-.017a.25.25 0 0 0 .232-.25V4.112q.518.047 1 .114v2.762a.25.25 0 0 0 .292.246l.291-.049q.547-.091 1.033-.208l.192-.046a.25.25 0 0 0 .192-.243V4.621c.672.184 1.251.409 1.677.678.415.261.823.655.823 1.2V13.5c0 .546-.408.94-.823 1.201-.44.278-1.043.51-1.745.696-1.41.376-3.33.603-5.432.603s-4.022-.227-5.432-.603c-.702-.187-1.305-.418-1.745-.696C.408 14.44 0 14.046 0 13.5v-7c0-.546.408-.94.823-1.201.426-.269 1.005-.494 1.677-.678v2.067c0 .116.08.216.192.243l.192.046q.486.116 1.033.208l.292.05a.25.25 0 0 0 .291-.247M1 8.82v1.659a1.935 1.935 0 0 0 2.298.43.935.935 0 0 1 1.08.175l.348.349a2 2 0 0 0 2.615.185l.059-.044a1 1 0 0 1 1.2 0l.06.044a2 2 0 0 0 2.613-.185l.348-.348a.94.94 0 0 1 1.082-.175c.781.39 1.718.208 2.297-.426V8.833l-.68.907a.94.94 0 0 1-1.17.276 1.94 1.94 0 0 0-2.236.363l-.348.348a1 1 0 0 1-1.307.092l-.06-.044a2 2 0 0 0-2.399 0l-.06.044a1 1 0 0 1-1.306-.092l-.35-.35a1.935 1.935 0 0 0-2.233-.362.935.935 0 0 1-1.168-.277z" />
+            </svg>
+            <strong>01/01/2024</strong>
+          </div>
+          <div class="d-flex flex-row align-items-center gap-2 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-person-plus-fill" viewBox="0 0 16 16">
+              <path d="M1 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6" />
+              <path fill-rule="evenodd"
+                d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5" />
+            </svg>
+            <strong>25 Year</strong>
+          </div>
+          <div class="d-flex flex-row align-items-center gap-2 p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-telephone-fill" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M1.885.511a1.745 1.745 0 0 1 2.61.163L6.29 2.98c.329.423.445.974.315 1.494l-.547 2.19a.68.68 0 0 0 .178.643l2.457 2.457a.68.68 0 0 0 .644.178l2.189-.547a1.75 1.75 0 0 1 1.494.315l2.306 1.794c.829.645.905 1.87.163 2.611l-1.034 1.034c-.74.74-1.846 1.065-2.877.702a18.6 18.6 0 0 1-7.01-4.42 18.6 18.6 0 0 1-4.42-7.009c-.362-1.03-.037-2.137.703-2.877z" />
+            </svg>
+            <strong>8237649116</strong>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card shadow-lg border-0 rounded-5 w-100">
+          <div class="d-flex justify-content-between flex-row align-items-center p-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" fill="currentColor"
+              class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+              <path
+                d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0m3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+            </svg>
+            <h3>Personal Details</h3>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="card border-0 rounded-5 shadow-lg mt-4">
+          <div class="row p-4">
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+              <!-- <p-button label="Attach New File" severity="info" icon="pi pi-link" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" /> -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center flex-row gap-2 w-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-link-45deg" viewBox="0 0 16 16">
+                    <path
+                      d="M4.715 6.542 3.343 7.914a3 3 0 1 0 4.243 4.243l1.828-1.829A3 3 0 0 0 8.586 5.5L8 6.086a1 1 0 0 0-.154.199 2 2 0 0 1 .861 3.337L6.88 11.45a2 2 0 1 1-2.83-2.83l.793-.792a4 4 0 0 1-.128-1.287z" />
+                    <path
+                      d="M6.586 4.672A3 3 0 0 0 7.414 9.5l.775-.776a2 2 0 0 1-.896-3.346L9.12 3.55a2 2 0 1 1 2.83 2.83l-.793.792c.112.42.155.855.128 1.287l1.372-1.372a3 3 0 1 0-4.243-4.243z" />
+                  </svg>
+                  <h4>Attach New File</h4>
+                </div>
+              </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+              <!-- <p-button label="Personal Details" severity="info" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" /> -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center flex-row gap-2 w-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-person-vcard-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M0 4a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2zm9 1.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4a.5.5 0 0 0-.5.5M9 8a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 0-1h-4A.5.5 0 0 0 9 8m1 2.5a.5.5 0 0 0 .5.5h3a.5.5 0 0 0 0-1h-3a.5.5 0 0 0-.5.5m-1 2C9 10.567 7.21 9 5 9c-2.086 0-3.8 1.398-3.984 3.181A1 1 0 0 0 2 13h6.96q.04-.245.04-.5M7 6a2 2 0 1 0-4 0 2 2 0 0 0 4 0" />
+                  </svg>
+                  <h4>Personal Details</h4>
+                </div>
+              </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+              <!-- <p-button label="OT Recording" severity="info" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" /> -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center flex-row gap-2 w-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-camera-video-fill" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M0 5a2 2 0 0 1 2-2h7.5a2 2 0 0 1 1.983 1.738l3.11-1.382A1 1 0 0 1 16 4.269v7.462a1 1 0 0 1-1.406.913l-3.111-1.382A2 2 0 0 1 9.5 13H2a2 2 0 0 1-2-2z" />
+                  </svg>
+                  <h4>OT Recording List</h4>
+                </div>
+              </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+              <!-- <p-button label="A/V Consents" severity="info" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" /> -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center flex-row gap-2 w-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-file-earmark-medical-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M9.293 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V4.707A1 1 0 0 0 13.707 4L10 .293A1 1 0 0 0 9.293 0M9.5 3.5v-2l3 3h-2a1 1 0 0 1-1-1m-3 2v.634l.549-.317a.5.5 0 1 1 .5.866L7 7l.549.317a.5.5 0 1 1-.5.866L6.5 7.866V8.5a.5.5 0 0 1-1 0v-.634l-.549.317a.5.5 0 1 1-.5-.866L5 7l-.549-.317a.5.5 0 0 1 .5-.866l.549.317V5.5a.5.5 0 1 1 1 0m-2 4.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1m0 2h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1 0-1" />
+                  </svg>
+                  <h4>A/V Consents</h4>
+                </div>
+              </button>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 mb-4">
+              <!-- <p-button label="Attached Documents" severity="info" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" /> -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center flex-row gap-2 w-100">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                    class="bi bi-folder-symlink-fill" viewBox="0 0 16 16">
+                    <path
+                      d="M13.81 3H9.828a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 6.172 1H2.5a2 2 0 0 0-2 2l.04.87a2 2 0 0 0-.342 1.311l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3M2.19 3q-.362.002-.683.12L1.5 2.98a1 1 0 0 1 1-.98h3.672a1 1 0 0 1 .707.293L7.586 3zm9.608 5.271-3.182 1.97c-.27.166-.616-.036-.616-.372V9.1s-2.571-.3-4 2.4c.571-4.8 3.143-4.8 4-4.8v-.769c0-.336.346-.538.616-.371l3.182 1.969c.27.166.27.576 0 .742" />
+                  </svg>
+                  <h4>Attached Documents</h4>
+                </div>
+              </button>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-4 mb-4" hidden>
+              <!-- <p-button label="Info" severity="info" [style]="{'width':'100%','font-weight':'900','font-size':'1.5rem'}" > -->
+              <button type="button" class="p-button p-button-rounded p-button-info rounded-5 w-100 text-center">
+                <div class="d-flex justify-content-center w-100">
+                  <h4>Attach New File</h4>
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<p-dialog header="More Details" [modal]="true" [(visible)]="isNewListDetail" position="bottom"
+  [style]="{ width: '25rem' }">
+  <!-- <div class="row" *ngIf="selectedIpdDetails">
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Patient Name</strong> ({{selectedIpdDetails.EntityId}})</small>
+        <strong>{{selectedIpdDetails.EntityName}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>UHID No</strong></small>
+        <strong>{{selectedIpdDetails.RegNo}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Alloted Bed Location</strong></small>
+        <strong>{{selectedIpdDetails.Location}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Addmission Date/Time</strong></small>
+        <strong>{{selectedIpdDetails.EntryDate | date : 'dd/MM/yyyy hh:mm a'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Insurance</strong></small>
+        <strong>{{selectedIpdDetails.BillClass ? selectedIpdDetails.BillClass : ''}}</strong>
+      </div>
+    </div>
+  </div> -->
+</p-dialog>

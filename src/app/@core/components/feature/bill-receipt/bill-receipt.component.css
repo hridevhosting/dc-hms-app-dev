@@ -1,0 +1,22 @@
+:host::ng-deep .p-dropdown-items {
+  padding: 0px !important;
+}
+
+:host::ng-deep .p-dropdown-item-group:hover {
+  background-color: #1E201E;
+  color: white;
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}
+
+:host::ng-deep .p-dropdown-item-group:hover label {
+  /* background-color: #1E201E; */
+  /* color: white; */
+  cursor: pointer;
+  /* transition: .3s ease-in-out; */
+}
+
+:host::ng-deep .p-dropdown .p-dropdown-label.p-placeholder {
+  padding: 5px !important;
+  width: 100%;
+}

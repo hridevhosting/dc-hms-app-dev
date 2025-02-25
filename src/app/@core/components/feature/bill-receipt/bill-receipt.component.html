@@ -1,0 +1,342 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div class="d-flex flex-column mt-2">
+    <div class="d-flex flex-row gap-2 w-100">
+      <div class="d-flex flex-column border-2 p-2 w-50">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payer</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('Payer')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.Payer">
+          <option value="">Select Payer...</option>
+          <option value="{{payer}}" *ngFor="let payer of payerList">{{payer | uppercase}}</option>
+        </select>
+      </div>
+      <div class="d-flex flex-column border-2 p-2 w-50">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">TPA</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('Tpa')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.TPA">
+          <option value="">Select TPA...</option>
+          <option value="{{tpa}}" *ngFor="let tpa of tpaList">{{tpa | uppercase}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="d-flex flex-row gap-2 w-100">
+      <div class="d-flex flex-column border-2 p-2 mt-3 w-50">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Transaction Date</strong>
+        </label>
+        <input type="date" name="" id="" class="form-control form-control-sm mt-1" (change)="onChangeShowDetail()"
+          [(ngModel)]="billReceiptDetail.TranDate">
+      </div>
+      <div class="d-flex flex-column border-2 p-2 mt-3 w-50">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payment Mode</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('PaymentMode')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.PaymentMode">
+          <option value="">Select Mode...</option>
+          <option value="{{paymentMode}}" *ngFor="let paymentMode of paymentModeList">{{paymentMode | uppercase}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex flex-row gap-1 w-100 mt-3">
+      <div class="d-flex flex-column border-2 p-2 " style="width: 50%;">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Description</strong>
+        </label>
+        <textarea name="" id="" rows="5" class="form-control form-control-sm" placeholder="Enter description..."
+          [(ngModel)]="billReceiptDetail.TranDesc"></textarea>
+      </div>
+      <div class="d-flex flex-column gap-1"  style="width: 50%;">
+        <div class="d-flex flex-column border-2 p-2">
+          <label style="margin-top: -22px;">
+            <strong style="background-color: white; color: red;" class="p-1">Receipt Amount</strong>
+          </label>
+          <input type="text" name="" id="" class="form-control form-control-lg" [(ngModel)]="billReceiptDetail.Receipts">
+        </div>
+        <div class="d-flex flex-column border-2 p-2">
+          <label class="d-flex justify-content-between" style="margin-top: -22px;">
+            <strong style="background-color: white;" class="p-1">Charges List</strong>
+            <!-- <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+              (click)="showCommonListDialogeBox('Tpa')">Add</strong> -->
+          </label>
+          <button type="button" class="btn btn-primary shadow-lg" (click)="showChargesList = !showChargesList"
+            [disabled]="!billItemList.length">
+            Show Charges
+          </button>
+        </div>
+
+      </div>
+    </div>
+    <hr>
+    <div class="d-flex flex-row gap-2">
+      <div class="d-flex flex-column border-2 p-2 w-50">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">TDS Deduction</strong>
+        </label>
+        <input type="text" name="" id="" class="form-control form-control-sm" placeholder="0.00"
+          [(ngModel)]="billReceiptDetail.TDSAmount">
+      </div>
+      <div class="d-flex flex-column border-2 p-2 w-50">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Cheque No</strong>
+        </label>
+        <input type="text" name="" id="" class="form-control form-control-sm" [(ngModel)]="billReceiptDetail.ChequeNo"
+          placeholder="Enter id...">
+      </div>
+
+    </div>
+    <div class="d-flex flex-row gap-2 w-100 mt-3">
+      <div class="d-flex flex-column border-2 p-2" style="width: 33.4%;">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Bank</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.IssuerBank">
+          <option value="">Select TPA...</option>
+          <option value=""></option>
+        </select>
+      </div>
+      <div class="d-flex flex-column border-2 p-2" style="width: 33.3%;">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payment Date</strong>
+        </label>
+        <input type="date" name="" id="" class="form-control form-control-sm mt-1"
+          [(ngModel)]="billReceiptDetail.ChequeDate">
+      </div>
+      <div class="d-flex flex-column p-2 h-100" style="width: 33.3%;">
+        <div class="d-flex justify-content-around align-items-center h-100">
+          <button type="button" class="btn btn-lg btn-warning" disabled>Print</button>
+          <button type="button" class="btn btn-lg btn-success" (click)="saveReceiptDetailByBillNo()">Save Receipt</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div class="d-flex flex-column mt-2">
+    <div class="d-flex flex-column gap-2 w-100">
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payer</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('Payer')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.Payer">
+          <option value="">Select Payer...</option>
+          <option value="{{payer}}" *ngFor="let payer of payerList">{{payer | uppercase}}</option>
+        </select>
+      </div>
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">TPA</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('Tpa')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.TPA">
+          <option value="">Select TPA...</option>
+          <option value="{{tpa}}" *ngFor="let tpa of tpaList">{{tpa | uppercase}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="d-flex flex-column gap-2 w-100">
+      <div class="d-flex flex-column border-2 p-2 mt-3 w-100">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Transaction Date</strong>
+        </label>
+        <input type="date" name="" id="" class="form-control form-control-sm mt-1" (change)="onChangeShowDetail()"
+          [(ngModel)]="billReceiptDetail.TranDate">
+      </div>
+      <div class="d-flex flex-column border-2 p-2 mt-3 w-100">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payment Mode</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('PaymentMode')">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.PaymentMode">
+          <option value="">Select Mode...</option>
+          <option value="{{paymentMode}}" *ngFor="let paymentMode of paymentModeList">{{paymentMode | uppercase}}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="d-flex flex-column border-2 p-2 mt-3">
+      <label style="margin-top: -22px;">
+        <strong style="background-color: white;" class="p-1">Description</strong>
+      </label>
+      <textarea name="" id="" rows="3" class="form-control form-control-sm" placeholder="Enter description..."
+        [(ngModel)]="billReceiptDetail.TranDesc"></textarea>
+    </div>
+    <div class="d-flex flex-column mt-3 gap-2">
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white; color: red;" class="p-1">Receipt Amount</strong>
+        </label>
+        <input type="text" name="" id="" class="form-control form-control-lg" [(ngModel)]="billReceiptDetail.Receipts">
+      </div>
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Charges List</strong>
+          <!-- <strong style="background-color: white; color: red; cursor: pointer;" class="underline"
+            (click)="showCommonListDialogeBox('Tpa')">Add</strong> -->
+        </label>
+        <button type="button" class="btn btn-primary shadow-lg" (click)="showChargesList = !showChargesList"
+          [disabled]="!billItemList.length">
+          Show Charges
+        </button>
+        <!-- <p-dropdown [options]="billItemList" placeholder="Select changes" [group]="true"
+          [style]="{'width':'100%','padding':'5px'}">
+          <ng-template let-group pTemplate="group" >
+            <div class="flex align-items-center" *ngIf="!group.Code" (click)="addDeleteCharges(group)">
+              <div class="form-check">
+                <input #checkBoxCharges class="form-check-input" type="checkbox">
+                <label class="form-check-label" for="flexCheckChecked">
+                  {{group.HeadDesc | uppercase}}
+                </label>
+              </div>
+            </div>
+          </ng-template>
+        </p-dropdown> -->
+      </div>
+
+    </div>
+    <hr>
+    <div class="d-flex flex-column gap-2">
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">TDS Deduction</strong>
+        </label>
+        <input type="text" name="" id="" class="form-control form-control-sm" placeholder="0.00"
+          [(ngModel)]="billReceiptDetail.TDSAmount">
+      </div>
+      <div class="d-flex flex-column border-2 p-2 w-100">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Cheque No</strong>
+        </label>
+        <input type="text" name="" id="" class="form-control form-control-sm" [(ngModel)]="billReceiptDetail.ChequeNo"
+          placeholder="Enter id...">
+      </div>
+
+    </div>
+    <div class="d-flex flex-column gap-2 w-100 mt-3">
+      <div class="d-flex flex-column border-2 p-2">
+        <label class="d-flex justify-content-between" style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Bank</strong>
+          <strong style="background-color: white; color: red; cursor: pointer;" class="underline">Add</strong>
+        </label>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billReceiptDetail.IssuerBank">
+          <option value="">Select TPA...</option>
+          <option value=""></option>
+        </select>
+      </div>
+      <div class="d-flex flex-column border-2 p-2">
+        <label style="margin-top: -22px;">
+          <strong style="background-color: white;" class="p-1">Payment Date</strong>
+        </label>
+        <input type="date" name="" id="" class="form-control form-control-sm mt-1"
+          [(ngModel)]="billReceiptDetail.ChequeDate">
+      </div>
+      <div class="d-flex flex-column p-2 h-100">
+        <div class="d-flex justify-content-around align-items-center h-100">
+          <button type="button" class="btn btn-lg btn-warning" disabled>Print</button>
+          <button type="button" class="btn btn-lg btn-success">Save Receipt</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+
+<p-dialog header="Charges List" [draggable]="false" [modal]="true" [(visible)]="showChargesList" position="bottom"
+  [style]="{ width: 'auto' }">
+  <ng-container *ngIf="false">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center">#</th>
+          <th>Charges Name</th>
+          <th class="text-center">Rate</th>
+          <th class="text-center">Unit</th>
+          <th class="text-center">Cost</th>
+          <th class="text-center">Paid/Unpaid</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let group of billItemList; index as i">
+          <tr *ngIf="group.Code">
+            <td class=" bg-primary text-center justify-content-center">
+              <div class="d-flex">
+                <div class="form-check">
+                  <input #checkBoxCharges class="form-check-input" type="checkbox"
+                    (click)="addDeleteCharges(group, checkBoxCharges.checked)"
+                    [disabled]="checkPaidUnpaid('bill_item_receipt_paidUnpaid_'+i)">
+                </div>
+              </div>
+            </td>
+            <td>{{group.HeadDesc | uppercase}}</td>
+            <td class=" text-center">{{group.Rate}}</td>
+            <td class="text-center">{{group.Unit}}</td>
+            <td class="text-center">{{group.Amount}}</td>
+            <td class="text-center" [id]="'bill_item_receipt_paidUnpaid_'+i"
+              [style]="changeBgColorByPaidUnPaid('bill_item_receipt_paidUnpaid_'+i)">
+              {{checkPaidUnPaid(group)}}
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </table>
+  </ng-container>
+  <ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+    <small class="mb-2">
+      <div class="d-flex justify-content-around">
+        <strong><span style="color: #1F4287;">R - </span> Rate</strong>
+        <strong><span style="color: #FFD700;">U - </span> Unit</strong>
+        <strong><span style="color: #CD1818;">C - </span> Cost</strong>
+      </div>
+    </small>
+    <div class="card border-0 rounded-2 shadow-lg mb-2 position-relative"
+      *ngFor="let group of billItemList; index as i">
+      <small>
+        <div class="d-flex flex-row">
+          <div class="d-flex align-items-center bg-primary text-white p-1"
+            style="border-top-left-radius: 5px; border-bottom-left-radius: 5px;">
+            <strong>{{i+1}}</strong>
+          </div>
+          <div class="d-flex flex-column pl-1 w-100">
+            <div class="">
+              <strong><i>{{group.HeadDesc | uppercase}}</i></strong>
+            </div>
+            <div class="d-flex justify-content-between w-100">
+              <strong><span style="color: #1F4287;">R:</span> {{group.Rate}}</strong>
+              <strong><span style="color: #FFD700;">U:</span> {{group.Unit}}</strong>
+              <strong><span style="color: #CD1818;">C:</span> {{group.Amount}}</strong>
+              <strong class="pl-1 pr-1" [id]="'bill_item_receipt_paidUnpaid_'+i"
+                [style]="changeBgColorByPaidUnPaid('bill_item_receipt_paidUnpaid_'+i)">
+                <i>{{checkPaidUnPaid(group)}}</i>
+              </strong>
+            </div>
+          </div>
+          <div class="d-flex align-items-center">
+            <div class="form-check">
+              <input #checkBoxCharges class="form-check-input" type="checkbox"
+                (click)="addDeleteCharges(group, checkBoxCharges.checked)"
+                [disabled]="checkPaidUnpaid('bill_item_receipt_paidUnpaid_'+i)">
+            </div>
+          </div>
+        </div>
+      </small>
+
+    </div>
+  </ng-container>
+</p-dialog>

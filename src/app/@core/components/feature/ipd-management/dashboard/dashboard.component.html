@@ -1,0 +1,876 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')" class="m-0 p-0">
+  <div class="d-flex flex-row">
+    <div style="width: 15% !important;" class="p-2">
+      <div class="d-flex flex-row gap-2 justify-content-center">
+        <img src="assets/images/available-bed.png" height="50px" alt="">
+        <h1>IPD</h1>
+      </div>
+      <small class="w-100 d-flex justify-content-center text-center mb-2" style="margin-top: -4% !important;">
+        <div class="d-flex flex-row gap-2">
+          <strong>Patient Count :</strong>
+          <i><strong>{{filteredIpdPatientList.length}}</strong></i>
+        </div>
+      </small>
+      <div class="d-flex flex-column mb-2">
+        <p-breadcrumb class="max-w-full" [model]="item">
+          <ng-template pTemplate="item" let-item>
+            <ng-container>
+              <a class="p-menuitem-link">
+                <!-- <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span> -->
+                <span class="text-primary font-semibold">{{ item.label }}</span>
+              </a>
+            </ng-container>
+            <!-- <ng-template #elseBlock>
+              <a [href]="item.url">
+                  <span class="text-color">{{ item.label }}</span>
+              </a>
+          </ng-template> -->
+          </ng-template>
+        </p-breadcrumb>
+      </div>
+      <div class="d-flex flex-column mb-2">
+        <strong>Patient Status</strong>
+        <select name="" id="" class="form-select" [(ngModel)]="patientStatus">
+          <option value="">Select Status</option>
+          <option value="All">All</option>
+          <option value={{filter}} *ngFor="let filter of patientStatusTypeList">{{filter | uppercase}}</option>
+        </select>
+      </div>
+      <div class="d-flex flex-column mb-2">
+        <strong>Filter Type</strong>
+        <select name="" id="" class="form-select" [(ngModel)]="selectedFilterType"
+          (change)="filterIpdPatientListBySelectedSortingType()">
+          <option value="">Select Filter</option>
+          <option value="{{filter}}" *ngFor="let filter of filterTypeList">{{filter ? filter : '' | uppercase}}</option>
+        </select>
+      </div>
+      <!-- <div class="d-flex flex-column mb-2" *ngIf="selectedFilterType.toLowerCase() === 'floor'">
+        <strong>Search Floor</strong>
+        <select name="" id="" class="form-select">
+          <option value="">Select floor</option>
+          <option value="{{filter}}" *ngFor="let filter of floorList">{{filter ? filter : '' | uppercase}}</option>
+        </select>
+      </div> -->
+      <div class="d-flex flex-column mb-2" *ngIf="selectedFilterType">
+        <strong>Search {{selectedFilterType}}</strong>
+        <select name="" id="" class="form-select" [(ngModel)]="selectedFilterVal">
+          <option value="">All</option>
+          <option value="{{filter}}" *ngFor="let filter of ipdFilterTypeList.filterValueList">{{filter ? filter :
+            '' | uppercase}}</option>
+        </select>
+      </div>
+      <!-- <div class="d-flex flex-column mb-2" *ngIf="selectedFilterType.toLowerCase() === 'doctor'">
+        <strong>Search Doctor</strong>
+        <select name="" id="" class="form-select">
+          <option value="">Select Doctor</option>
+          <option value="{{filter}}" *ngFor="let filter of doctorList">{{filter ? filter.UserName : '' | uppercase}}
+          </option>
+        </select>
+      </div>
+      <div class="d-flex flex-column mb-2" *ngIf="selectedFilterType.toLowerCase() === 'referral doctor'">
+        <strong>Search Referral Doctor</strong>
+        <select name="" id="" class="form-select">
+          <option value="">Select Referral Doctor</option>
+          <option value="{{filter}}" *ngFor="let filter of referralDoctorList">{{filter ? filter.ListItem : '' |
+            uppercase}}</option>
+        </select>
+      </div> -->
+      <div class="d-flex flex-column mb-2">
+        <strong>From Date</strong>
+        <input type="date" name="" id="" class="form-control" [(ngModel)]="fromDate">
+      </div>
+      <div class="d-flex flex-column mb-2">
+        <strong>To Date</strong>
+        <input type="date" name="" id="" class="form-control" [(ngModel)]="toDate">
+      </div>
+      <button type="button" class="btn btn-sm btn-success w-100" (click)="loadPatientListByPatientStatus()">
+        <strong>Search</strong>
+      </button>
+    </div>
+    <div style="width: 85% !important;">
+      <div class="row m-0">
+
+        <div class="col-12">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-wrap gap-2">
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/location.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Location</span></strong></small>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/hospital-bed.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Bed Name</span></strong></small>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/calender-icon.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Admission Date</span></strong></small>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/clock.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Admission Time</span></strong></small>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/referredBy.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Referred By</span></strong></small>
+              </div>
+              <div class="vertical-line"></div>
+              <div class="d-flex flex-wrap align-items-center gap-1">
+                <img src="assets/images/treatment_for.png" style="color: white;" height="20px" alt="" srcset="">
+                <small><strong><span>Admission Reason</span></strong></small>
+              </div>
+            </div>
+            <div class="d-flex flex-column" style="position: relative !important;">
+              <input list="searchedPatientList_1" type="text" placeholder="Search patient name here..."
+                class="form-control rounded-0 searchPatientNameEleStyle" style="min-width: 30vw; font-weight: 700;"
+                [(ngModel)]="searchedPatientName" (keyup)="loadPatientList(searchedPatientName)">
+              <i class="bi bi-x-circle-fill"
+                style="position: absolute; top: 0; right: 2%; font-size: 1.5rem; color: red !important;"
+                *ngIf="searchedPatientName.length > 0"
+                (click)="resetFilters()"></i>
+              <ng-container *ngIf="searchedPatientList.length && searchedPatientName.length">
+                <!-- <datalist id="searchedPatientList_1">
+                  <option value="" *ngFor="let patient of searchedPatientList">{{patient.EntityName | uppercase}}
+                  </option>
+                </datalist> -->
+                <ul class="card border-0 shadow-lg p-1 m-0"
+                  style="position: absolute; top: 100%; right: 0; max-height: 500px; min-width: 100%; overflow-y: auto; z-index: 10000;">
+                  <li *ngFor="let patient of searchedPatientList" class="text-nowrap p-1 row-hover-effect"
+                    (click)="setAndSearchPatientDetailByPatientName(patient.EntityName); showCombinedPatientSearchDetail(patient)">
+                    <div class="d-flex flex-column">
+                      <strong class="p-0 m-0">{{patient.EntityName | uppercase}}</strong>
+                      <i class="p-0 m-0" style="margin-top: 0% !important;">
+                        <ng-container *ngIf="patient.RegNo">
+                          <small class="p-0 m-0" style="color: red;">
+                            <strong>{{patient.RegNo | uppercase}} | [ID: {{patient.EntityId}}]</strong>
+                          </small>
+                        </ng-container>
+                        <ng-container *ngIf="!patient.RegNo">
+                          <small class="p-0 m-0" style="color: red;">
+                            <strong>No ID | [ID: {{patient.EntityId}}]</strong>
+                          </small>
+                        </ng-container>
+                      </i>
+                    </div>
+                  </li>
+                </ul>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+        <ng-container>
+          <div class="col-12" *ngIf="ipdFilterTypeList.filterValueList.length"
+            style="overflow-y: auto; max-height: 90vh; position: relative;">
+            <ng-container *ngFor="let filter of ipdFilterTypeList.filterValueList">
+              <div class="d-flex flex-column"
+                *ngIf="!selectedFilterVal || filter.toLowerCase().trim().includes(selectedFilterVal.toLowerCase().trim())">
+                <div class="card border-0 shadow-lg p-2 mb-3"
+                  *ngIf="validCount(filter,ipdFilterTypeList.filterKeyValue)">
+                  <div class="row main-head">
+                    <div class="col-12 rounded-5 pr-2 pl-2 sub-head"
+                      style="background-color: #4C3BCF; color: white; position: sticky; top: 0; z-index: 100;">
+                      <h5 class="p-1 m-0">
+                        {{filter | uppercase}}
+                      </h5>
+                    </div>
+                    <ng-container *ngFor="let ipd of filteredIpdPatientList">
+                      <ng-container *ngIf="validFilterType(filter,ipdFilterTypeList.filterKeyValue,ipd)">
+                        <div class="col-12 col-md-4 col-lg-3 col-xl-3">
+                          <div class="card rounded-1 shadow-lg p-2 card-bg mb-2"
+                            (click)="op.toggle($event); showDetailsOfIpdPatient(ipd)"
+                            style="position: relative !important;">
+                            <div
+                              class="card border-0 rounded-0 {{ return_PatientStatus(ipd).toLowerCase().includes('discharge') ? 'bg-red-400 text-white' : 'bg-blue-400 text-white'}}"
+                              style="position: absolute; bottom: 0; right: 0; padding-top: 5px !important; padding-bottom: 5px !important; padding-left: 10px !important; padding-right: 10px !important; border-top-left-radius: 25px !important;">
+                              <strong>{{return_PatientStatus(ipd)}}</strong>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <div class="d-flex flex-wrap">
+                                <h5 class="p-0 m-0"><strong>{{ipd.salutation.includes('.') ? ipd.salutation :
+                                    ipd.salutation
+                                    +
+                                    '.'}}
+                                    {{ipd.EntityName}}</strong></h5>
+                              </div>
+                              <!-- <div class="d-flex flex-wrap">
+                            <h6 class="p-0 m-0"><strong><i><span>{{ipd.RegNo}}</span></i></strong></h6>
+                          </div> -->
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap gap-2">
+                                  <h6 class="p-0 m-0"><strong>UHID: <i><span
+                                          [style]=" ipd.RegNo ? 'color : #4E9F3D;' : '' ">{{ipd.RegNo}}</span></i></strong>
+                                  </h6>
+                                </div>
+
+
+                              </div>
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap gap-1">
+                                  <!-- <img src="assets/images/treatment_for.png" style="color: white;" height="20px" alt="" srcset=""> -->
+                                  <small><strong>IPD No: <span
+                                        [style]=" ipd.IPDNO ? 'color : #D89216;' : '' ">{{ipd.IPDNO
+                                        ?
+                                        ipd.IPDNO : 'IPD_NO_NEED'}}</span></strong></small>
+                                </div>
+
+                              </div>
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap align-items-center">
+                                  <img src="assets/images/location.png" style="color: white;" height="20px" alt=""
+                                    srcset="">
+                                  <small><strong><span pTooltip="Floor"
+                                        [style]=" ipd.location ? 'color : #E2703A;' : '' ">{{ipd.location}}</span></strong></small>
+                                </div>
+
+                                <div class="d-flex flex-wrap align-items-center" pTooltip="Admission Date">
+                                  <img src="assets/images/addmission_date_time.png" style="color: white;" height="20px"
+                                    alt="" srcset="">
+                                  <small><strong><span>{{ipd.AdmissionDate| date :
+                                        'dd/MM/yy'}}</span></strong></small>
+                                </div>
+                                <div class="d-flex flex-wrap align-items-center" pTooltip="Admission Time">
+                                  <img src="assets/images/clock.png" style="color: white;" height="20px" alt=""
+                                    srcset="">
+                                  <small><strong><span>{{ipd.AdmissionDate| date :
+                                        'h:mm a'}}</span></strong></small>
+                                </div>
+                              </div>
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap gap-1">
+                                  <img src="assets/images/hospital-bed.png" style="color: white;" height="20px" alt=""
+                                    srcset="">
+                                  <small><strong><span pTooltip="Bed"
+                                        [style]=" ipd.Bed ? 'color : #810CA8;' : 'color : #FF0000;' ">{{ipd.Bed ?
+                                        ipd.Bed : 'Please Allocate Bed'}}</span></strong></small>
+                                </div>
+
+                              </div>
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap gap-1"
+                                  pTooltip="{{ipd.ReferredBy.length > 44 ? ipd.ReferredBy : ''}}">
+                                  <img src="assets/images/referredBy.png" style="color: white;" height="20px" alt=""
+                                    srcset="">
+                                  <small><strong><span>{{wrapupExtraProcedureText(ipd.ReferredBy) ||
+                                        'No Referral Detail'}}</span></strong></small>
+                                </div>
+                              </div>
+
+                              <div class="flex justify-content-between">
+                                <div class="d-flex flex-wrap gap-2"
+                                  pTooltip="{{ipd.ProcAdviced.length > 44 ? ipd.ProcAdviced : ''}}">
+                                  <img src="assets/images/treatment_for.png" style="color: white;" height="20px" alt=""
+                                    srcset="">
+                                  <small><strong><span>{{wrapupExtraProcedureText(ipd.ProcAdviced)}}</span></strong></small>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </ng-container>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <!-- Mobile View -->
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between w-100 pr-2 pl-2">
+        <div class="d-flex flex-row gap-1 align-items-center h-100 gap-2">
+          <img src="assets/images/available-bed-1.png" height="35px" alt="" srcset="">
+          <h4 class="p-0 m-0">IPD ({{filteredIpdPatientList.length}})</h4>
+        </div>
+        <select name="" id="" class="form-select form-select-sm" style="max-width: 150px;"
+          [(ngModel)]="selectedSubFilterType" (change)="sortSelectedFilterTypeArrayDataByFilterType()">
+          <option value="">All</option>
+          <option value="{{filter}}" *ngFor="let filter of ipdFilterTypeList.filterValueList">
+            <div class="d-flex justify-content-between w-100">
+              {{filter}}
+              ({{checkCount(filter,ipdFilterTypeList.filterKeyValue)}})
+            </div>
+          </option>
+        </select>
+        <!-- <p-checkbox
+      [(ngModel)]="isToday"
+      [binary]="true" (onChange)="updateBreadcrump1()"
+      inputId="binary" label="Today"/> -->
+        <!-- <button type="button" class="btn btn-sm btn-success" (click)="updateBreadcrump1()">Today</button> -->
+        <!-- <div class="d-flex flex-row">
+          <button #btn type="button"
+            class="btn btn-sm bg-transparent btn-warning d-flex flex-row gap-2 align-items-center" icon="pi pi-bars"
+            label="Show" (click)="visibleFilterDialog = !visibleFilterDialog">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-sliders"
+              viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                d="M11.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M9.05 3a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0V3zM4.5 7a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M2.05 8a2.5 2.5 0 0 1 4.9 0H16v1H6.95a2.5 2.5 0 0 1-4.9 0H0V8zm9.45 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m-2.45 1a2.5 2.5 0 0 1 4.9 0H16v1h-2.05a2.5 2.5 0 0 1-4.9 0H0v-1z" />
+            </svg>
+            <strong>Filter</strong>
+          </button>
+        </div> -->
+      </div>
+    </div>
+    <div class="col-12" *ngIf="false">
+      <p-breadcrumb class="max-w-full" [model]="item">
+        <ng-template pTemplate="item" let-item>
+          <ng-container>
+            <a class="p-menuitem-link">
+              <!-- <span [ngClass]="[item.icon ? item.icon : '', 'text-color']"></span> -->
+              <span class="text-primary font-semibold">{{ item.label }}</span>
+            </a>
+          </ng-container>
+          <!-- <ng-template #elseBlock>
+              <a [href]="item.url">
+                  <span class="text-color">{{ item.label }}</span>
+              </a>
+          </ng-template> -->
+        </ng-template>
+      </p-breadcrumb>
+    </div>
+    <div class="col-12">
+      <div class="row">
+        <div class="col-12"
+          [style]="{'overflow-y': 'auto', 'overflow-x': 'hidden', 'max-height': (screenHeight-100) + 'px'}">
+          <div class="col-12" *ngIf="ipdFilterTypeList.filterValueList.length">
+            <ng-container *ngFor="let filter of ipdFilterTypeList.filterValueList">
+              <ng-container *ngIf="validCount(filter,ipdFilterTypeList.filterKeyValue)">
+                <div class="d-flex flex-column" *ngIf="validSubFilter(filter)">
+                  <div class="col-12 rounded-1 pr-2 pl-2"
+                    style="background-color: #4C3BCF; color: white; position: sticky; top: 0; z-index: 100;">
+                    <h5 class="p-1 m-0">
+                      {{filter | uppercase}}
+                    </h5>
+                  </div>
+                  <div class="row">
+                    <ng-container *ngFor="let ipd of filteredIpdPatientList">
+                      <div class="col-12 col-md-6 col-lg-3 col-xl-3"
+                        *ngIf="validFilterType(filter,ipdFilterTypeList.filterKeyValue,ipd)">
+                        <div class="card rounded-1 shadow-lg p-2 card-bg"
+                          (click)="op.toggle($event); showDetailsOfIpdPatient(ipd)">
+                          <div class="d-flex flex-column">
+                            <div class="d-flex flex-wrap">
+                              <h5 class="p-0 m-0"><strong>{{ipd.salutation.includes('.') ? ipd.salutation :
+                                  ipd.salutation
+                                  +
+                                  '.'}}
+                                  {{ipd.EntityName}}</strong></h5>
+                            </div>
+                            <!-- <div class="d-flex flex-wrap">
+                            <h6 class="p-0 m-0"><strong><i><span>{{ipd.RegNo}}</span></i></strong></h6>
+                          </div> -->
+                            <div class="flex justify-content-between">
+                              <div class="d-flex flex-wrap gap-2">
+                                <h6 class="p-0 m-0"><strong>UHID: <i><span
+                                        [style]=" ipd.RegNo ? 'color : #4E9F3D;' : '' ">{{ipd.RegNo}}</span></i></strong>
+                                </h6>
+                              </div>
+                              <div class="d-flex flex-wrap gap-2">
+                                <img src="assets/images/addmission_date_time.png" style="color: white;" height="20px"
+                                  alt="" srcset="">
+                                <small><strong><span pTooltip="Admission Date">{{ipd.AdmissionDate| date :
+                                      'dd/MM/yy h:mm a'}}</span></strong></small>
+                              </div>
+                            </div>
+                            <div class="flex justify-content-between">
+                              <div class="d-flex flex-wrap gap-2">
+                                <!-- <img src="assets/images/treatment_for.png" style="color: white;" height="20px" alt="" srcset=""> -->
+                                <small><strong>IPD No: <span [style]=" ipd.IPDNO ? 'color : #D89216;' : '' ">{{ipd.IPDNO
+                                      ?
+                                      ipd.IPDNO : 'IPD_NO_NEED'}}</span></strong></small>
+                              </div>
+                            </div>
+                            <div class="flex justify-content-between">
+                              <div class="d-flex flex-wrap gap-2">
+                                <img src="assets/images/hospital-bed.png" style="color: white;" height="20px" alt=""
+                                  srcset="">
+                                <small><strong><span pTooltip="Bed"
+                                      [style]=" ipd.Bed ? 'color : #810CA8;' : 'color : #FF0000;' ">{{ipd.Bed ?
+                                      ipd.Bed : 'Please Allocate Bed'}}</span></strong></small>
+                              </div>
+                              <div class="d-flex flex-wrap gap-2">
+                                <img src="assets/images/location.png" style="color: white;" height="20px" alt=""
+                                  srcset="">
+                                <small><strong><span pTooltip="Floor"
+                                      [style]=" ipd.location ? 'color : #E2703A;' : '' ">{{ipd.location}}</span></strong></small>
+                              </div>
+                            </div>
+                            <div class="flex justify-content-between">
+                              <div class="d-flex flex-wrap gap-2"
+                                pTooltip="{{ipd.ReferredBy.length > 44 ? ipd.ReferredBy : ''}}">
+                                <img src="assets/images/referredBy.png" style="color: white;" height="20px" alt=""
+                                  srcset="">
+                                <small><strong><span>{{wrapupExtraProcedureText(ipd.ReferredBy) ||
+                                      'No Referral Detail'}}</span></strong></small>
+                              </div>
+                            </div>
+                            <div class="flex justify-content-between">
+                              <div class="d-flex flex-wrap gap-2"
+                                pTooltip="{{ipd.ProcAdviced.length > 44 ? ipd.ProcAdviced : ''}}">
+                                <img src="assets/images/treatment_for.png" style="color: white;" height="20px" alt=""
+                                  srcset="">
+                                <small><strong><span>{{wrapupExtraProcedureText(ipd.ProcAdviced)}}</span></strong></small>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </ng-container>
+                  </div>
+                </div>
+              </ng-container>
+
+            </ng-container>
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="floatable-filter-icon" (click)="visibleFilterDialog = !visibleFilterDialog">
+    <div class="card rounded-5 p-2 shadow-lg">
+      <img src="assets/images/filter.png" height="50 px" alt="" srcset="">
+    </div>
+  </div>
+</ng-container>
+
+
+<p-dialog header="Filter" [modal]="true" [(visible)]="visibleFilterDialog" [style]="{ width: 'auto' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
+  <div class="row">
+    <div class="col-12 p-2 mt-2">
+      <div class="d-flex justify-content-around align-items-center gap-2 h-100">
+        <div class="d-flex flex-row align-items-center">
+          <p-radioButton name="pizza" value="0" inputId="dateSearch0" [(ngModel)]="isCustomDate"
+            (onClick)="updateBreadcrump1()" />
+          <!-- -->
+          <label for="dateSearch0" class="ml-2">
+            All
+          </label>
+        </div>
+        <div class="d-flex flex-row align-items-center">
+          <p-radioButton name="pizza" value="1" inputId="dateSearch1" [(ngModel)]="isCustomDate"
+            (onClick)="updateBreadcrump1()" />
+          <!-- -->
+          <label for="dateSearch1" class="ml-2">
+            Current Date
+          </label>
+        </div>
+        <div class="d-flex flex-row align-items-center">
+          <p-radioButton name="pizza" value="2" inputId="dateSearch2" [(ngModel)]="isCustomDate"
+            (onClick)="updateBreadcrump1()" />
+          <!-- [(ngModel)]="ingredient"  -->
+          <label for="dateSearch2" class="ml-2">
+            Custom Date
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 p-2" *ngIf="isCustomDate.toLowerCase().includes('2')">
+      <div class="row">
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>From</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <input type="date" name="" id="" class="form-control" [(ngModel)]="fromDate">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>To</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <input type="date" name="" id="" class="form-control" [(ngModel)]="toDate">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 p-2">
+      <div class="row">
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>Filter Type</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedFilterType"
+              (change)="filterIpdPatientListBySelectedSortingType()">
+              <option value="">Select Option</option>
+              <option value="{{opt}}" *ngFor="let opt of filterTypeList">{{opt}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>Patient Status</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <select name="" id="" class="form-select form-select-sm" [(ngModel)]="patientStatus"
+              (change)="loadPatientListByPatientStatus()">
+              <option value="">Select Option</option>
+              <option value="{{opt}}" *ngFor="let opt of patientStatusTypeList">{{opt}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 text-end" *ngIf="isCustomDate.toLowerCase().includes('2')">
+      <button type="button" class="btn btn-success">
+        <div class="d-flex flex-row gap-1">
+          <i class="bi bi-search"></i>
+          <strong>Search</strong>
+        </div>
+      </button>
+    </div>
+  </div>
+</p-dialog>
+
+
+<!-- Additional Option for Card -->
+<p-dialog [modal]="true" [(visible)]="visibleAdditionalOptionsDialog" [style]="{ width: 'auto' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" [maximizable]="true">
+  <div class="row">
+    <div class="col-12 p-2">
+      <div class="d-flex justify-content-around">
+        <div class="d-flex flex-row gap-1 align-items-center">
+          <p-radioButton name="pizza" value="false" inputId="dateSearch1" [(ngModel)]="isCustomDate" />
+          <!-- -->
+          <label for="dateSearch1" class="ml-2">
+            Current Date
+          </label>
+        </div>
+        <div class="d-flex flex-row gap-1 align-items-center">
+          <p-radioButton name="pizza" value="true" inputId="dateSearch2" [(ngModel)]="isCustomDate" />
+          <!-- [(ngModel)]="ingredient"  -->
+          <label for="dateSearch2" class="ml-2">
+            Custom Date
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 p-2">
+      <div class="row">
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>From</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <input type="date" name="" id="" class="form-control">
+          </div>
+        </div>
+        <div class="col-6">
+          <div class="d-flex flex-column gap-1">
+            <small><strong>To</strong></small>
+            <!-- <p-calendar [iconDisplay]="'input'" [showIcon]="true" inputId="icondisplay" /> -->
+            <input type="date" name="" id="" class="form-control">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="More Details" [modal]="true" [(visible)]="moreDetails" position="bottom" [style]="{ width: '25rem' }">
+  <div class="row" *ngIf="selectedIpdDetails">
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Patient Name</strong> ({{selectedIpdDetails.EntityId}})</small>
+        <strong>{{selectedIpdDetails.EntityName}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>UHID No</strong></small>
+        <strong>{{selectedIpdDetails.RegNo}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Alloted Bed Location</strong></small>
+        <strong>{{selectedIpdDetails.Location}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Addmission Date/Time</strong></small>
+        <strong>{{selectedIpdDetails.EntryDate | date : 'dd/MM/yyyy hh:mm a'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Insurance</strong></small>
+        <strong>{{selectedIpdDetails.BillClass ? selectedIpdDetails.BillClass : ''}}</strong>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-overlayPanel #op>
+  <div class="flex flex-wrap gap-1" style="max-width: 500px !important;">
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      (click)="showMoreDetail = !showMoreDetail">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/details.png" style="color: white;" height="20px" alt="" srcset="">
+        Details
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;" (click)="showBillDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/bills.png" style="color: white;" height="20px" alt="" srcset="">
+        Hospital Bill
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      (click)="showPathBillDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/bills.png" style="color: white;" height="20px" alt="" srcset="">
+        Path Bills
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      (click)="showPathTestDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/path_ipd_icon.png" style="color: white;" height="20px" alt="" srcset="">
+        Add Path Tests
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      (click)="showPathReportListDateWise = !showPathReportListDateWise; loadPatReportListByPatientIdPathId(); loadPathReportListByPathIdAndPatientIdDate()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/path_ipd_icon.png" style="color: white;" height="20px" alt="" srcset="">
+        Path Test Summary
+      </strong>
+    </button>
+    <!-- <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;" (click)="showBedAllocationDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/bed_allocation_ipd.png" style="color: white;" height="20px" alt="" srcset="">
+        Bed Allocation
+      </strong>
+    </button> -->
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      *ngIf="validRole_ShowDoctorSisterNotes_Btn('doctor')" (click)="showDoctorNotesHistoryForIpdPatientDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_summary.png" style="color: white;" height="20px" alt="" srcset="">
+        Doctor Notes
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      *ngIf="validRole_ShowDoctorSisterNotes_Btn('sister')" (click)="showSisterNotesHistoryForIpdPatientDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_summary.png" style="color: white;" height="20px" alt="" srcset="">
+        Sister Notes
+      </strong>
+    </button>
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;"
+      (click)="showAdmissionHistoryForIpdPatientDialoge()">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_summary.png" style="color: white;" height="20px" alt="" srcset="">
+        Dicharge Summary
+      </strong>
+    </button>
+    <!-- <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;">
+    <strong class="flex flex-row justify-content-center gap-2">
+      <img src="assets/images/edit_appoinment.png" style="color: white;" height="20px" alt="" srcset="">
+      Edit Admission
+    </strong>
+  </button> -->
+    <!-- <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;">
+    <strong class="flex flex-row justify-content-center gap-2">
+      <img src="assets/images/attached_files.png" style="color: white;" height="20px" alt="" srcset="">
+      Attached Files
+    </strong>
+  </button> -->
+    <button type="button" class="btn p-button p-button-raised btn-info" style="width: 49%;">
+      <strong class="flex flex-row justify-content-center gap-2">
+        <img src="assets/images/discharge_patient.png" style="color: white;" height="20px" alt="" srcset="">
+        Discharge Patient
+      </strong>
+    </button>
+  </div>
+</p-overlayPanel>
+
+
+
+<p-dialog header="More Options - {{selectedIpdDetails ? selectedIpdDetails.PatientName : ''}}" [modal]="true"
+  [(visible)]="showMoreDetail" position="bottom" [style]="{ width: '70rem' }">
+
+  <p-tabView *ngIf="selectedIpdDetails">
+    <p-tabPanel header="Patient Detail">
+      <app-patient-details [patientId]="selectedIpdDetails.EntityId"></app-patient-details>
+    </p-tabPanel>
+    <p-tabPanel header="Admission Detail">
+      <app-patient-admission [patientId]="selectedIpdDetails.EntityId"
+        [appointmentId]="selectedIpdDetails.AppointmentId"></app-patient-admission>
+    </p-tabPanel>
+    <p-tabPanel header="Appointment List">
+      <!-- <div class="row" *ngIf="selectedIpdDetails">
+        <div class="col-12" *ngFor="let al of previousAppointmentList">
+          <div class="card rounded-3 shadow-lg p-2 appointment-list-card-style">
+            <div class="d-flex flex-column">
+              <div class="d-flex justify-content-between">
+                <strong><small>Date: <i>{{al.SendAt | date:'dd/MM/yyyy'}}</i></small></strong>
+                <strong><small style="color: red;">{{al.WhichOPD | uppercase}}</small></strong>
+              </div>
+              <div class="d-flex flex-row gap-2">
+                <strong>
+                  <small>
+                    <label for="">Doctor: </label>
+                  </small>
+                </strong>
+                <strong><small>{{al.BookedFor | uppercase}}</small></strong>
+              </div>
+              <div class="d-flex flex-row gap-2">
+                <strong><small>Referred By: </small></strong>
+                <strong><small>{{al.ReferredBy | uppercase}}</small></strong>
+              </div>
+              <div class="d-flex flex-row gap-2">
+                <strong><small>Reason: </small></strong>
+                <strong><small> <i style="color: red;">{{al.Treatment}}</i></small></strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div> -->
+    </p-tabPanel>
+  </p-tabView>
+
+</p-dialog>
+
+
+<p-overlayPanel #dischargePatient>
+  <!-- <div class="d-flex flex-column" style="max-width: 300px;">
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column">
+        <strong><small>Reason for delete?</small></strong>
+        <input id="reasonForDeleteBillItemInput" type="text" class="form-control form-control-sm"
+          [(ngModel)]="reasonForDischargePaitent">
+      </div>
+    </div>
+    <div class="d-flex justify-content-around mt-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="deleteBillItemByBillItemIdBillNo()"
+        [disabled]="selectedDeletingBillItemId === 0 && !reasonForDeleteBillItemDetail.length">Delete</button>
+      <button type="button" class="btn btn-sm btn-danger" id="reasonForDeleteBillItemHide"
+        (click)="reasonForDeleteBillItem.hide()">Cancel</button>
+    </div>
+  </div> -->
+</p-overlayPanel>
+
+
+<p-overlayPanel #pathTestReportList>
+
+</p-overlayPanel>
+
+
+<p-dialog header="Path Report List Date Wise" [modal]="true" [(visible)]="showPathReportListDateWise" position="bottom"
+  [style]="{ width: setWidthBasedOnDevice() }">
+  <div class="d-flex flex-column mt-2" style="width:100%; max-height: 50dvh !important;">
+    <div class="d-flex flex-row justify-content-end align-items-end gap-1">
+      <div class="d-flex flex-row align-items-center gap-2">
+        <strong><small>Pathalogy: </small></strong>
+        <select name="" id="" class="form-select form-select-sm" [(ngModel)]="pathLabId">
+          <option value="{{id}}" *ngFor="let id of pathLabRegIdList">{{id | uppercase}}</option>
+        </select>
+      </div>
+      <!-- <div class="d-flex flex-column">
+        <strong><small>Date</small></strong>
+        <input type="date" name="" id="" class="form-control form-control-sm" [(ngModel)]="pathReportDate">
+      </div>
+      <button type="button" class="btn btn-sm btn-success"
+        (click)="loadPathReportListByPathIdAndPatientIdDate()">Search</button> -->
+    </div>
+    <div class="d-flex flex-column gap-2 mt-2">
+      <ng-container *ngIf="pathReportList.length">
+        <div class="card border-2 rounded-3 shadow-lg p-2 path-report-date-wise-card-bg-color"
+          *ngFor="let report of pathReportList; index as i"
+          (click)="pathReportDate = report.date; rediectToPathManagement(report)">
+
+          <div class="d-flex flex-row gap-1">
+            <strong class="d-flex align-items-center p-2">
+              {{i+1}}
+            </strong>
+            <div class="d-flex flex-column">
+              <h3 class="m-0 p-0">{{report.DoneBy | date:'dd/MMM/yyyy'}}</h3>
+              <strong>
+                <i>
+                  <small>
+                    {{selectedIpdDetails.EntityName | uppercase}}
+                  </small>
+                </i>
+              </strong>
+            </div>
+
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!pathReportList.length">
+        <div class="d-flex justify-content-center text-center p-2" style="width: 100%;">
+          <img src="assets/images/no-data.png" height="200px" alt="" srcset="">
+        </div>
+      </ng-container>
+      <!-- <button type="button" class="btn btn-sm btn-success" (click)="deleteBillItemByBillItemIdBillNo()"
+        [disabled]="selectedDeletingBillItemId === 0 && !reasonForDeleteBillItemDetail.length">Delete</button>
+      <button type="button" class="btn btn-sm btn-danger" id="reasonForDeleteBillItemHide"
+        (click)="reasonForDeleteBillItem.hide()">Cancel</button> -->
+    </div>
+  </div>
+
+</p-dialog>
+
+<p-dialog header="Searched Patient" [modal]="true" [(visible)]="showAlertPopup" [position]="'center'"
+  [style]="{ width: '25rem' }">
+  <div class="d-flex flex-column justify-content-center gap-1 text-center w-100">
+    <div class="d-flex text-center justify-content-center w-100">
+      <img src="assets/images/patient_detail_alert.gif" height="150px" width="150px" alt="" srcset="">
+    </div>
+    <strong>Your searched patient, <br> {{searchedPatientName | uppercase}} <br> is not available in between <br>
+      <span style="color: red;"><i>{{fromDate | date:'dd-MMM-yyyy'}}</i></span> to
+      <span style="color: red;"><i>{{toDate | date:'dd-MMM-yyyy'}}</i></span>
+    </strong>
+    <!-- <br> -->
+    <hr>
+    <!-- <br> -->
+    <strong>
+      Do you like to search for some other date?
+    </strong>
+    <div class="d-flex flex-row justify-content-around gap-2 w-100">
+      <div class="d-flex flex-column">
+        <small>
+          <strong>
+            From Date
+          </strong>
+        </small>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="fromDate">
+      </div>
+      <div class="d-flex flex-column">
+        <small>
+          <strong>
+            to Date
+          </strong>
+        </small>
+        <input type="date" class="form-control form-control-sm" [(ngModel)]="toDate">
+      </div>
+    </div>
+  </div>
+  <hr>
+  <div class="flex justify-content-end gap-2 mt-2">
+    <!-- <p-button label="Cancel" severity="secondary" (onClick)="visible = false" /> -->
+    <!-- <p-button label="Search" (click)="showAlertPopup = false; loadPatientListByPatientStatus()" /> -->
+    <button type="button" class="btn btn-sm btn-secondary"
+      (click)="showAlertPopup = false; searchedPatientName = ''; loadPatientListByPatientStatus()">
+      <strong>
+        Cancel
+      </strong>
+    </button>
+    <button type="button" class="btn btn-sm btn-success"
+      (click)="showAlertPopup = false; loadPatientListByPatientStatus()">
+      <strong>
+        Search Patient
+      </strong>
+    </button>
+  </div>
+</p-dialog>

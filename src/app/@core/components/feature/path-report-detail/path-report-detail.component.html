@@ -1,0 +1,431 @@
+<ng-container *ngIf=" this.validPlatform('window') ||  this.validPlatform('mac')">
+  <div class="d-flex flex-column gap-1" *ngIf="false">
+    <div class="card rounded-3 shadow-lg w-100 border-2 border-primary p-1" style="min-height: 100px;"
+      *ngIf="patientDetail.EntityId > 0">
+      <div class="d-flex flex-row justify-content-between align-items-center w-100">
+        <div class="d-flex flex-column" style="min-width: 50%;">
+          <div class="d-flex flex-column">
+            <strong class="text-primary"><i>Patient Name</i> ({{patientDetail.PrimaryFld2 | uppercase}})
+              ({{patientDetail.PrimaryId1}})
+              ({{patientDetail.ExternalCategory}})</strong>
+            <h5>{{patientDetail.EntityName | uppercase}}</h5>
+          </div>
+          <div class="d-flex flex-column" *ngIf="caseDetail">
+            <strong class="text-primary"><i>Doctor Name</i></strong>
+            <h5>{{caseDetail.Consultant | uppercase}}</h5>
+          </div>
+          <div class="d-flex flex-row align-items-center gap-2" *ngIf="caseDetail">
+            <strong class="text-nowrap text-primary"><i>Path Lab:</i></strong>
+            <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedPathLabId"
+              style="min-width: 50%; max-width: 50%;">
+              <option value="">Select Path Lab</option>
+              <!-- <option value="critizone">Critizone</option> -->
+            </select>
+          </div>
+        </div>
+        <small>
+          <table class="table table-sm table-borderless">
+            <tbody>
+              <tr *ngIf="pathTestDetail.BillNo > 0">
+                <td>
+                  <strong class="text-red-600"><i>Path Case No:</i></strong>
+                </td>
+                <td>
+                  <strong><u>{{pathTestDetail.IPCaseNo | uppercase}}</u></strong>
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <strong class="text-green-600"><i>Case No:</i></strong>
+                </td>
+                <td>
+                  <strong><u>{{caseDetail.IPDNO | uppercase}}</u></strong>
+                </td>
+              </tr>
+              <tr>
+                <td> <strong class="text-green-600"><i>Bed No:</i></strong></td>
+                <td> <strong><u>{{caseDetail.Bed | uppercase}} ({{caseDetail.location | uppercase}})</u></strong></td>
+              </tr>
+              <tr>
+                <td colspan="2">
+                  <div class="d-flex justify-content-between gap-2">
+                    <div
+                      class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2 p-1">
+                      <strong class="text-green-600"><i>Admission Date:</i></strong>
+                      <div class="d-flex flex-row gap-1 justify-content-center text-center">
+                        <strong
+                          [ngClass]="caseDetail.AdmissionDate.split('T')[0] !== pathTestDetail.AdmissionDate.split('T')[0] ? 'text-red-900' : ''"><u>{{caseDetail.AdmissionDate
+                            | date:'dd/MM/yyyy'}}</u></strong>
+                        <img src="./../../../../../assets/images/alert.gif" height="20px" alt="" srcset=""
+                          *ngif="caseDetail.AdmissionDate.split('T')[0] !== pathTestDetail.AdmissionDate.split('T')[0]">
+                      </div>
+                    </div>
+                    <div
+                      class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2 p-1">
+                      <strong class="text-green-600"><i>Path Bill Date:</i></strong>
+                      <strong *ngIf="pathTestDetail.BillDate"><u>{{pathTestDetail.BillDate |
+                          date:'dd/MM/yyyy'}}</u></strong>
+                      <strong *ngIf="!pathTestDetail.BillDate"><u>No date...</u></strong>
+                    </div>
+                    <div
+                      class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2 p-1">
+                      <strong class="text-green-600"><i>Contact No:</i></strong>
+                      <strong *ngIf="caseDetail.PrimaryFld1"><u>{{caseDetail.PrimaryFld1}}</u></strong>
+                      <strong *ngIf="!caseDetail.PrimaryFld1"><u>?</u></strong>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </small>
+      </div>
+    </div>
+    <div class="d-flex flex-row gap-1 w-100">
+      <div class="card border-2 rounded-3 shadow-lg w-50 border-warning p-2" style=" min-height: 500px;">
+        <div class="d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center">
+            <strong>Requested Test List ({{pathTestList.length}})</strong>
+            <div style="position: relative;">
+              <input type="text" class="form-control form-control-sm" placeholder="Search path test here.."
+                #searchPathTest style="max-width: 300px;" [disabled]="!pathTestList.length"
+                (keyup)="filterPathTest(searchPathTest.value)">
+              <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0; top:0;"
+                *ngIf="searchPathTest.value.length" (click)="searchPathTest.value = ''; filterPathTest();">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <ng-container *ngIf="pathTestList.length">
+            <div class="d-flex flex-column p-2 mt-1" style="overflow-y: auto; max-height: 50vh;">
+              <ng-container *ngFor="let test of pathTestList; index as i">
+                <div class="card border-0 rounded-3 shadow-lg mb-1 main-head position-relative">
+                  <div class="d-flex flex-row gap-1">
+                    <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded-3">
+                      <strong>{{i+1}}</strong>
+                    </div>
+                    <small class="w-100">
+                      <div class="d-flex flex-column w-100">
+                        <strong class="text-success">{{test.HeadDesc | uppercase}}</strong>
+                        <div class="d-flex justify-content-between w-100">
+                          <strong class="text-warning"><i>{{test.Date |date:'dd/MM/yyyy'}}</i></strong>
+                          <strong class="pr-2 text-danger"><i class="bi bi-currency-rupee"></i>:
+                            <u><i>{{test.Amount}}</i></u></strong>
+                        </div>
+                      </div>
+                    </small>
+                  </div>
+                  <div
+                    class="position-absolute right-0 top-0 h-100 shadow-lg sub-head d-flex align-items-center rounded-2">
+                    <img class="rounded-2 bg-transparent cursor-pointer" pTooltip="Delete test!"
+                      (click)="reasonForDeleteBillItem.toggle($event); selectedDeletingBillItemId = test.BillDetailId"
+                      src="./../../../../../assets/images/delete.gif" height="40px" alt="" srcset="">
+                    <!-- <strong>Delete</strong> -->
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!pathTestList.length">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100" style="min-height: 400px;">
+              <img src="assets/images/zero.gif" height="100px" alt="" srcset="">
+              <h4><i>There is no test added, yet!</i></h4>
+              <strong style="color: red;">Please add,</strong>
+              <strong style="color: red;">if patient need any!</strong>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="card rounded-3 shadow-lg w-50 border-2 border-info p-2">
+        <div class="d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-center">
+            <strong>Test List ({{filteredPathTestList.length}})</strong>
+            <div style="position: relative;">
+              <input type="text" class="form-control form-control-sm" placeholder="Search path test here.."
+                #searchPathTest style="max-width: 300px;" [disabled]="!testList.length"
+                (keyup)="filterPathTest(searchPathTest.value)">
+              <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0; top:0;"
+                *ngIf="searchPathTest.value.length" (click)="searchPathTest.value = ''; filterPathTest();">
+                <i class="bi bi-x-lg"></i>
+              </button>
+            </div>
+          </div>
+          <small class="w-100 text-center">
+            <strong class="text-red-700 text-uppercase">
+              Double click to add test or click plus icon.
+            </strong>
+          </small>
+          <div class="d-flex flex-column p-2 mt-1" style="overflow-y: auto; max-height: 50vh;">
+            <ng-container *ngFor="let test of filteredPathTestList; index as i">
+              <div class="card border-0 rounded-3 shadow-lg mb-1 main-head position-relative"
+                (dblclick)="doubleClickMouseSavePathTest(test)">
+                <div class="d-flex flex-row gap-1">
+                  <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded-3">
+                    <strong>{{i+1}}</strong>
+                  </div>
+                  <small class="w-100">
+                    <div class="d-flex flex-column w-100">
+                      <strong class="text-success">{{test.TestName | uppercase}}</strong>
+                      <div class="d-flex justify-content-between w-100">
+                        <strong class="text-warning"><i>{{test.Remarks |uppercase}}</i></strong>
+                        <strong class="pr-2 text-danger"><i class="bi bi-currency-rupee"></i>:
+                          <u><i>{{test.Amount}}</i></u></strong>
+                      </div>
+                    </div>
+                  </small>
+                </div>
+                <div
+                  class="position-absolute right-0 top-0 h-100 shadow-lg text-white sub-head d-flex align-items-center rounded-2">
+                  <img class="rounded-2 bg-transparent cursor-pointer" pTooltip="Add test!"
+                    src="./../../../../../assets/images/add.gif"
+                    (click)="addChargeWithUnitNote.toggle($event); setSelectedBillItemChargeDetail(test)" height="40px"
+                    alt="" srcset="">
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<div *ngIf="false">
+  <div class="d-flex flex-column justify-content-center align-items-center h-100"
+    style="min-height: 500px; min-width: 500px;">
+    <!-- <div class="d-flex flex-column gap-1"> -->
+    <h5>This feature is in,</h5>
+    <h4><i>Development</i></h4>
+    <strong>Coming Soon!</strong>
+    <!-- </div> -->
+  </div>
+</div>
+
+<ng-container *ngIf="this.validPlatform('iphone') || this.validPlatform('ipad')">
+
+  <div class="d-flex flex-column">
+    <div class="d-flex flex-row justify-content-between gap-1">
+      <div class="d-flex flex-column">
+        <strong class="text-primary">
+          <small>
+            <i>Patient Name</i> ({{patientDetail.PrimaryFld2 | uppercase}})
+            ({{patientDetail.PrimaryId1}})
+            ({{patientDetail.ExternalCategory}})
+          </small>
+        </strong>
+        <h5>{{patientDetail.EntityName | uppercase}}</h5>
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <img src="./../../../../../assets/images/info.png" height="35px" alt="" srcset="">
+      </div>
+    </div>
+    <hr class="p-0 m-0">
+    <div class="d-flex flex-row justify-content-between gap-1">
+      <div class="d-flex flex-column" *ngIf="caseDetail">
+        <strong class="text-primary">
+          <small>
+            <i>Doctor Name</i>
+          </small>
+        </strong>
+        <h5>{{caseDetail.Consultant | uppercase}}</h5>
+      </div>
+      <div class="d-flex justify-content-center align-items-center">
+        <img src="./../../../../../assets/images/info.png" height="35px" alt="" srcset="">
+      </div>
+    </div>
+    <hr class="p-0 m-0">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2" style="padding-left: 1px; padding-right: 1px;">
+        <strong class="text-green-600"><small><i>Admission Date:</i></small></strong>
+        <div class="d-flex flex-row gap-1 justify-content-center text-center">
+          <strong
+            [ngClass]="caseDetail.AdmissionDate.split('T')[0] !== pathTestDetail.AdmissionDate.split('T')[0] ? 'text-red-900' : ''"><u>{{caseDetail.AdmissionDate
+              | date:'dd/MM/yyyy'}}</u></strong>
+          <img src="./../../../../../assets/images/alert.gif" height="20px" alt="" srcset=""
+            *ngif="(caseDetail.AdmissionDate.split('T')[0] !== pathTestDetail.AdmissionDate.split('T')[0]) || pathTestDetail.BillNo === 0">
+            <img src="./../../../../../assets/images/alert.gif" height="20px" alt="" srcset=""
+            *ngif="pathTestDetail.BillNo === 0">
+        </div>
+      </div>
+      <div class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2" style="padding-left: 1px; padding-right: 1px;">
+        <strong class="text-green-600"><small><i>Path Bill Date:</i></small></strong>
+        <strong *ngIf="pathTestDetail.BillDate"><u>{{pathTestDetail.BillDate |
+            date:'dd/MM/yyyy'}}</u></strong>
+        <strong *ngIf="!pathTestDetail.BillDate"><u>No date...</u></strong>
+      </div>
+      <div class="d-flex flex-column justify-content-center text-center border-1 border-black rounded-2" style="padding-left: 1px; padding-right: 1px;">
+        <strong class="text-green-600"><small><i>Contact No:</i></small></strong>
+        <strong *ngIf="caseDetail.PrimaryFld1"><u>{{caseDetail.PrimaryFld1}}</u></strong>
+        <strong *ngIf="!caseDetail.PrimaryFld1"><u>?</u></strong>
+      </div>
+    </div>
+    <hr class="p-0 m-0">
+    <div class="d-flex justify-content-between mt-1 mb-1">
+      <div class="d-flex justify-content-start align-items-center h-100">
+        <strong class="mt-1" *ngIf="value.toLowerCase().includes('requested')">Requested Test List
+          ({{pathTestList.length}})</strong>
+        <strong class="mt-1" *ngIf="value.toLowerCase().includes('test')">Test List
+          ({{filteredPathTestList.length}})</strong>
+      </div>
+      <p-selectButton [options]="stateOptions" [(ngModel)]="value" optionLabel="label" optionValue="value" />
+    </div>
+    <div class="card border-2 rounded-3 shadow-lg w-100 border-warning p-2" style=" min-height: 500px;"
+      *ngIf="value.toLowerCase().includes('requested')">
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="w-100" style="position: relative;">
+            <input type="text" class="form-control form-control-sm" placeholder="Search path test here.."
+              #searchPathTest [disabled]="!pathTestList.length" (keyup)="filterPathTest(searchPathTest.value)">
+            <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0; top:0;"
+              *ngIf="searchPathTest.value.length" (click)="searchPathTest.value = ''; filterPathTest();">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+        <ng-container *ngIf="pathTestList.length">
+          <div class="d-flex flex-column p-2 mt-1" style="overflow-y: auto; max-height: 50vh;">
+            <ng-container *ngFor="let test of pathTestList; index as i">
+              <div class="card border-0 rounded-3 shadow-lg mb-1 main-head position-relative">
+                <div class="d-flex flex-row gap-1">
+                  <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded-3">
+                    <strong>{{i+1}}</strong>
+                  </div>
+                  <small class="w-100">
+                    <div class="d-flex flex-column w-100">
+                      <strong class="text-success">{{test.HeadDesc | uppercase}}</strong>
+                      <div class="d-flex justify-content-between w-100">
+                        <strong class="text-warning"><i>{{test.Date |date:'dd/MM/yyyy'}}</i></strong>
+                        <strong class="pr-2 text-danger"><i class="bi bi-currency-rupee"></i>:
+                          <u><i>{{test.Amount}}</i></u></strong>
+                      </div>
+                    </div>
+                  </small>
+                </div>
+                <div
+                  class="position-absolute right-0 top-0 h-100 shadow-lg sub-head d-flex align-items-center rounded-2">
+                  <img class="rounded-2 bg-transparent cursor-pointer" pTooltip="Delete test!"
+                    (click)="reasonForDeleteBillItem.toggle($event); selectedDeletingBillItemId = test.BillDetailId"
+                    src="./../../../../../assets/images/delete.gif" height="40px" alt="" srcset="">
+                  <!-- <strong>Delete</strong> -->
+                </div>
+              </div>
+            </ng-container>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!pathTestList.length">
+          <div class="d-flex flex-column justify-content-center align-items-center h-100" style="min-height: 400px;">
+            <img src="assets/images/zero.gif" height="100px" alt="" srcset="">
+            <h4><i>There is no test added, yet!</i></h4>
+            <strong style="color: red;">Please add,</strong>
+            <strong style="color: red;">if patient need any!</strong>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+    <div class="card rounded-3 shadow-lg w-100 border-2 border-info p-2" style=" min-height: 500px;"
+      *ngIf="value.toLowerCase().includes('test')">
+      <div class="d-flex flex-column">
+        <div class="d-flex justify-content-between align-items-center">
+          <div class="w-100" style="position: relative;">
+            <input type="text" class="form-control form-control-sm" placeholder="Search path test here.."
+              #searchPathTest [disabled]="!testList.length" (keyup)="filterPathTest(searchPathTest.value)">
+            <button type="button" class="btn btn-sm btn-danger" style="position: absolute; right: 0; top:0;"
+              *ngIf="searchPathTest.value.length" (click)="searchPathTest.value = ''; filterPathTest();">
+              <i class="bi bi-x-lg"></i>
+            </button>
+          </div>
+        </div>
+        <small class="w-100 text-center">
+          <strong class="text-red-700 text-uppercase" style="font-size: 0.8rem;">
+            Double click to add test or click plus icon.
+          </strong>
+        </small>
+        <div class="d-flex flex-column p-2 mt-1" style="overflow-y: auto; max-height: 50vh;">
+          <ng-container *ngFor="let test of filteredPathTestList; index as i">
+            <div class="card border-0 rounded-3 shadow-lg mb-1 main-head position-relative"
+              (dblclick)="doubleClickMouseSavePathTest(test)">
+              <div class="d-flex flex-row gap-1">
+                <div class="d-flex justify-content-center align-items-center p-2 bg-primary text-white rounded-3">
+                  <strong>{{i+1}}</strong>
+                </div>
+                <small class="w-100">
+                  <div class="d-flex flex-column w-100">
+                    <strong class="text-success">{{test.TestName | uppercase}}</strong>
+                    <div class="d-flex justify-content-between w-100">
+                      <strong class="text-warning"><i>{{test.Remarks |uppercase}}</i></strong>
+                      <strong class="pr-2 text-danger"><i class="bi bi-currency-rupee"></i>:
+                        <u><i>{{test.Amount}}</i></u></strong>
+                    </div>
+                  </div>
+                </small>
+              </div>
+              <div
+                class="position-absolute right-0 top-0 h-100 shadow-lg text-white sub-head d-flex align-items-center rounded-2">
+                <img class="rounded-2 bg-transparent cursor-pointer" pTooltip="Add test!"
+                  src="./../../../../../assets/images/add.gif"
+                  (click)="addChargeWithUnitNote.toggle($event); setSelectedBillItemChargeDetail(test)" height="40px"
+                  alt="" srcset="">
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+<p-overlayPanel #addChargeWithUnitNote>
+  <div class="d-flex flex-column" style="max-width: 300px;">
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column">
+        <strong><small>Unit</small></strong>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="billItemCharge.Unit"
+          (keyup)="calculateFinalRateAmount()">
+      </div>
+      <div class="d-flex flex-column">
+        <strong><small>Rate (Per Unit)</small></strong>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="this.billItemCharge.Rate"
+          (keyup)="calculateFinalRateAmount()">
+      </div>
+    </div>
+
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column w-50">
+        <strong><small>Notes</small></strong>
+        <textarea name="" id="" rows="3" cols="3" class="form-control form-control-sm"
+          [(ngModel)]="billItemCharge.Notes"></textarea>
+      </div>
+      <div class="d-flex flex-column w-50">
+        <div class="d-flex flex-column">
+          <strong><small>Final Rate</small></strong>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="billItemCharge.Amount" disabled>
+        </div>
+        <div class="d-flex justify-content-around mt-2">
+          <button type="button" class="btn btn-sm btn-success" (click)="saveBillItem()">Add</button>
+          <button type="button" class="btn btn-sm btn-danger" id="addChargeWithUnitNoteHide"
+            (click)="addChargeWithUnitNote.hide()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #reasonForDeleteBillItem>
+  <div class="d-flex flex-column" style="max-width: 300px;">
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column">
+        <strong><small>Reason for delete?</small></strong>
+        <input id="reasonForDeleteBillItemInput" type="text" class="form-control form-control-sm"
+          [(ngModel)]="reasonForDeleteBillItemDetail">
+      </div>
+    </div>
+    <div class="d-flex justify-content-around mt-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="deleteBillItemByBillItemIdBillNo()"
+        [disabled]="selectedDeletingBillItemId === 0 && !reasonForDeleteBillItemDetail.length">Delete</button>
+      <button type="button" class="btn btn-sm btn-danger" id="reasonForDeleteBillItemHide"
+        (click)="reasonForDeleteBillItem.hide()">Cancel</button>
+    </div>
+  </div>
+</p-overlayPanel>

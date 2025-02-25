@@ -1,0 +1,56 @@
+/* :host ::ng-deep {
+  .speeddial-tooltip-demo {
+    .p-speeddial-direction-up {
+      &.speeddial-left {
+        left: 0;
+        bottom: 0;
+      }
+
+      &.speeddial-right {
+        right: 0;
+        bottom: 0;
+      }
+    }
+  }
+} */
+
+:host ::ng-deep .speeddial-tooltip-demo .p-speeddial-direction-up .speeddial-left {
+  left: 0;
+  bottom: 0;
+}
+
+:host ::ng-deep .speeddial-tooltip-demo .p-speeddial-direction-up .speeddial-right {
+  left: 0;
+  bottom: 0;
+}
+
+
+:host ::ng-deep .p-speeddial-button .p-button-rounded {
+  border-radius: 50px !important;
+}
+
+:host ::ng-deep .p-inputtext {
+  width: 100% !important;
+  padding: 0.25rem 0.25rem !important;
+}
+
+.dropdown-menu {
+  background-color: transparent !important;
+  border: none !important;
+}
+
+:host :ng-deep .p-dialog .p-dialog-content {
+  padding: 0 0.5rem 0.5rem 0.5rem !important;
+}
+
+:host :ng-deep ::after .p-dialog .p-dialog-header {
+  padding: 0.5rem !important;
+}
+
+:host :ng-deep .p-autocomplete-items {
+  padding: 0 !important;
+}
+
+ul {
+  padding-left: 0rem !important;
+}

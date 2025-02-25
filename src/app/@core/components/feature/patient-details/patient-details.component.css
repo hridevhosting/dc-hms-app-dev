@@ -1,0 +1,30 @@
+.person-profile-photo-image {
+  min-height: 200px;
+  max-height: 200px;
+
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24
+}
+
+
+.form-filed{
+  border: 1px solid black;
+  padding: 5px;
+}
+
+.form-filed label{
+  margin-top: -17px;
+  padding-bottom: 5px;
+}
+
+.form-filed label strong{
+  background-color: white;
+  padding-left: 5px;
+  padding-right: 5px;
+}

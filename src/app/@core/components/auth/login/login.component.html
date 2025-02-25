@@ -1,0 +1,187 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div appDevResIdentify="'hello'" class="cover-photo"></div>
+  <div class="brand-label card border-0 rounded-0 p-3">
+    <div class="d-flex flex-row gap-3">
+      <h5 class="p-0 m-0"><i>Software By</i></h5>
+      <img src="assets/logo/companyLogo.png" height="20px" alt="">
+    </div>
+  </div>
+  <div class="main">
+    <div class="container h-100 w-100">
+      <div class="d-flex justify-content-end align-items-center h-100">
+        <div class="card element border-0 p-3" style="height: 500px !important; width: 500px !important;">
+          <ng-container *ngIf="!inProcess && !isSuccess">
+            <div class="row">
+              <div class="col-12">
+                <div class="d-flex flex-row gap-2 h-100 align-items-end justify-content-between p-2">
+                  <h5 class="">
+                    <strong>
+                      <i>Welcome at, </i>
+                    </strong>
+                  </h5>
+                  <h4>{{hospitalName}} Hospital</h4>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2">
+              <div class="col-12 text-center">
+                <!-- <div class="d-flex flex-row gap-1"> -->
+                <!-- <img src="assets/images/profile-photo.png" height="20px" alt="" srcset=""> -->
+                <img src="assets/images/authentication-lock.png" height="100px" alt="">
+                <!-- </div> -->
+              </div>
+              <div class="col-12">
+                <div class="d-flex flex-column text-end">
+                  <!-- <small> -->
+                  <!-- <h5>Username</h5> -->
+                  <!-- </small> -->
+                  <div class="d-flex flex-row gap-1">
+                    <img src="assets/images/profile-photo.png" class="p-1 rounded-1" style="background-color: #F6F5F2;"
+                      height="50px" alt="" srcset="">
+                    <!-- <img src="assets/images/authentication-lock.png" height="100px" alt=""> -->
+                    <input list="userNameList" type="text" class="form-select form-select-lg rounded-0"
+                      placeholder="Enter your username" [(ngModel)]="loginDetails.LoginName"
+                      style="border-bottom: 3px solid black;">
+                    <datalist id="userNameList">
+                      <!-- <option value="">Please select user</option> -->
+                      <option [value]="item.LoginName" *ngFor="let item of loginUserList">{{item.LoginName | uppercase}}
+                      </option>
+                    </datalist>
+                    <!-- <select class="form-select form-select-lg rounded-0" [(ngModel)]="loginDetails.LoginName">
+                      <option value="">Please select user</option>
+                      <option [value]="item.LoginName" *ngFor="let item of loginUserList">{{item.LoginName | uppercase}}
+                      </option>
+                    </select> -->
+                    <!-- <input type="text" class="form-control form-control-lg rounded-0 text-start"
+                    style="border-bottom: 3px solid black;" placeholder="Enter your username"> -->
+                  </div>
+                </div>
+              </div>
+              <div class="col-12">
+                <div class="d-flex flex-column text-end">
+                  <!-- <small> -->
+                  <!-- <h5>Password</h5> -->
+                  <!-- </small> -->
+                  <div class="d-flex flex-row gap-1">
+                    <img src="assets/images/password.png" class="p-1 rounded-1" style="background-color: #F6F5F2;"
+                      height="50px" alt="" srcset="">
+                    <!-- <img src="assets/images/authentication-lock.png" height="100px" alt=""> -->
+                    <input type="password" class="form-control form-control-lg rounded-0 text-start"
+                      style="border-bottom: 3px solid black;" placeholder="Enter your password"
+                      [(ngModel)]="loginDetails.pass1">
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 text-center">
+                <button type="button" class="btn btn-lg btn-element" (click)="validateLogin()">
+                  <!-- <button type="button" class="btn btn-lg btn-element" (click)="inProcess = true"> -->
+                  <div class="d-flex flex-row gap-1 h-100 align-items-center">
+                    <img src="assets/images/validate.png" height="25px" alt="" srcset="">
+                    <strong>Login</strong>
+                  </div>
+                </button>
+              </div>
+              <div class="col-12">
+                <hr>
+              </div>
+              <div class="col-12 text-center">
+                <h6 style="color: #CD1818;">Opps! have you forget your password? <strong><i><u style="cursor: pointer;" pTooltip="Let us help you, for getting you new password."
+                        routerLink="./../forget-password">Let`s
+                        reset.</u></i></strong></h6>
+              </div>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="inProcess && !isSuccess">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 w-100">
+              <img src="assets/images/login_process.gif" height="250px" alt="" srcset="">
+              <h4>Verifying your details...</h4>
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!inProcess && isSuccess">
+            <div class="d-flex flex-column justify-content-center align-items-center h-100 w-100">
+              <img src="assets/images/welcome_animation.gif" height="120px" width="300px" alt="" srcset="">
+              <h3>{{userName | uppercase}}</h3>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div class="bg-image" [style]="{'height':screenHeight,'width':screenWidth}">
+  </div>
+  <div class="w-100" style="position: absolute; top: 5%;">
+    <div class="d-flex justify-content-center">
+      <img src="assets/hospital-image/bg-image.png" style="background-size: contain;" class="rounded-5 shadow-8"
+        height="300px" alt="">
+      <!-- <small><strong>Product By</strong></small> -->
+    </div>
+  </div>
+  <div class="d-flex justify-content-center align-items-center" style="position: absolute; bottom: 0px;">
+    <div class="card shadow-lg border-custom-login-card">
+      <div class="row p-4" *ngIf="!inProcess && !isSuccess">
+        <div class="col-12 text-center">
+          <h1 class="h1 p-0">Welcome back!</h1>
+          <h6 class="p-0 m-0">Login to continue using EasyLife(HMS).</h6>
+        </div>
+        <div class="col-12">
+          <div class="d-flex flex-column">
+            <label for="username"><strong style="font-weight: 700; font-size: 1.2rem;">Username</strong></label>
+            <input list="userNameList" type="text" class="form-control" placeholder="Enter your user name..."
+              [(ngModel)]="loginDetails.LoginName">
+            <datalist id="userNameList">
+              <option value="">Please select user</option>
+              <option [value]="item.LoginName" *ngFor="let item of loginUserList">{{item.LoginName | uppercase}}
+              </option>
+            </datalist>
+            <!-- <select class="form-select" [(ngModel)]="loginDetails.LoginName">
+              <option value="">Please select user</option>
+              <option [value]="item.LoginName" *ngFor="let item of loginUserList">{{item.LoginName | uppercase}}
+              </option>
+            </select> -->
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="d-flex flex-column w-100" style="width: 100%;">
+            <label for="username"><strong style="font-weight: 700; font-size: 1.2rem;">Password</strong></label>
+            <input type="password" name="" id="" class="form-control" [(ngModel)]="loginDetails.pass1"
+              placeholder="Please enter your account password">
+          </div>
+        </div>
+        <div class="col-12 mt-1">
+          <div class="d-flex justify-content-center w-100">
+            <p-checkbox [binary]="true" inputId="binary" label="Remember me for future."></p-checkbox>
+          </div>
+        </div>
+        <div class="col-12 mt-1">
+          <div class="d-flex justify-content-center flex-column w-100">
+            <button pButton pRipple label="Login" class="btn btn-sm p-button-raised btn-success"
+              (click)="validateLogin()">
+            </button>
+            <!-- <p-divider /> -->
+            <div class="d-flex justify-content-center w-100">
+              <!-- <p-button label="Reset Password" [text]="true" severity="danger" /> -->
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row p-4">
+        <ng-container *ngIf="inProcess && !isSuccess">
+          <div class="d-flex flex-column justify-content-center align-items-center h-100" style="width: 100dvw;">
+            <img src="assets/images/login_process.gif" height="250px" alt="" srcset="">
+            <h4>Verifying your details...</h4>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="!inProcess && isSuccess">
+          <div class="d-flex flex-column justify-content-center align-items-center h-100" style="width: 100dvw;">
+            <img src="assets/images/welcome_animation.gif" height="120px" width="300px" alt="" srcset="">
+            <h3>{{userName | uppercase}}</h3>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</ng-container>

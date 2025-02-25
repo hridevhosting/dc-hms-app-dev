@@ -1,0 +1,27 @@
+:host :ng-deep .p-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+:host :ng-deep .p-sidebar-content {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.menu-item-style {
+  padding: 15px;
+  list-style-type: none;
+  font-weight: 600;
+}
+
+.menu-item-style:hover {
+  padding: 15px;
+  background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
+  color: white;
+}
+
+.menu-item-style:active {
+  padding: 15px;
+  background-image: linear-gradient(-20deg, #f794a4 0%, #fdd6bd 100%);
+  color: white;
+}

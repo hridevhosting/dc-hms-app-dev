@@ -1,0 +1,302 @@
+<div class="" style="position: relative; min-height: 50vh;">
+
+  <div class="row" *ngIf="rxPrescriptionList.length">
+    <div class="col-12" *ngFor="let prescription of rxPrescriptionList">
+      <div class="card shadow-lg rounded-3 shadow-lg p-1" style="border: 2px dotted #FF7D29;">
+        <div class="d-flex flex-column">
+          <div class="d-flex flex-column">
+            <!-- <img src="./../../../../../assets/images/medicine.png" height="35px" alt="" srcset=""> -->
+            <small class="d-flex justify-content-between align-items-center h-100">
+              <strong>
+                Medicine
+                <!-- <img src="./../../../../../assets/images/medicine.png" height="15px" alt="" srcset=""> -->
+              </strong>
+              <div class="d-flex justify-content-around gap-1">
+                <div class="d-flex flex-row text-start gap-1">
+                  <small class="d-flex align-items-center"><strong>Dose
+                      <!-- <img src="./../../../../../assets/images/time.png" height="15px" alt="" srcset="">  -->
+                      :</strong></small>
+                  <strong><i>{{prescription.Doses}}</i></strong> |
+                  <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                    placeholder="Select Dose" [(ngModel)]="prescription.Doses"> -->
+                </div>
+                <div class="d-flex flex-row text-start gap-1">
+                  <small class="d-flex align-items-center"><strong>Days
+                      <!-- <img src="./../../../../../assets/images/calender-icon.png" height="15px" alt="" srcset=""> -->
+                      :</strong></small>
+                  <strong><i>{{prescription.Days}}</i></strong> |
+                  <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                    placeholder="Enter Days" [(ngModel)]="prescription.Days"> -->
+                </div>
+                <div class="d-flex flex-row text-start gap-1">
+                  <small class="d-flex align-items-center"><strong>Qty
+                      <!-- <img src="./../../../../../assets/images/boxes.png" height="15px" alt="" srcset=""> -->
+                      :</strong></small>
+                  <strong><i>{{prescription.Qty}}</i></strong>
+                  <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                    placeholder="Enter Qty" [(ngModel)]="prescription.Qty"> -->
+                </div>
+                <div class="d-flex flex-row flex-wrap" *ngIf="false">
+                  <small class="d-flex align-items-center"><strong>Instruction
+                      <!-- <img src="./../../../../../assets/images/planning.png" height="15px" alt="" srcset=""> -->
+                    </strong></small>
+                  <i>{{prescription.Instruction}}</i>
+
+                  <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                    placeholder="Select Dose" [(ngModel)]="prescription.Instruction"> -->
+                </div>
+              </div>
+              <!-- <i>{{prescription.Instruction}}</i> -->
+            </small>
+            <i>{{prescription.medicine}}</i>
+            <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+              placeholder="Search medicine here" [(ngModel)]="prescription.medicine"> -->
+          </div>
+          <div class="d-flex flex-wrap gap-2">
+            <div class="d-flex flex-column text-center" *ngIf="false">
+              <small class="d-flex align-items-center"><strong>Dose <img src="./../../../../../assets/images/time.png"
+                    height="15px" alt="" srcset=""></strong></small>
+              <i>{{prescription.Doses}}</i>
+              <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                placeholder="Select Dose" [(ngModel)]="prescription.Doses"> -->
+            </div>
+            <div class="d-flex flex-column text-center" *ngIf="false">
+              <small class="d-flex align-items-center"><strong>Days <img
+                    src="./../../../../../assets/images/calender-icon.png" height="15px" alt=""
+                    srcset=""></strong></small>
+              <i>{{prescription.Days}}</i>
+              <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                placeholder="Enter Days" [(ngModel)]="prescription.Days"> -->
+            </div>
+            <div class="d-flex flex-column text-center" *ngIf="false">
+              <small class="d-flex align-items-center"><strong>Qty <img src="./../../../../../assets/images/boxes.png"
+                    height="15px" alt="" srcset=""></strong></small>
+              <i>{{prescription.Qty}}</i>
+              <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                placeholder="Enter Qty" [(ngModel)]="prescription.Qty"> -->
+            </div>
+            <div class="d-flex flex-column flex-wrap" *ngIf="false">
+              <small class="d-flex align-items-center"><strong>Instruction <img
+                    src="./../../../../../assets/images/planning.png" height="15px" alt="" srcset=""></strong></small>
+              <i>{{prescription.Instruction}}</i>
+
+              <!-- <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                placeholder="Select Dose" [(ngModel)]="prescription.Instruction"> -->
+            </div>
+          </div>
+          <div class="row pl-1 pr-1" hidden>
+            <div class="col">
+              <!-- <img src="./../../../../../assets/images/time.png" height="30px" alt="" srcset=""> -->
+              <div class="d-flex flex-column">
+                <small><strong>Dose</strong></small>
+                <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                  placeholder="Select Dose" [(ngModel)]="prescription.Doses">
+              </div>
+            </div>
+            <div class="col">
+              <!-- <img src="./../../../../../assets/images/calender-icon.png" height="30px" alt="" srcset=""> -->
+              <div class="d-flex flex-column">
+                <small><strong>Days</strong></small>
+                <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                  placeholder="Enter Days" [(ngModel)]="prescription.Days">
+              </div>
+            </div>
+            <div class="col">
+              <!-- <img src="./../../../../../assets/images/boxes.png" height="30px" alt="" srcset=""> -->
+              <div class="d-flex flex-column">
+                <small><strong>Qty</strong></small>
+                <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                  placeholder="Enter Qty" [(ngModel)]="prescription.Qty">
+              </div>
+            </div>
+          </div>
+          <div class="row pl-1 pr-1" hidden>
+            <div class="col">
+              <!-- <img src="./../../../../../assets/images/time.png" height="30px" alt="" srcset=""> -->
+              <div class="d-flex flex-column">
+                <small><strong>Instruction</strong></small>
+                <input type="text" name="" id="" class="form-control form-control-sm border-0 border-bottom-1"
+                  placeholder="Select Dose" [(ngModel)]="prescription.Instruction">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div style="position: absolute; right: 1%; bottom: -5%;" *ngIf="false">
+    <div class="dropdown">
+      <button class="btn btn-lg btn-primary rounded-5 dropdown-toggle" type="button" data-bs-toggle="dropdown"
+        aria-expanded="false">
+        <i class="bi bi-layers-half"></i>
+      </button>
+      <ul class="dropdown-menu text-end">
+
+        <li class="m-1">
+          <button class="btn btn-primary">
+            <i class="bi bi-arrow-clockwise"></i>
+          </button>
+        </li>
+        <li class="m-1">
+          <button class="btn btn-primary">
+            <i class="bi bi-prescription"></i>
+          </button>
+        </li>
+        <li class="m-1">
+          <button class="btn btn-primary" (click)="showMedicineAddUpdatePopUp = true">
+            <i class="bi bi-plus-lg"></i>
+          </button>
+        </li>
+
+
+      </ul>
+    </div>
+  </div>
+
+  <p-dialog header="Medicine Details" [modal]="true" position="bottom" [(visible)]="showMedicineAddUpdatePopUp"
+    [style]="{ width: '25rem' }">
+    <div class="d-flex flex-column gap-2">
+      <div class="d-flex flex-column">
+        <small><strong>Medicine Name</strong></small>
+        <input type="search" name="" id="" class="form-control" placeholder="Search medicine here...">
+      </div>
+      <div class="d-flex flex-column">
+        <small><strong>Medicine Dose</strong></small>
+        <input type="search" name="" id="" class="form-control" placeholder="Enter medicine dose...">
+      </div>
+      <div class="d-flex flex-column">
+        <small><strong>Medicine Days</strong></small>
+        <input type="search" name="" id="" class="form-control" placeholder="Enter medicine intake period here...">
+      </div>
+      <div class="d-flex flex-column">
+        <small><strong>Medicine Qty</strong></small>
+        <input type="search" name="" id="" class="form-control" placeholder="Enter medicine qty here...">
+      </div>
+      <div class="d-flex flex-column">
+        <small><strong>Medicine Dose Description</strong></small>
+        <input type="search" name="" id="" class="form-control" placeholder="Medicine dose description here...">
+      </div>
+      <div class="d-flex flex-row gap-2 justify-content-end">
+        <button type="button" class="btn btn-sm btn-danger shadow-lg"><i class="bi bi-x-lg"></i> Cancel</button>
+        <button type="button" class="btn btn-sm btn-success shadow-lg"><i class="bi bi-plus-lg"></i> Save</button>
+      </div>
+    </div>
+  </p-dialog>
+</div>
+
+<div style="position: absolute; right: 1%; bottom: 1%;" *ngIf="!showAddMedicineModal"
+  (click)="showAddMedicineModal = !showAddMedicineModal">
+  <div class="card border-1 shadow-lg rounded-5 p-2">
+    <img src="./../../../../../assets/images/add-med.png" height="50px" alt="" srcset="">
+  </div>
+</div>
+<div class="card shadow-lg border-0" style="position: absolute; right: 0; bottom: 0%; background-color: #BEDCFA;"
+  *ngIf="showAddMedicineModal">
+  <div class="container p-3">
+    <div class="row p-0">
+
+      <div class="col-12 p-0">
+        <div class="d-flex flex-column p-0">
+          <small class="d-flex justify-content-between mb-1">
+            <h4 class="m-0 p-0">
+              <strong>
+                Medicine Name
+              </strong>
+            </h4>
+            <div class="">
+              <select #langSelection name="" id="" class="form-select form-select-sm"
+                [(ngModel)]="medicineDoseLang.ListItem" (change)="updateDoseDataBySelectedLang(langSelection.value)">
+                <option value="">Select Language...</option>
+                <option value="lan-en">English</option>
+                <option value="lan-hi">Hindi</option>
+                <option value="lan-mr">Marathi</option>
+              </select>
+            </div>
+          </small>
+          <div class="w-100" style="position: relative;">
+            <p-autoComplete #searchMedName [style]="{'width':'100%'}" [(ngModel)]="newMedicineDetail.medicineName"
+              optionValue="ListItem" (onSelect)="setSearchedMedicineName(searchMedName.value)" field="ListItem"
+              [suggestions]="medicineItemList" />
+            <button type="button" class="btn btn-sm btn-outline-success" style="position: absolute; right: 1%; top: 1%;"
+              (click)="loadMedicineItemList(searchMedName.value)">
+              <img src="assets/images/search-medicine.png" height="20px" alt="">
+              Search
+            </button>
+            <!-- (completeMethod)="search($event)" -->
+          </div>
+          <!-- <input type="text" class="form-control form-control-sm"> -->
+        </div>
+      </div>
+    </div>
+    <div class="row p-0">
+      <div class="col p-0">
+        <div class="d-flex flex-column">
+          <small>
+            <strong>
+              Dose
+            </strong>
+          </small>
+          <select name="" id="" class="form-select form-select-sm" [(ngModel)]="newMedicineDetail.medicineDoses">
+            <option value="">Select..</option>
+            <option value="{{dose.doseNo}}-{{dose.doseDescription}}" *ngFor="let dose of dosesList; index as i">{{dose.doseNo}} -
+              {{dose.doseDescription}}
+            </option>
+          </select>
+        </div>
+      </div>
+      <div class="col p-0">
+        <div class="d-flex flex-column">
+          <small>
+            <strong>
+              Days
+            </strong>
+          </small>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="newMedicineDetail.medicineDays"
+            (keyup)="calculateMedicineQty()">
+        </div>
+      </div>
+      <div class="col p-0">
+        <div class="d-flex flex-column">
+          <small>
+            <strong>
+              Qty
+            </strong>
+          </small>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="newMedicineDetail.medicineQty">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12 p-0">
+        <div class="d-flex flex-column">
+          <small><strong>Extra Instruction (Optional)</strong></small>
+          <div style="position: relative;">
+            <textarea name="" id="" class="form-control form-control-sm" rows="3"
+              placeholder="Enter extra instruction, if any!" [(ngModel)]="newMedicineDetail.medicineExtraInstruction">
+          </textarea>
+          <button style="position: absolute; top: 1%; right: 1%;" type="button" class="btn btn-sm btn-warning" (click)="translate()" *ngIf="newMedicineDetail.medicineExtraInstruction.length">
+            <i class="bi bi-translate"></i>
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-12 p-0">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <h5 class="p-0 m-0"><strong>Add Medicine</strong></h5>
+          <div class="d-flex flex-row gap-2">
+            <button type="submit" class="btn btn-sm btn-success" (click)="saveMedicine()">
+              Add
+            </button>
+            <button type="button" class="btn btn-sm btn-danger" (click)="showAddMedicineModal = !showAddMedicineModal">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

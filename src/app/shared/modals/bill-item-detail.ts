@@ -1,0 +1,24 @@
+export class BillItemDetail {
+  BillDetailId: number = 0;
+  BillNo: number = 0;
+  Code: string = ''
+  HeadDesc: string = ''
+  Date: string = ''
+  Rate: number = 0;
+  Unit: string = ''
+  Amount: number = 0;
+  Notes: string = ''
+  SeqNo: number = 0;
+  Active: number = 0;
+  RateId: number = 0;
+  source: string = ''
+  issync: number = 0;
+  PATHLABID: string = ''
+  DOCTOR: string = ''
+  BD_Rec_Cash: number = 0;
+  BD_Rec_ePay: number = 0;
+  BD_DISCOUNT: number = 0;
+  oldsoft: string = ''
+  oldbillId: number = 0;
+  oldbillDetailId: number = 0;
+}

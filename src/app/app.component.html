@@ -1,0 +1,68 @@
+<ng-container *ngIf="validAccessableDevices()">
+  <div class="container-fluid m-0 p-0">
+    <!-- <div [style]="{'height':screenHeight, 'width':screenWidth, 'position':'relative'}"> -->
+    <div [style]="{'height':'100dvh', 'width':'99dvw', 'position':'relative'}">
+      <div class="d-flex flex-column w-100">
+        <app-header class="p-0 m-0" *ngIf="isSessionActive"></app-header>
+        <router-outlet></router-outlet>
+      </div>
+
+    </div>
+  </div>
+</ng-container>
+
+
+<!-- <ng-template>
+ <div class="container-fluid">
+  <router-outlet></router-outlet>
+ </div>
+</ng-template> -->
+
+
+
+<div class="platform-disable-screen" *ngIf="!validAccessableDevices()">
+  <div class="d-flex justify-content-center align-items-center h-100 w-100">
+    <div class="d-flex flex-column text-center">
+      <div class="card border-0 shadow-lg p-4 rounded-5" style="background-color: #D9E4DD;">
+        <div class="d-flex justify-content-center">
+          <img src="assets/images/apple.png" height="150px" width="150px" alt="">
+        </div>
+        <h4 style="color: red;">Unauthrized Platform</h4>
+        <h6>Please use only <span style="font-weight: 900;">Apple Iphone/Mac</span>
+          <img src="assets/images/iphone.png" height="20px" alt="">.
+        </h6>
+        <h6>
+          <i>Not</i>, <u>{{platformName}}</u>
+          <img src="assets/images/icons8-high-priority.gif" height="20px" alt="">
+        </h6>
+      </div>
+      <!-- <h6>{{validAccessableDevices()}}</h6> -->
+    </div>
+  </div>
+</div>
+<div class="loading-screen" *ngIf="isLoading">
+  <div class="flex justify-content-center align-items-center flex-column" style="height: 100vh; width: 100vw;">
+    <img src="./../assets/images/process.gif" height="100px" class="rounded-5 p-2" alt="">
+    <h1 class="text-white">Loading</h1>
+  </div>
+</div>
+
+
+<!-- <p-button type="button" [label]="" (onClick)="toggle($event)" styleClass="min-w-48" />
+
+<p-popover #op>
+    <div class="flex flex-col gap-4">
+        <div>
+            <span class="font-medium block mb-2">Team Members</span>
+            <ul class="list-none p-0 m-0 flex flex-col">
+                <li *ngFor="let member of members" class="flex items-center gap-2 px-2 py-3 hover:bg-emphasis cursor-pointer rounded-border" (click)="selectMember(member)">
+                    <img [src]="'https://primefaces.org/cdn/primeng/images/demo/avatar/' + member.image" style="width: 32px" />
+                    <div>
+                        <span class="font-medium">{{ member.name }}</span>
+                        <div class="text-sm text-surface-500 dark:text-surface-400">{{ member.email }}</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</p-popover> -->

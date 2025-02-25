@@ -1,0 +1,35 @@
+export class BillDetail {
+  BillNo: number = 0;
+  IPCaseNo: string = '';
+  PatientId: number = 0;
+  AppointmentId: number = 0;
+  PayerName: string = '';
+  TPA: string = '';
+  BillDate: string = '';
+  AdmissionDate: string = '';
+  DischargeDate: string = '';
+  PanNo: string = '';
+  BedNo: string = '';
+  TotalAmt: number = 0;
+  DiscountAmt: number = 0;
+  AmountToPayer: number = 0;
+  AmountToPatient: number = 0;
+  Active: number = 0;
+  Notes: string = '';
+  IsQuote: number = 0;
+  Locked: number = 0;
+  LockedBy: number = 0;
+  LockedAt: string = '';
+  CCNo: string = '';
+  issync: number = 0;
+  PATHLABID: string = '';
+  BillDepartment: string = '';
+  billCategory: string = '';
+  B_Department: string = '';
+  B_WhichOpd: string = '';
+  iskuberd: number = 0;
+  oldsoft: string = '';
+  oldbillId: number = 0;
+  oldInvoiceNo: number = 0;
+  oldEncounterId: number = 0;
+}

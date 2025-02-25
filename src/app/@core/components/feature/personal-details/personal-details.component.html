@@ -1,0 +1,84 @@
+<div class="flex justify-content-center w-100">
+  <div class="row" *ngIf="userDetails">
+    <div class="col-12">
+      <div class="flex justify-content-center w-100">
+        <div class="card shadow-8 rounded-5 mt-3">
+          <img [src]="defaultProfilePhotoPathUrl" class="rounded-5" height="150px" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-3" *ngIf="userDetails">
+      <div class="flex justify-content-center w-100">
+        <h3 class="p-0 m-0"><strong>{{userDetails.UserName}}</strong></h3>
+      </div>
+    </div>
+    <div class="col-12 mt-1" *ngIf="userDetails && userEmployeeDetails">
+      <div class="flex justify-content-center align-items-center gap-2 h-100 w-100">
+        <strong><img src="assets/images/age.png" height="20px" alt="" srcset="">
+          {{loadUserAge(userEmployeeDetails.DOB)}}</strong>
+        <strong>|</strong>
+        <strong><img src="assets/images/contact-book.png" height="20px" alt="" srcset="">
+          +91-{{userDetails.MobileNo}}</strong>
+        <strong>|</strong>
+        <strong><img src="assets/images/gender.png" height="20px" alt="" srcset="">
+          {{userEmployeeDetails.JsonObject.Gender | uppercase}}</strong>
+      </div>
+    </div>
+    <div class="col-12 mt-1" *ngIf="userDetails && userEmployeeDetails">
+      <div class="flex justify-content-center align-items-center gap-2 h-100 w-100">
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <img src="assets/images/agreement.png" height="20px" alt="" srcset="">
+            <label for="">{{userDetails.AssociationType}} (#{{userEmployeeDetails.EmpId}})</label>
+          </div>
+        </strong>
+        <strong>|</strong>
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <img src="assets/images/identity.png" height="20px" alt="" srcset="">
+            <label for=""> {{userEmployeeDetails.Designation}}</label>
+          </div>
+        </strong>
+      </div>
+    </div>
+    <div class="col-12 mt-1" *ngIf="userDetails && userEmployeeDetails">
+      <div class="flex justify-content-center align-items-center gap-2 h-100 w-100">
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <label for="">DOB</label>
+            <img src="assets/images/happy-birthday.png" height="20px" alt="" srcset="">
+            <label for="">: {{userEmployeeDetails.DOB | date: 'dd/MM/yyyy'}}</label>
+          </div>
+        </strong>
+        <strong>|</strong>
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <label for=""> DOJ</label>
+            <img src="assets/images/calender-icon.png" height="20px" alt="" srcset="">
+            <label for="">: {{userEmployeeDetails.DateOfJoin | date : 'dd/MM/yyyy'}}</label>
+          </div>
+        </strong>
+      </div>
+    </div>
+    <div class="col-12 mt-1" *ngIf="userDetails && userEmployeeDetails">
+      <div class="flex justify-content-center align-items-center gap-2 h-100 w-100">
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <img src="assets/images/mail.png" height="20px" alt="" srcset="">
+            <label for="">{{userDetails.Email || 'Add your mail'}}</label>
+          </div>
+        </strong>
+      </div>
+    </div>
+    <div class="col-12 mt-1" *ngIf="userDetails && userEmployeeDetails">
+      <div class="flex justify-content-center align-items-center gap-2 h-100 w-100">
+        <strong>
+          <div class="flex align-items-center h-100 gap-1">
+            <img src="assets/images/map.png" height="20px" alt="" srcset="">
+            <label for="">{{userEmployeeDetails.Location || 'Add your Location'}}</label>
+          </div>
+        </strong>
+      </div>
+    </div>
+  </div>
+</div>

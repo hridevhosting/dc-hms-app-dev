@@ -1,0 +1,61 @@
+:host ::ng-deep .p-accordion .p-accordion-header .p-accordion-header-link {
+  padding: 0.75rem !important;
+}
+
+
+
+/* :host ::ng-deep.p-accordion-header-link {
+  background-color: var(_color);
+} */
+
+
+/* * {
+
+} */
+:host :ng-deep .p-dialog .p-dialog-content {
+  padding: 0 0.5rem 0.5rem 0.5rem !important;
+}
+
+:host :ng-deep .p-dialog .p-dialog-header {
+  padding: 0.5rem !important;
+}
+
+:host ::ng-deep .p-button {
+  padding: 0.3rem !important;
+}
+
+
+:host ::ng-deep .p-inputtext {
+  padding: 0.3rem 0.3rem !important;
+}
+
+
+table.table tbody tr:hover {
+  background-color: #CAF4FF !important;
+  color: #03AED2 !important;
+  /* border-color: #F7F9F2; */
+}
+
+
+h6 {
+  font-weight: 700;
+}
+
+
+.main-head:hover .sub-head {
+  background-color: #5AB2FF !important;
+  color: white;
+  /* padding: 5px; */
+  padding-top: 0px;
+  padding-left: 20px;
+  padding-right: 0px;
+  padding-bottom: 0px;
+  border-radius: 20px;
+  transition: .5s;
+}
+
+.sub-head{
+  visibility: visible !important;
+}
+
+

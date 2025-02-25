@@ -1,0 +1,32 @@
+export class BillReceipt {
+  BillReceiptId: number = 0;
+  BillNo: number = 0;
+  TranDate: string = '';
+  TranDesc: string = '';
+  Receipts: number = 0;
+  TDSAmount: number = 0;
+  PaymentMode: string = '';
+  Amount: number = 0;
+  ChequeDate: string = '';
+  IssuerBank: string = '';
+  ChequeNo: string = '';
+  EntryBy: string = '';
+  EntryAt: string = '';
+  Active: number = 0;
+  IsSync: number = 0;
+  Payer: string = '';
+  TPA: string = '';
+  ReceiptNo: string = '';
+  Locked: any = null;
+  Printed: any = null;
+  LockedBy: any = null;
+  LockedAt: any = null;
+  change_Remark: any = null;
+  updatedAt: string = '';
+  PATHLABID: any = null;
+  BillDepartment: any = null;
+  R_Department: string = '';
+  R_WhichOpd: string = '';
+  oldsoft: any = null;
+  oldEncounterid: any = null;
+}

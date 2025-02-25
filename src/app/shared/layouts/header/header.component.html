@@ -1,0 +1,39 @@
+<div class="row">
+  <div class="col-12 bg-color">
+    <div class="d-flex justify-content-between align-items-center h-100">
+      <div class="d-flex flex-row align-items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list"
+          style="margin-left: 20px; color: white;" viewBox="0 0 16 16" (click)="showHideSidebar()">
+          <path fill-rule="evenodd"
+            d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+        </svg>
+        <div class="d-flex flex-row gap-2 align-items-center">
+          <p-menu #menu1 [model]="linkItems" [popup]="true" class="text-center"></p-menu>
+          <img (click)="menu1.toggle($event)" src="assets/logo/companyLogo.png" height="20px" alt="" srcset="">
+        </div>
+      </div>
+
+      <span style="margin-right: 6.5%; color: white;" *ngIf="screenWidth > 1000">
+        <h5 class="m-0 p-0"><strong>{{navigateScreenName | uppercase}}</strong></h5>
+      </span>
+
+      <div class="d-flex flex-row gap-2 align-items-center">
+        <div>
+          <p-menu #menu [model]="items" [popup]="true"></p-menu>
+          <button type="button" (click)="menu.toggle($event)" class="btn btn-sm bg-transparent border-0 text-white" icon="pi pi-bars">
+            <div class="d-flex flex-row gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor"
+                class="bi bi-person-circle" viewBox="0 0 16 16">
+                <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0" />
+                <path fill-rule="evenodd"
+                  d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1" />
+              </svg>
+              <strong>User</strong>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<app-sidebar [sidebarVisible]="isShowSideBar"></app-sidebar>

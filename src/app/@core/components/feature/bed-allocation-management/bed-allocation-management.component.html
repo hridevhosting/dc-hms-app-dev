@@ -1,0 +1,109 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div class="d-flex flex-column gap-2">
+    <div class="d-flex flex-row gap-2 card shadow-lg p-2 align-items-center">
+      <h4 class="p-0 m-0"><strong>Floor</strong></h4>
+      <button type="button" (click)="selectedLocation = ''; filterBed()"
+        class="btn shadow-lg {{ selectedLocation === '' ? 'btn-light-color-active' : 'btn-light-color'}}">
+        <strong>All</strong>
+      </button>
+      <button type="button" *ngFor="let location of locationList"
+        (click)="selectedLocation = location; filterBed()"
+        class="btn shadow-lg {{ selectedLocation === location ? 'btn-light-color-active' : 'btn-light-color'}}">
+        <strong>{{location}}</strong>
+      </button>
+    </div>
+    <div class="d-flex flex-row gap-2">
+      <div class="card shadow-lg p-2" style="overflow-y: auto; max-height: 100%; width: 20%;">
+        <div class="d-flex flex-column gap-2">
+          <h5 class="p-0 m-0 text-center"><strong>Bed Type</strong></h5>
+          <button type="button" (click)="selectedBedType = ''; filterBed()"
+            class="btn shadow-lg {{ selectedBedType === '' ? 'btn-light-color-active' : 'btn-light-color'}}">
+            <strong>All</strong>
+          </button>
+          <button type="button" *ngFor="let type of bedTypeList"
+            (click)="selectedBedType = type; filterBed()"
+            class="btn shadow-lg {{ selectedBedType === type ? 'btn-light-color-active' : 'btn-light-color'}}">
+            <strong>{{type}}</strong>
+          </button>
+        </div>
+      </div>
+      <div class="d-flex flex-column gap-2" style="width: 80%;">
+        <div class="card border-2 shadow-lg p-2" style="overflow-y: auto; max-height: 100%;">
+          <!-- <div class="d-flex justify-content-center w-100"> -->
+            <div class="d-flex flex-wrap gap-2 p-2">
+              <ng-container *ngIf="sortedBedList.length">
+                <ng-container *ngFor="let bed of sortedBedList">
+                  <div class="card shadow-lg p-2" style="min-width: 250px;" (click)="selectedBedDetails = bed; showAllotementAlertPopUp($event)">
+                    <div class="d-flex flex-column gap-1">
+                      <h4 class="d-flex flex-row gap-1">
+                        <img src="assets/images/available-bed-2.png" height="35px" alt="" srcset="">
+                        <strong>{{bed.BedDesc | uppercase}}</strong>
+                      </h4>
+                      <div class="d-flex flex-row gap-1">
+                        <img src="assets/images/hand-money.png" height="20px" alt="" srcset="">
+                        <i><strong>{{bed.Charges}}</strong></i>
+                      </div>
+                    </div>
+                  </div>
+                </ng-container>
+              </ng-container>
+            </div>
+          <!-- </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div class="row">
+    <div class="col-12">
+      <div class="flex justify-content-between gap-1 h-100">
+        <div class="flex flex-column gap-1">
+          <label for=""><strong>Bed Type</strong></label>
+          <select name="" id="" class="form-select" [(ngModel)]="selectedBedType">
+            <option [value]="0">Select Type</option>
+            <!-- <option [value]="type.BedTypeId" *ngFor="let type of bedTypeList">{{type.Description | uppercase}}</option> -->
+          </select>
+        </div>
+        <div class="flex flex-column gap-1">
+          <label for=""><strong>Location Type</strong></label>
+          <select name="" id="" class="form-select" [(ngModel)]="selectedLocation">
+            <option value="">Select Type</option>
+            <option [value]="location" *ngFor="let location of locationList">{{location | uppercase}}</option>
+          </select>
+        </div>
+        <div class="flex flex-column gap-1 h-100 align-items-end" (click)="sortBedByLocationAndBedType()">
+          <!-- <label for=""><strong>Location Type</strong></label> -->
+          <img src="./../../../../../assets/images/search-bed.png" class="mt-2" height="50px" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-12">
+      <div class="card shadow-8 border-0 rounded-5 p-2 mb-3" *ngFor="let bed of sortedBedList">
+        <div class="flex flex-row justify-content-between gap-2">
+          <div class="flex flex-row gap-2 h-100 align-items-center">
+            <img src="./../../../../../assets/images/available-bed.png" height="30px" alt="" srcset="">
+            <!-- <h4><strong>{{bed.Description | uppercase}}</strong></h4> -->
+          </div>
+          <img src="./../../../../../assets/images/send.png" height="30px" alt="" srcset="">
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <strong>{{ message.message }}</strong>
+      <div class="flex align-items-center gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-success" (click)="confirmPopup.accept()">Yes</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="confirmPopup.reject()">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmPopup>

@@ -1,0 +1,286 @@
+<ng-container *ngIf="historyListWithDept.length">
+  <p-tabView [(activeIndex)]="activeIndex" [scrollable]="true">
+    <p-tabPanel *ngFor="let tab of historyListWithDept" [header]="tab.departmentName">
+      <ng-template pTemplate="content">
+        <ng-container *ngIf="tab.dataArray.length">
+          <ng-container *ngIf="tab.departmentName.toLowerCase().trim().includes('ipd')">
+            <ng-container *ngFor="let ipd of tab.dataArray">
+              <div class="card border-0 rounded-0 shadow-lg p-2 mb-2" style="border-bottom: 2px solid #37AFE1 !important;" (click)="searchPatient_IPD_Screen(ipd)">
+                <div class="d-flex flex-row gap-1">
+                  <div class="d-flex flex-column text-center p-2 h-100 align-items-center rounded-1" style="background-color: #3674B5; color: white;">
+                    <ng-container *ngIf="ipd.TAdmissionDate">
+                      <h1 class="h1 p-0 m-0">
+                        {{ipd.TAdmissionDate | date: 'dd'}}
+                      </h1>
+                      <h3 class="h3 p-0 m-0">
+                        {{ipd.TAdmissionDate | date: 'MMM'}}
+                      </h3>
+                      <strong>
+                        {{ipd.TAdmissionDate | date: 'yyyy'}}
+                      </strong>
+                    </ng-container>
+                    </div>
+                  <div class="d-flex flex-column w-100">
+                    <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>IPD No:</strong>
+
+                          <i style="color: red;">
+                            {{ipd.RegNo | uppercase}}
+                          </i>
+
+                      </div>
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <!-- <strong>IPD No:</strong> -->
+                        <strong>
+                          <i>
+
+                          </i>
+                        </strong>
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Admission Date:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.TAdmissionDate">
+                              {{ipd.TAdmissionDate | date: 'dd/MM/yyyy hh:mm a'}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.TAdmissionDate">
+                              Not Set...
+                            </ng-container>
+                          </i>
+                      </div>
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Discharge Date:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.DischargeDate">
+                              {{ipd.DischargeDate | date: 'dd/MM/yyyy hh:mm a'}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.DischargeDate">
+                              Yet to discharge...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Ref By:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.ReferedBy">
+                              {{ipd.ReferedBy}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.ReferedBy">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Consultant:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.Consultant">
+                              {{ipd.Consultant}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.Consultant">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Location:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.Location">
+                              {{ipd.Location}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.Location">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Payer:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.Payer">
+                              {{ipd.Payer}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.Payer">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                    </div>
+                    <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Admit Reason:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.ProcAdviced">
+                              {{ipd.ProcAdviced}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.ProcAdviced">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                      <div class="d-flex flex-row flex-wrap gap-1">
+                        <strong>Discharge Reason:</strong>
+
+                          <i>
+                            <ng-container *ngIf="ipd.DischargeReason">
+                              {{ipd.DischargeReason}}
+                            </ng-container>
+                            <ng-container *ngIf="!ipd.DischargeReason">
+                              Not Set...
+                            </ng-container>
+                          </i>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="tab.departmentName.toLowerCase().trim().includes('opd')">
+            <ng-container *ngFor="let opd of tab.dataArray">
+              <div class="card border-0 rounded-0 shadow-lg p-2 mb-2" style="border-bottom: 2px solid #37AFE1 !important;" (click)="opd.toggle($event); appointmentId = opd.AppointmentId">
+                  <div class="d-flex flex-row gap-1 align-items-center h-100">
+                    <div class="d-flex flex-column text-center p-2 h-100 align-items-center rounded-1" style="background-color: #3674B5; color: white;">
+                      <ng-container *ngIf="opd.StartDatetime">
+                        <h1 class="h1 p-0 m-0">
+                          {{opd.StartDatetime | date: 'dd'}}
+                        </h1>
+                        <h3 class="h3 p-0 m-0">
+                          {{opd.StartDatetime | date: 'MMM'}}
+                        </h3>
+                        <strong>
+                          {{opd.StartDatetime | date: 'yyyy'}}
+                        </strong>
+                      </ng-container>
+                      </div>
+                    <div class="d-flex flex-column w-100">
+                      <div class="d-flex flex-row justify-content-between">
+                      <div class="d-flex flex-row gap-1">
+                      <strong>OPD No:</strong>
+
+                        <i>
+                          {{opd.RegNo | uppercase}}
+                        </i>
+
+                    </div>
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Reason:</strong>
+
+                        <i>
+                          {{opd.Treatment | uppercase}}
+                        </i>
+
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Appointment Date:</strong>
+
+                        <i>
+                          <ng-container *ngIf="opd.StartDatetime">
+                            {{opd.StartDatetime |  date:'dd/MM/yyyy hh:mm a'}}
+                          </ng-container>
+                          <ng-container *ngIf="!opd.StartDatetime">
+                            ---
+                          </ng-container>
+                        </i>
+
+                    </div>
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Left Date:</strong>
+
+                        <i>
+
+                          <ng-container *ngIf="opd.LeftAt">
+                            {{opd.LeftAt |  date:'dd/MM/yyyy hh:mm a'}}
+                          </ng-container>
+                          <ng-container *ngIf="!opd.LeftAt">
+                            ---
+                          </ng-container>
+                        </i>
+
+                    </div>
+                  </div>
+                  <div class="d-flex flex-row justify-content-between">
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Ref By:</strong>
+
+                        <i>
+
+                          <ng-container *ngIf="opd.ReferredBy">
+                            {{opd.ReferredBy | uppercase}}
+                          </ng-container>
+                          <ng-container *ngIf="!opd.ReferredBy">
+                            Not Set...
+                          </ng-container>
+
+                        </i>
+
+                    </div>
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Consultant:</strong>
+
+                        <i>
+
+                          <ng-container *ngIf="opd.BookedFor">
+                            {{opd.BookedFor | uppercase}}
+                          </ng-container>
+                          <ng-container *ngIf="!opd.BookedFor">
+                            Not Set...
+                          </ng-container>
+                        </i>
+
+                    </div>
+                  </div>
+                    </div>
+                  </div>
+                </div>
+            </ng-container>
+          </ng-container>
+          <ng-container *ngIf="tab.departmentName.toLowerCase().trim().includes('path')">
+            <div class="card border-0 rounded-0 shadow-lg p-2">
+              Hello World!
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+  <p-overlayPanel #ipd>
+    <div class="d-flex flex-row gap-1">
+      <button type="button" class="btn btn-sm btn-primary" (click)="showAdmissionHistoryForIpdPatientDialoge()">
+        Discharge Summary
+      </button>
+    </div>
+  </p-overlayPanel>
+
+  <p-overlayPanel #opd>
+    <div class="d-flex flex-row gap-1">
+      <button type="button" class="btn btn-sm btn-primary" (click)="navigateToOpdCard()">
+        OPD Card
+      </button>
+    </div>
+  </p-overlayPanel>
+
+</ng-container>
+
+

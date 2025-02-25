@@ -1,0 +1,12 @@
+:host ::ng-deep .p-panelmenu .p-panelmenu-header .p-panelmenu-header-content .p-panelmenu-header-action {
+  padding: 0.50rem;
+}
+
+
+:host :ng-deep input .p-inputtext {
+  padding: 0.40rem !important;
+}
+
+:host ::ng-deep .p-panelmenu .p-panelmenu-content .p-panelmenu-root-list {
+  padding-left: 0rem !important;
+}

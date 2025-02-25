@@ -1,0 +1,1 @@
+var t=class{constructor(s){this.ListItemId=-1,this.ListType="",this.ListItem="",this.Active=1,this.CreatedBy=0,this.ListParam="",this.SeqNo=0,this.userid=0,this.department="",this.ListType=s}};export{t as a};

@@ -1,0 +1,903 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div class="d-flex flex-row mt-2" style="padding-left: 3%; padding-right: 3%;">
+    <div class="d-flex flex-column gap-2" style="width: 20%;">
+      <!-- <div class="d-flex justify-content-between">
+        <div class="d-flex flex-row gap-1">
+          <img src="assets/images/discharge-summary-1.png" height="50px" alt="" srcset="">
+          <div class="d-flex flex-column">
+            <h4 class="p-0 m-0">Discharge Summary </h4>
+            <h6 class="p-0 m-0">{{patientDetails ? patientDetails.EntityName : '' | uppercase}}</h6>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-secondary">
+          <i class="bi bi-gear-wide-connected" style="font-size: 1.5rem;"></i>
+        </button>
+      </div> -->
+
+      <div class="d-flex flex-column gap-1 main-head">
+        <div class="d-flex flex-row justify-content-between align-items-center sub-head">
+          <h6 class="p-0 m-0">Patient Name</h6>
+          <img src="assets/images/info.png" style="cursor: pointer;" height="30px" alt="" srcset=""
+            (click)="showPatientDetailsDialoge()" pTooltip="Show patient details">
+        </div>
+        <h5>{{patientDetails ? patientDetails.EntityName : '' | uppercase}}</h5>
+      </div>
+
+      <div class="d-flex flex-column gap-1 main-head" *ngIf="admissionDetails">
+        <div class="d-flex flex-row justify-content-between align-items-center sub-head">
+          <h6 class="p-0 m-0">Patient Case Id</h6>
+          <img src="assets/images/info.png" style="cursor: pointer;" height="30px" alt="" srcset=""
+            (click)="showAdmissionAppointmentFormByHospitalSection()" pTooltip="Show case details">
+        </div>
+        <h5>{{admissionDetails ? admissionDetails.RegNo : '' | uppercase}}</h5>
+      </div>
+
+      <div class="d-flex flex-column gap-1 main-head" style="position: relative;">
+        <div class="d-flex flex-row justify-content-between align-items-center sub-head">
+          <h6 class="p-1 m-0 sub-head">Filter Group</h6>
+        </div>
+        <div class="d-flex align-items-center">
+          <select #filterGroupName name="" id="" class="form-select"
+            (change)="filterDichargeSummaryListByGroupName(filterGroupName.value)">
+            <option value="">Select group name</option>
+            <option value="{{item.printGroupName}}" *ngFor="let item of filteredGroupList">{{item.printGroupName |
+              uppercase}}</option>
+          </select>
+          <button type="button" class="btn btn-sm btn-danger shadow-lg" style="position: absolute; right: 1%;"
+            *ngIf="filterGroupName.value"
+            (click)="filterGroupName.value = ''; filterDichargeSummaryListByGroupName('')">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column gap-1 main-head">
+        <div class="d-flex justify-content-between align-items-center sub-head">
+          <h6 class="p-1 m-0">{{(hospitalSection.toLowerCase().includes('ipd') ? 'Admission List' : 'Appointment List')
+            }}</h6>
+          <strong class="p-1">{{previousAppointmentList.length}}</strong>
+        </div>
+        <div class="d-flex flex-column gap-2 p-2" *ngIf="previousAppointmentList.length"
+          style="overflow-y: auto; max-height: 30vh;">
+          <div class="card border-0 rounded-5 mb-2 p-2 btn-light-color" *ngFor="let item of previousAppointmentList">
+            <div class="d-flex flex-column pl-3">
+              <h5 class="d-flex flex-row gap-1 align-items-center">
+                <img src="assets/images/calender-icon.png" height="20px" alt="" srcset="">
+                {{(hospitalSection.toLowerCase().includes('ipd') ? item.TAdmissionDate : item.ArrivedAt) | date:
+                'dd/MM/yyyy'}}
+              </h5>
+              <h6>Reg No: {{item.RegNo | uppercase}}</h6>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex justify-content-center align-items-center p-3" *ngIf="!previousAppointmentList.length">
+          <strong>
+            <i>
+              No Details <br> have found
+            </i>
+          </strong>
+        </div>
+      </div>
+      <!-- <div class="d-flex flex-column gap-2"> -->
+      <div class="d-flex flex-column gap-1" *ngIf="admissionDetails && false">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <h5 class="p-0 m-0">Date of Admission</h5>
+          <img src="assets/images/info.png" style="cursor: pointer;" height="30px" alt="" srcset=""
+            (click)="showPatientDetails = !showPatientDetails" pTooltip="Show patient admission details">
+        </div>
+        <input type="datetime-local" name="" id="" class="form-control" [(ngModel)]="admissionDetails.TAdmissionDate">
+      </div>
+      <div class="d-flex flex-column gap-1" *ngIf="admissionDetails && false">
+        <h5 class="p-0 m-0">Date of Discharge</h5>
+        <input type="datetime-local" name="" id="" class="form-control" [(ngModel)]="admissionDetails.DischargeDate">
+      </div>
+      <!-- </div> -->
+      <div class="d-flex flex-column gap-2">
+        <div class="d-flex flex-column gap-1 justify-content-start text-nowrap">
+          <strong>Template</strong>
+          <select #seletedPrintTemplate name="" id="" class="form-select" [(ngModel)]="printingReportDetail.reportName"
+            (change)="setDischargeTemplate(seletedPrintTemplate.value)">
+            <option value="">Select Template...</option>
+            <option value="{{template.templateName}}" *ngFor="let template of templateList">{{template.templateName |
+              uppercase}}</option>
+          </select>
+        </div>
+        <!-- <div class="d-flex flex-column gap-1 justify-content-start text-nowrap">
+          <strong>Printer</strong>
+          <select name="" id="" class="form-select" [(ngModel)]="printingReportDetail.printerName">
+            <option value="">Select Printer...</option>
+            <option value="Canon G3030 series HTTP">Canon G3030 series HTTP</option>
+            <option value="Brother DCP-B7535DW series [94ddf812de90]">Brother DCP-B7535DW series [94ddf812de90]</option>
+            <option value="Brother DCP-B7535DW series Printer">Brother DCP-B7535DW series Printer</option>
+            <option value="Microsoft Print to PDF">PDF Convert</option>
+          </select>
+        </div> -->
+
+      </div>
+
+      <div class="d-flex flex-wrap gap-1 main-head">
+        <div class="d-flex flex-row justify-content-between align-items-center sub-head w-100">
+          <h6 class="p-1 m-0 sub-head">Utilities</h6>
+        </div>
+        <!-- <div class=""> -->
+        <button type="button" *ngIf="!dischareSummarySetItems.length"
+          class="btn btn-light-color d-flex flex-row align-items-center justify-content-center gap-2"
+          style="width: 49%;" (click)="showAttributeListDialog()">
+          <img src="assets/images/list.png" height="20px" alt="" srcset="">
+          <strong>Set List</strong>
+        </button>
+
+        <button type="button" *ngIf="dischareSummarySetItems.length"
+          class="btn btn-light-color d-flex flex-row align-items-center justify-content-center gap-2"
+          style="width: 49%;">
+          <img src="assets/images/cross.png" height="20px" alt="" srcset="">
+          <strong>Remove Set</strong>
+        </button>
+        <!-- </div> -->
+        <!-- <div class=""> -->
+        <button type="button"
+          class="btn btn-light-color d-flex flex-row align-items-center justify-content-center gap-2"
+          style="width: 49%;" *ngIf="false">
+          <img src="assets/images/whatsapp_icon.png" height="20px" alt="" srcset="">
+          <strong>WhatsApp</strong>
+        </button>
+        <!-- </div> -->
+        <!-- <div class=""> -->
+        <button type="button" (click)="printReport()"
+          class="btn btn-light-color d-flex flex-row align-items-center justify-content-center gap-2"
+          style="width: 49%;">
+          <img src="assets/images/printer.png" height="20px" alt="" srcset="">
+          <strong>Print</strong>
+        </button>
+        <!-- </div> -->
+        <!-- <div class=""> -->
+        <button type="button"
+          class="btn btn-light-color d-flex flex-row align-items-center justify-content-center gap-2"
+          style="width: 49%;">
+          <img src="assets/images/more.png" height="20px" alt="" srcset="">
+          <strong>More</strong>
+        </button>
+        <!-- </div> -->
+      </div>
+    </div>
+    <div style="padding-left: 2%; width: 80%;">
+      <div class="d-flex flex-row justify-content-between mb-2">
+        <p-selectButton [options]="stateOptions" [(ngModel)]="statusValue" optionLabel="label" optionValue="value" />
+        <!-- <button type="button" class="btn btn-outline-success">
+          <i class="bi bi-save2"></i> Save
+        </button> -->
+
+      </div>
+      <div class="pb-3" style="width: 100%; overflow-y: auto; max-height: 90vh !important; position: relative;"
+        *ngIf="statusValue.toLowerCase().includes('summary')">
+        <ng-container *ngFor="let item of filteredGroupList; index as i">
+          <div class="d-flex flex-column gap-1 main-head">
+            <div class="d-flex flex-row gap-1 align-items-center m-2 sub-head"
+              style="background-color: white; position: sticky; top: 0%; z-index: 50;">
+              <!-- <div class=""> -->
+              <h4 class="p-3" style="border-bottom: 2px solid #EBF3E8; "><strong>{{i+1}}</strong></h4>
+              <h4 class="p-0 m-0">{{item.printGroupName}}</h4>
+              <!-- </div> -->
+            </div>
+            <div class="mr-4 ml-4 pr-4 pl-4" style="border-left: 2px solid #E1F0DA;">
+              <div class="p-3 rounded-5 shadow" style="background-color: #FFF7F1;">
+                <ng-container *ngFor="let value of item.printGroupValue; index as j">
+                  <ng-container *ngIf="value.AttributeName.toLowerCase()!=='save'">
+                    <div class="d-flex flex-row gap-1">
+                      <div class="flex flex-column gap-1 mb-2" style="width: 50%;">
+                        <div class="d-flex flex-row justify-content-start align-items-center gap-3">
+                          <h5 class="m-0 p-0">{{value.AttributeName}}</h5>
+                          <!-- <button type="button" class="btn btn-sm btn-success">
+                            Save
+                          </button> -->
+                          <ng-container *ngIf="value.ControlType.toLowerCase() === 'text and multiselection' && !value.IsDuration">
+                            <u class="btn btn-sm btn-danger p-0 m-0" style="padding-left: 5px !important; padding-right: 5px !important;" (click)="value.IsDuration = 1">Add New</u>
+                          </ng-container>
+                          <ng-container *ngIf="value.ControlType.toLowerCase() === 'text and multiselection' && value.IsDuration">
+                            <u style="color: red;" (click)="value.IsDuration = 0">Close</u>
+                          </ng-container>
+                          <div class="form-check" *ngIf="value.ControlType.toLowerCase() === 'void'">
+                            <input #pCheckbox class="form-check-input" type="checkbox" [id]="'flexCheckChecked'+j"
+                              [checked]="isChecked(value.AttributeValue,pCheckbox.checked)"
+                              (change)="updateAttributeValue(pCheckbox.checked ? 'selected' : 'not selected',  value.EntityAttributeId, value.AttributeId, value.SetName)">
+                            <!-- <label class="form-check-label" for="flexCheckChecked">
+                              Checked checkbox
+                            </label> -->
+                          </div>
+                        </div>
+                        <div class="">
+                          <textarea #inputOption *ngIf="value.ControlType.toLowerCase().includes('textbox') || (value.ControlType.toLowerCase() === 'text and multiselection' && value.IsDuration)" type="text"
+                            name="" id="" class="form-control form-control-sm" [(ngModel)]="value.AttributeValue"
+                            placeholder="Fill detail here..."
+                            (blur)="updateAttributeValue(inputOption.value,  value.EntityAttributeId, value.AttributeId, value.SetName)"></textarea>
+
+                        </div>
+                        <select #selectOption name="" id="" [(ngModel)]="value.AttributeValue"
+                          class="form-select form-select-sm w-20rem"
+                          *ngIf="value.ControlType.toLowerCase() === 'combobox'"
+                          (click)="loadListByPrintGroupAttribute(value.DataSpecs)"
+                          (ngModelChange)="updateAttributeValue(selectOption.value,  value.EntityAttributeId, value.AttributeId, value.SetName)">
+                          <option value="">Please Select...</option>
+                          <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                        </select>
+                        <!-- <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm w-20rem"
+                          *ngIf="value.ControlType.toLowerCase() === 'combobox'"
+                          (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                          <option value="">Please Select...</option>
+                          <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                        </select> -->
+                        <div class="btn-group text-start w-20rem"
+                          *ngIf="(value.ControlType.toLowerCase() === 'text and multiselection' && !value.IsDuration) || value.ControlType.toLowerCase() === 'multiselect'">
+                          <button
+                            class="btn btn-transperent border-1 border-black btn-sm dropdown-toggle flex justify-content-between align-items-center"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                            {{(value.AttributeValue ? wrapupExtraProcedureText(value.AttributeValue,20) : '') || 'Select value...'}}
+                            <!-- {{replaceDropdownAttributeValue(value.AttributeValue)}} -->
+                          </button>
+                          <ul class="dropdown-menu"
+                            style="overflow-y: auto; overflow-x: auto; max-height: 250px !important; max-width: 80% !important;">
+                            <li>
+                              <a class="dropdown-item" *ngFor="let item of loadedList; index as i">
+                                <div class="flex flex-row gap-2">
+                                  <!-- <p-checkbox #checkBoxInputOption [binary]="true" inputId="binary"
+                                    *ngIf="value.ControlType.toLowerCase() === 'void'" trueValue="selected"
+                                    falseValue="not selected"
+                                    (onChange)="convertPipeValuesIntoStringArray(item.ListItem, value, checkBoxInputOption.value)" /> -->
+                                  <input #checkBoxInputOption (change)="multiSelection(i,j, item.ListItem, $event.target)"
+                                    type="checkbox" class="form-check form-check-sm" [name]="'id_'+i" [id]="'id_'+i"
+                                    [checked]="checkIsValueInParameter(item.ListItem, value, value.AttributeName)">
+                                  <label [for]="''" class="flex flex-wrap w-100"> {{item.ListItem}}</label>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                        <!-- <textarea *ngIf="value.ControlType.toLowerCase().includes('textbox')" type="text" name="" id=""
+                          class="form-control form-control-sm" [(ngModel)]="value.AttributeValue"
+                          placeholder="Fill detail here..." name="" id="" rows="3"></textarea>
+                        <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm w-20rem"
+                          *ngIf="value.ControlType.toLowerCase() === 'text and multiselection'"
+                          (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                          <option value="">Please Select...</option>
+                          <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                        </select> -->
+                        <!-- <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm w-20rem"
+                          *ngIf="value.ControlType.toLowerCase() === 'combobox'"
+                          (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                          <option value="">Please Select...</option>
+                          <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                        </select> -->
+                        <!-- <div class="btn-group text-start" *ngIf="value.ControlType.toLowerCase() === 'multiselect'">
+                          <button
+                            class="btn btn-transperent border-1 border-black btn-sm dropdown-toggle flex justify-content-between align-items-center"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                            Select values...
+                          </button>
+                          <ul class="dropdown-menu"
+                            style="overflow-y: auto; overflow-x: auto; max-height: 250px !important; max-width: 80% !important;">
+                            <li>
+                              <a class="dropdown-item" *ngFor="let item of loadedList">
+                                <div class="flex flex-row gap-2">
+                                  <input (change)="multiSelection(i,j, item.ListItem, $event.target)" type="checkbox"
+                                    class="form-check form-check-sm" name="" id=""
+                                    [checked]="checkIsValueInParameter(item.ListItem, value)">
+                                  <label for="" class="flex flex-wrap w-100"> {{item.ListItem}}</label>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div> -->
+                        <!-- <label for=""
+                          *ngIf="value.ControlType.toLowerCase() === 'multiselect'">{{value.AttributeValue}}</label> -->
+                      </div>
+                      <div class="d-flex flex-column text-center gap-1" style="width: 50%; height: 100%;">
+                        <!-- <h6 class="p-0 m-0">Previous Data</h6> -->
+                        <div class="d-flex flex-row justify-content-center align-items-center gap-1 h-100">
+                          <button type="button" class="btn btn-sm btn-light-color"
+                            *ngIf="value.ControlType.toLowerCase() !== 'void'"
+                            (click)="op2.toggle($event); setSelectedPreviousData(value,i,j,value.AttributeName)">
+                            <strong>Show Previous Data <i class="bi bi-info-circle"></i></strong>
+                          </button>
+                          <!-- <button type="button" class="btn btn-sm btn-light-color"
+                            (click)="op.toggle($event); setSelectedPreviousData(value,i,j,value.AttributeName)">
+                            <strong>Show Previous Data <i class="bi bi-info-circle"></i></strong>
+                          </button> -->
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+                  </ng-container>
+                  <ng-container *ngIf="value.AttributeName.toLowerCase()==='save'">
+                    <div class="d-flex justify-content-end mt-2 w-100">
+                      <input value="Save Note"  type="button" class="btn btn-success p-1 shadow-lg" (click)="saveNoteDetailByNoteTypePatientIdAdmissionId()">
+                      <!-- <button type="button" class="btn btn-success p-1 shadow-lg" (click)="">
+                        <strong>Save Note</strong>
+                      </button> -->
+                    </div>
+                  </ng-container>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+        <div class="d-flex flex-row justify-content-end text-end"
+          style="position: fixed ; bottom: 3%; right: 3%; z-index: 100;">
+
+          <!-- <div class="d-flex flex-column gap-1">
+            <div class="d-flex flex-column gap-3">
+
+              <button type="button" class="btn btn-sm rounded-5 p-3 shadow-lg"
+                style="background-color: #F5F5F5; color: white; border: 3px solid #FF0000;"
+                (click)="showPrescriptionDialog()">
+                <img src="assets/images/prescription_label.png" height="30px" alt="" srcset="">
+              </button>
+
+              <button type="button" class="btn btn-sm rounded-5 p-2 shadow-lg" style="background-color: #B5DEFF;"
+                *ngIf="false">
+                <img src="assets/images/search.png" height="30px" alt="" srcset="">
+              </button>
+
+            </div>
+            <div class="d-flex flex-row gap-2 w-100" *ngIf="false">
+              <input #groupNameText type="text" id="groupNameTextId" class="form-control"
+                placeholder="Search group name here..."
+                (keyup)="filterDichargeSummaryListByGroupName(groupNameText.value)">
+              <button type="button" class="btn btn-sm rounded-1 p-2 shadow-lg" style="background-color: #FFACAC;"
+                *ngIf="groupNameText.value.length" (click)="clearSearchedValue(groupNameText.value)">
+                <img src="assets/images/cross.png" height="20px" alt="" srcset="">
+              </button>
+            </div>
+          </div> -->
+        </div>
+
+      </div>
+      <div style="width: 100%; padding-left: 0%;" *ngIf="statusValue.toLowerCase().includes('rx')">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+          <div class="">
+            <h4>Rx</h4>
+          </div>
+          <div class="d-flex flex-row gap-2 align-items-center">
+            <strong class="text-nowrap">Translate Language ( Dose & Instruction ) :</strong>
+            <select #langSelection name="" id="" class="form-select form-select-sm"
+              [(ngModel)]="medicineDoseLang.ListItem" (change)="updateDoseDataBySelectedLang(langSelection.value)">
+              <option value="">Select Language...</option>
+              <option value="lan-en">English</option>
+              <option value="lan-hi">Hindi</option>
+              <option value="lan-mr">Marathi</option>
+            </select>
+          </div>
+        </div>
+        <!-- <app-rx-management></app-rx-management> -->
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th style="min-width: 30px !important;">#</th>
+              <th style="min-width: 30% !important;">Medicine Name</th>
+              <th style="min-width: 20% !important;">Doses</th>
+              <th style="min-width: 30px !important;">Days</th>
+              <th style="min-width: 30px !important;">Qty</th>
+              <th style="min-width: 30% !important;">Extra Instructions</th>
+              <th style="min-width: 30px !important;">Action</th>
+            </tr>
+            <tr>
+              <th style="min-width: 30px !important;"></th>
+              <th style="min-width: 30% !important;">
+                <div class="w-100" style="position: relative;">
+                  <p-autoComplete #searchMedName [style]="{'width':'100%'}" [(ngModel)]="newMedicineDetail.medicineName"
+                    optionValue="ListItem" (chage)="setSearchedMedicineName(searchMedName.value)" field="ListItem"
+                    [suggestions]="medicineItemList" />
+                  <button type="button" class="btn btn-sm btn-success" style="position: absolute; right: 1%; top: 1%;"
+                    (click)="loadMedicineItemList(searchMedName.value)">
+                    <img src="assets/images/search-medicine.png" height="20px" alt="">
+                    Search
+                  </button>
+                  <!-- (completeMethod)="search($event)" -->
+                </div>
+              </th>
+              <th style="min-width: 20% !important;">
+                <select name="" id="" class="form-select form-select-sm" [(ngModel)]="newMedicineDetail.medicineDoses">
+                  <option value="">Select..</option>
+                  <option value="{{dose.doseNo + '-' + dose.doseDescription}}"
+                    *ngFor="let dose of dosesList; index as i">{{dose.doseNo}} -
+                    {{dose.doseDescription}}
+                  </option>
+                </select>
+              </th>
+              <th style="min-width: 30px !important;">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="newMedicineDetail.medicineDays"
+                  (keyup)="calculateMedicineQty()">
+              </th>
+              <th style="min-width: 30px !important;">
+                <input type="text" class="form-control form-control-sm" [(ngModel)]="newMedicineDetail.medicineQty">
+              </th>
+              <th style="min-width: 30% !important;">
+                <div class="" style="position: relative;">
+                  <input type="text" class="form-control form-control-sm"
+                    [(ngModel)]="newMedicineDetail.medicineExtraInstruction" placeholder="Enter extra instructions">
+                  <button type="button" class="btn btn-sm btn-warning" style="position: absolute; right: 1%; top: 1%;"
+                    pTooltip="Translate" (click)="translate()">
+                    <i class="bi bi-translate"></i>
+                  </button>
+                </div>
+
+              </th>
+              <th style="min-width: 30px !important;">
+                <button type="submit" class="btn btn-sm btn-success" (click)="saveMedicine()">
+                  Add
+                </button>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dose of rxPrescriptionList; index as i">
+              <td style="min-width: 30px !important;">{{i+1}}</td>
+              <td style="min-width: 30% !important;">{{dose.medicine | uppercase}}</td>
+              <td style="min-width: 20% !important;">{{dose.Doses}}</td>
+              <td style="min-width: 30px !important;">{{dose.Days}}</td>
+              <td style="min-width: 30px !important;">{{dose.Qty}}</td>
+              <td style="min-width: 30% !important;">{{dose.Instruction}}</td>
+              <td style="min-width: 30px !important;">
+                <button type="submit" class="btn btn-sm btn-danger"
+                  (click)="showDeletePopUp($event, dose.prescriptionid)">
+                  Delete
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div class="" [style]="{'position': 'relative','min-height': screenHeight}">
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex justify-content-between pl-3">
+          <div class="d-flex flex-row gap-1">
+            <img src="assets/images/discharge-summary-1.png" height="50px" alt="" srcset="">
+            <div class="d-flex flex-column">
+              <h4 class="p-0 m-0" style="font-weight: 700;">Discharge Summary </h4>
+              <h6 class="p-0 m-0" style="font-weight: 900; color: red;">{{patientDetails ? patientDetails.EntityName :
+                '' | uppercase}}</h6>
+            </div>
+          </div>
+          <div class="d-flex justify-content-center align-items-center h-100">
+            <button type="button" class="btn btn-lg" (click)="op1.toggle($event)">
+              <i class="bi bi-gear-wide-connected"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="col-12" style="overflow-y: auto; max-height: 85vh;">
+
+        <!-- <span > -->
+        <p-accordion [multiple]="true" [activeIndex]="[0]">
+          <p-accordionTab [id]="'dischargeAccordionTab'+i.toString()"
+            [style]="{'background-color':'#FDDE55 !important'}" [header]="item.printGroupName"
+            *ngFor="let item of filteredGroupList; index as i">
+            <div class="flex flex-column mb-2" *ngFor="let value of item.printGroupValue; index as j">
+              <ng-container *ngIf="value.AttributeName.toLowerCase()!=='save'">
+              <div class="d-flex flex-row justify-content-between align-items-center mb-1">
+                <div class="d-flex justify-content-between w-100 align-items-center">
+                  <strong class="m-0 p-0">{{value.AttributeName}}</strong>
+                  <button type="button" class="btn btn-sm btn-light-color"
+                    *ngIf="value.ControlType.toLowerCase() !== 'void'"
+                    (click)="showPreviousData = true; setSelectedPreviousData(value,i,j,value.AttributeName)">
+                    <strong>Show Previous Data <i class="bi bi-info-circle"></i></strong>
+                  </button>
+                </div>
+                <!-- <button type="button" class="btn btn-sm btn-success">
+                    Save
+                  </button> -->
+                <p-checkbox #pCheckox [(ngModel)]="value.AttributeValue" trueValue="selected" falseValue="not selected"
+                  *ngIf="value.ControlType.toLowerCase() === 'void'"
+                  (onChange)="updateAttributeValue(value.AttributeValue ? 'selected' : 'not selected',  value.EntityAttributeId, value.AttributeId, value.SetName)" />
+              </div>
+              <div class="" style="position: relative;">
+                <textarea #inputOption *ngIf="value.ControlType.toLowerCase().includes('textbox')" type="text" name=""
+                  id="" class="form-control form-control-sm" [(ngModel)]="value.AttributeValue"
+                  placeholder="Fill detail here..."
+                  (blur)="updateAttributeValue(inputOption.value,  value.EntityAttributeId, value.AttributeId, value.SetName)"></textarea>
+                <button *ngIf="value.AttributeValue && value.ControlType.toLowerCase().includes('textbox')"
+                  class="btn btn-sm btn-info" type="button" style="position: absolute; right: 0; bottom: 0;"
+                  (click)="selectedLargeTextDetails = value.AttributeValue; showLargeText = true">
+                  View
+                </button>
+              </div>
+              <select #selectOption name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm"
+                *ngIf="value.ControlType.toLowerCase() === 'combobox'"
+                (click)="loadListByPrintGroupAttribute(value.DataSpecs)"
+                (ngModelChange)="updateAttributeValue(selectOption.value,  value.EntityAttributeId, value.AttributeId, value.SetName)">
+                <option value="">Please Select...</option>
+                <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+              </select>
+              <div class="btn-group text-start"
+                *ngIf="value.ControlType.toLowerCase() === 'text and multiselection' || value.ControlType.toLowerCase() === 'multiselect'">
+                <button
+                  class="btn btn-transperent border-1 border-black btn-sm dropdown-toggle flex justify-content-between align-items-center"
+                  type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                  (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                  {{(value.AttributeValue ? wrapupExtraProcedureText(value.AttributeValue,20) : '' )|| 'Select value...'}}
+                  <!-- {{replaceDropdownAttributeValue(value.AttributeValue)}} -->
+                </button>
+                <ul class="dropdown-menu"
+                  style="overflow-y: auto; overflow-x: auto; max-height: 250px !important; max-width: 80% !important;">
+                  <li>
+                    <a class="dropdown-item" *ngFor="let item of loadedList; index as i">
+                      <div class="flex flex-row gap-2">
+                        <!-- <p-checkbox #checkBoxInputOption [binary]="true" inputId="binary"
+                          *ngIf="value.ControlType.toLowerCase() === 'void'" trueValue="selected"
+                          falseValue="not selected"
+                          (onChange)="convertPipeValuesIntoStringArray(item.ListItem, value, checkBoxInputOption.value)" /> -->
+                        <input #checkBoxInputOption (change)="multiSelection(i,j, item.ListItem, $event.target)"
+                          type="checkbox" class="form-check form-check-sm" [name]="'id_'+i" [id]="'id_'+i"
+                          [checked]="checkIsValueInParameter(item.ListItem, value, value.AttributeName)">
+                        <label [for]="''" class="flex flex-wrap w-100"> {{item.ListItem}}</label>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <!-- <label for="" *ngIf="value.ControlType.toLowerCase() === 'multiselect'">{{value.AttributeValue}}</label> -->
+              <!-- <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm" *ngIf="value.ControlType.toLowerCase() === 'multiselect'" (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                  <option value="" >Please Select...</option>
+                  <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                </select>
+                <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm" *ngIf="value.ControlType.toLowerCase() === 'multiselect'" (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+                  <option value="" >Please Select...</option>
+                  <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+                </select> -->
+              </ng-container>
+
+            </div>
+            <!-- <p-fieldset [legend]="value.AttributeName" *ngFor="let value of item.printGroupValue">
+                <p class="m-0">
+                  {{value.AttributeValue}}
+                </p>
+              </p-fieldset> -->
+          </p-accordionTab>
+        </p-accordion>
+        <ng-container *ngIf="noteType">
+          <div class="d-flex justify-content-end mt-2 w-100">
+            <button type="button" class="btn btn-success p-1 shadow-lg" (click)="isSaved_1 = !isSaved_1">
+              <strong>Save Note</strong>
+            </button>
+          </div>
+        </ng-container>
+        <!-- </span> -->
+      </div>
+    </div>
+    <div class="d-flex flex-row justify-content-end text-end"
+      style="position: fixed ; bottom: 3%; right: 5%; z-index: 100;">
+
+      <div class="d-flex flex-column gap-1">
+        <div class="d-flex flex-column gap-3">
+
+          <button type="button" class="btn btn-sm rounded-5 p-2 shadow-lg" style="background-color: #B5DEFF;"
+            (click)="showPrescriptionDialog()">
+            <img src="assets/images/prescription_label.png" height="30px" alt="" srcset="">
+          </button>
+
+          <button type="button" class="btn btn-sm rounded-5 p-2 shadow-lg" style="background-color: #B5DEFF;"
+            *ngIf="false">
+            <img src="assets/images/search.png" height="30px" alt="" srcset="">
+          </button>
+
+        </div>
+        <div class="d-flex flex-row gap-2 w-100" *ngIf="false">
+          <!-- <div class="d-flex justify-content-center align-items-end p-2"> -->
+          <input #groupNameText type="text" id="groupNameTextId" class="form-control"
+            placeholder="Search group name here..." (keyup)="filterDichargeSummaryListByGroupName(groupNameText.value)">
+          <!-- </div> -->
+          <button type="button" class="btn btn-sm rounded-1 p-2 shadow-lg" style="background-color: #FFACAC;"
+            *ngIf="groupNameText.value.length" (click)="clearSearchedValue(groupNameText.value)">
+            <img src="assets/images/cross.png" height="20px" alt="" srcset="">
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</ng-container>
+
+<div style="position: absolute; top: 3%; width: 100%;z-index: 100;" class="d-flex justify-content-center"
+  *ngIf="showInProcess">
+  <div class="card border-0 p-2 shadow-lg">
+    <div class="d-flex flex-column gap-1 justify-content-center text-center">
+      <div class="text-center w-100">
+        <img src="assets/images/loading.gif" height="50px" width="50px" alt="image_null" *ngIf="isInProcess">
+        <img src="assets/images/saved.gif" height="50px" width="50px" alt="image_null" *ngIf="isSaved">
+      </div>
+      <h6 *ngIf="processHeaderName">{{processHeaderName | uppercase}}</h6>
+      <label for="">
+        <strong>{{isInProcess && !isSaved ? 'Saving':'Saved'}} detail...</strong>
+      </label>
+    </div>
+  </div>
+</div>
+
+<p-overlayPanel #op>
+  <div class="d-flex flex-wrap" style="overflow-y: auto; max-height: 300px;">
+    {{wrappedData}}
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #op1>
+  <div class="d-flex flex-column gap-2">
+    <button type="button" class="btn btn-sm btn-outline-danger">
+      <div class="d-flex flex-row gap-1 align-items-center">
+        <img src="assets/images/cross.png" height="15px" alt="" srcset="">
+        <strong class="text-nowrap">Remove Set</strong>
+      </div>
+    </button>
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #op2>
+  <div class="flex flex-column gap-2">
+    <div class="d-flex flex-column gap-1" *ngIf="selectedPreviousDataInfomation.data">
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <!-- <div class="p-3" (click)="isWrappedData ? op.toggle($event) : null; wrappedData = selectedPreviousDataInfomation.data.COL1"> -->
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails = selectedPreviousDataInfomation.data.COL1">
+          <div class="d-flex flex-row gap-2">
+            <strong>1</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL1,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL1)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails =  selectedPreviousDataInfomation.data.COL2">
+          <div class="d-flex flex-row gap-2">
+            <strong>2</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL2,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL2)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails =  selectedPreviousDataInfomation.data.COL3">
+          <div class="d-flex flex-row gap-2">
+            <strong>3</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL3,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL3)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails =  selectedPreviousDataInfomation.data.COL4">
+          <div class="d-flex flex-row gap-2">
+            <strong>4</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL4,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL4)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails =  selectedPreviousDataInfomation.data.COL5">
+          <div class="d-flex flex-row gap-2">
+            <strong>5</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL5,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL5)">Use</button>
+      </div>
+    </div>
+  </div>
+</p-overlayPanel>
+
+<p-dialog [header]="'Previous Data of '+selectedPreviousDataInfomation.header" [modal]="true"
+  [(visible)]="showPreviousData" position="bottom" [style]="{'width': true ? '100%' : '50%'}">
+  <div class="flex flex-column gap-2">
+    <div class="d-flex flex-column gap-1" *ngIf="selectedPreviousDataInfomation.data">
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="showLargeText = true; selectedLargeTextDetails =  selectedPreviousDataInfomation.data.COL1">
+          <div class="d-flex flex-row gap-2">
+            <strong>1</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL1,40)}}
+              </label>
+              <small *ngIf="isWrappedData" (click)="showLargeTextData(selectedPreviousDataInfomation.data.COL1)">Click
+                for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL1)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="isWrappedData ? op.toggle($event) : null; wrappedData = selectedPreviousDataInfomation.data.COL2">
+          <div class="d-flex flex-row gap-2">
+            <strong>2</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL2,40)}}
+              </label>
+              <small *ngIf="isWrappedData" (click)="showLargeTextData(selectedPreviousDataInfomation.data.COL2)">Click
+                for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL2)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="isWrappedData ? op.toggle($event) : null; wrappedData = selectedPreviousDataInfomation.data.COL3">
+          <div class="d-flex flex-row gap-2">
+            <strong>3</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL3,40)}}
+              </label>
+              <small *ngIf="isWrappedData" (click)="showLargeTextData(selectedPreviousDataInfomation.data.COL3)">Click
+                for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL3)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="isWrappedData ? op.toggle($event) : null; wrappedData = selectedPreviousDataInfomation.data.COL4">
+          <div class="d-flex flex-row gap-2">
+            <strong>4</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL4,40)}}
+              </label>
+              <small *ngIf="isWrappedData" (click)="showLargeTextData(selectedPreviousDataInfomation.data.COL4)">Click
+                for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL4)">Use</button>
+      </div>
+      <div class="card border-0 shadow-lg p-2 d-flex flex-row justify-content-between">
+        <div class="p-3"
+          (click)="isWrappedData ? op.toggle($event) : null; wrappedData = selectedPreviousDataInfomation.data.COL5">
+          <div class="d-flex flex-row gap-2">
+            <strong>5</strong>
+            <div class="d-flex flex-column">
+              <label for="">
+                {{wrapupExtraProcedureText(selectedPreviousDataInfomation.data.COL5,40)}}
+              </label>
+              <small *ngIf="isWrappedData">Click for more details.</small>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-success border-0"
+          (click)="updateDischargeSummaryAttributeValueBySelectedPreviousData(selectedPreviousDataInfomation.data.COL5)">Use</button>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+
+<!-- <p-overlayPanel #op>
+  <div class="flex flex-column gap-2">
+    <button type="button" class="btn btn-sm btn-success" (click)="showBillDialoge()">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/open-folder.png" alt="" height="25px" srcset="">
+        <strong>Yes</strong>
+      </div>
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="showDeletePopUp($event)">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/delete-folder.png" alt="" height="25px" srcset="">
+        <strong>No</strong>
+      </div>
+    </button>
+  </div>
+</p-overlayPanel> -->
+
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <span>{{ message.message }}</span>
+      <div class="flex align-items-center gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-success" (click)="confirmPopup.accept()">Yes</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="confirmPopup.reject()">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmPopup>
+
+
+<p-dialog [header]="'Data'" [modal]="true" [(visible)]="showLargeText" position="bottom"
+  [style]="{'width': validPlatform('iphone') ? '100%' : '50%'}">
+  <div class="text-wrap">
+    {{selectedLargeTextDetails || 'No Data'}}
+  </div>
+</p-dialog>
+
+
+
+<p-accordion [multiple]="true" [activeIndex]="[0]" *ngIf="false">
+  <p-accordionTab [id]="'dischargeAccordionTab'+i.toString()" [style]="{'background-color':'#FDDE55 !important'}"
+    [header]="item.printGroupName" *ngFor="let item of filteredGroupList; index as i">
+    <div class="flex flex-column mb-2" *ngFor="let value of item.printGroupValue; index as j">
+      <h6 class="m-0 p-0">{{value.AttributeName}}</h6>
+
+      <!-- <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm" *ngIf="value.ControlType.toLowerCase() === 'multiselect'" (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+        <option value="" >Please Select...</option>
+        <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+      </select>
+      <select name="" id="" [(ngModel)]="value.AttributeValue" class="form-select form-select-sm" *ngIf="value.ControlType.toLowerCase() === 'multiselect'" (click)="loadListByPrintGroupAttribute(value.DataSpecs)">
+        <option value="" >Please Select...</option>
+        <option [value]="item.ListItem" *ngFor="let item of loadedList">{{item.ListItem}}</option>
+      </select> -->
+    </div>
+    <!-- <p-fieldset [legend]="value.AttributeName" *ngFor="let value of item.printGroupValue">
+      <p class="m-0">
+        {{value.AttributeValue}}
+      </p>
+    </p-fieldset> -->
+  </p-accordionTab>
+</p-accordion>
+
+
+<p-dialog
+    header="Note Saved"
+    [modal]="true"
+    [(visible)]="isSaved_1"
+    [position]="'bottom'"
+    [style]="{ width: '25rem' }">
+
+        <div class="d-flex justify-content-center align-items-center flex-column w-100">
+          <img src="./../../../../../assets/images/saved.gif" height="100px" width="100px" alt="" srcset="">
+          <h3>Note</h3>
+          <strong>
+             has been saved!
+          </strong>
+        </div>
+        <div class="d-flex justify-content-center gap-2">
+            <p-button label="Okay" severity="primary" (onClick)="isSaved_1 = false" />
+        </div>
+</p-dialog>

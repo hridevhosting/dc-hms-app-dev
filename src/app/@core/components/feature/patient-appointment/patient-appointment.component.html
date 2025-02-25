@@ -1,0 +1,177 @@
+<div class="container-fluid" style="min-height: 500px !important;">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex flex-column p-2" style="border: 2px solid black;">
+        <label for="" style="margin-top: -20px; margin-left: 15px;">
+          <strong style="background-color: white;">
+            Patient Details
+          </strong>
+        </label>
+        <div class="d-flex flex-column">
+          <small class="d-flex justify-content-between align-items-center">
+            <strong>Patient Name <i>({{patientDetails.EntityId}})</i></strong>
+            <strong style="color: red;">UHID No: {{patientDetails.RegNo}}</strong>
+          </small>
+          <div class="d-flex flex-row">
+            <input type="text" id="" class="form-control form-control-sm" [(ngModel)]="patientDetails.EntityName"
+              disabled>
+            <button type="button" class="btn btn-sm" style="background-color: #03AED2; color: white;">
+              <i class="bi bi-info-circle-fill"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 mt-2">
+      <div class="d-flex flex-column p-2" style="border: 2px solid black;">
+        <label for="" style="margin-top: -20px; margin-left: 15px;">
+          <strong style="background-color: white;">
+            Appointment Details
+          </strong>
+        </label>
+        <table class="table table-bordered table-sm">
+          <tbody>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Appointment Date</strong>
+                </small>
+              </td>
+              <td>
+                <input type="datetime-local" id="" class="form-control form-control-sm"
+                  [(ngModel)]="appointmentDetail.SendAt">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Appointment For</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm" [disabled]="!appointmentReasonList.length">
+                  <option value="">Select reason...</option>
+                  <option value="" *ngFor="let arl of appointmentReasonList">{{arl | uppercase}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Doctor</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm" [disabled]="!doctorList.length">
+                  <option value="">Select doctor...</option>
+                  <option value="" *ngFor="let doc of doctorList">{{doc | uppercase}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Referred Doctor</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm" [disabled]="!referralDoctorList.length">
+                  <option value="">Select referral doctor...</option>
+                  <option value="" *ngFor="let refDoc of referralDoctorList">{{refDoc | uppercase}}</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12 mt-2">
+      <div class="d-flex flex-column p-2" style="border: 2px solid black;">
+        <label for="" style="margin-top: -20px; margin-left: 15px;">
+          <strong style="background-color: white;">
+            Additional Details
+          </strong>
+        </label>
+        <table class="table table-bordered table-sm">
+          <tbody>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Department</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm">
+                  <option value="">Select reason...</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Location</strong>
+                </small>
+              </td>
+              <td>
+                <input type="text" id="" class="form-control form-control-sm"
+                  placeholder="Enter patient native location">
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Send To</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm" [disabled]="!doctorList.length">
+                  <option value="">Select doctor...</option>
+                  <option value="" *ngFor="let doc of doctorList">{{doc | uppercase}}</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Treatment Plan</strong>
+                </small>
+              </td>
+              <td>
+                <select name="" id="" class="form-select form-select-sm">
+                  <option value="">Select plan...</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-center">
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">MLC No.</strong>
+                </small>
+              </td>
+              <td class="d-flex flex-row">
+                <input type="text" class="form-control form-control-sm" placeholder="MLC No.">
+                <button type="button" class="btn btn-sm btn-warning"><strong>Generate</strong></button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <small class="d-flex justify-content-center align-items-center">
+                  <strong class="text-nowrap">Additional Details</strong>
+                </small>
+              </td>
+              <td>
+                <textarea name="" id="" rows="3" class="form-control form-control-sm"
+                  placeholder="Enter additional details, if you find any."></textarea>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="col-12 text-end">
+      <button type="button" class="btn btn-success shadow-lg" disabled>
+        Save Appointment Detail
+      </button>
+    </div>
+  </div>
+</div>

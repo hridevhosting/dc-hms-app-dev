@@ -1,0 +1,903 @@
+<!-- Large Screen Layout -->
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div class="d-flex flex-row gap-1" style="min-width: 100%;">
+    <div class="d-flex p-1" style="min-width: 20%; max-width: 25%;">
+      <div class="card shadow-lg p-2" style="min-height: 92vh; min-width: 100%;">
+        <strong>Bill No : </strong>
+        <div class="d-flex flex-column">
+          <h6><i>{{billDetail.IPCaseNo}}</i></h6>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>{{billType.toLowerCase().includes('ipd') ? 'Admission' : 'Appointment'}} Id
+            </strong>
+            <img src="assets/images/info.png" height="20px" alt="" srcset="">
+          </div>
+          <h6 *ngIf="billType.toLowerCase().includes('ipd') && admissionDetails"><i>{{admissionDetails.RegNo}}</i></h6>
+          <h6 *ngIf="billType.toLowerCase().includes('opd') && appointmentDetails"><i>{{appointmentDetails.RegNo}}</i>
+          </h6>
+        </div>
+        <div class="d-flex flex-column" *ngIf="patientDetail">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>Patient Name </strong>
+            <img src="assets/images/info.png" height="20px" alt="" srcset="">
+          </div>
+          <h6><i>{{patientDetail.EntityName}}</i></h6>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>Doctor Name </strong>
+            <!-- <img src="assets/images/info.png" height="20px" alt="" srcset=""> -->
+          </div>
+          <h6 *ngIf="billType.toLowerCase().includes('ipd') && admissionDetails"><i>{{admissionDetails.Consultant}}</i>
+          </h6>
+          <h6 *ngIf="billType.toLowerCase().includes('opd') && appointmentDetails">
+            <i>{{appointmentDetails.BookedFor}}</i>
+          </h6>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>Payer </strong>
+            <!-- <img src="assets/images/info.png" height="20px" alt="" srcset=""> -->
+          </div>
+          <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billDetail.PayerName">
+            <option value="">Select Payer...</option>
+            <option value="{{payer.ListItem}}" *ngFor="let payer of payerList">{{payer.ListItem | uppercase}}</option>
+          </select>
+        </div>
+        <div class="d-flex flex-column">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>TPA </strong>
+            <!-- <img src="assets/images/info.png" height="20px" alt="" srcset=""> -->
+          </div>
+          <select name="" id="" class="form-select form-select-sm" [(ngModel)]="billDetail.TPA">
+
+            <option value="">Select TPA...</option>
+            <option value="{{tpa.ListItem}}" *ngFor="let tpa of tpaList">{{tpa.ListItem | uppercase}}</option>
+
+          </select>
+        </div>
+        <div class="d-flex flex-column" *ngIf="admissionDetails">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>Date of Addmission </strong>
+            <!-- <img src="assets/images/info.png" height="20px" alt="" srcset=""> -->
+          </div>
+          <input type="datetime-local" name="" id="" class="form-control form-control-sm"
+            [(ngModel)]="admissionDetails.TAdmissionDate" disabled>
+        </div>
+        <div class="d-flex flex-column" *ngIf="admissionDetails">
+          <div class="d-flex flex-row justify-content-between">
+            <strong>Date of Discharged </strong>
+            <!-- <img src="assets/images/info.png" height="20px" alt="" srcset=""> -->
+          </div>
+          <input type="datetime-local" name="" id="" class="form-control form-control-sm"
+            [(ngModel)]="admissionDetails.DischargeDate" disabled>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex p-1" style="min-width: 60%; max-width: 50%; position: relative;">
+      <div class="card shadow-lg p-2" style="min-height: 92vh; min-width: 100%;">
+        <div class="d-flex flex-column">
+          <div class="d-flex justify-content-between mb-1">
+            <div class="d-flex flex-row gap-1">
+              <button type="button" class="btn btn-sm shadow-lg btn-warning"
+                (click)="loadBillDetailsByBillId(billDetail.BillNo);">
+                <div class="d-flex flex-row align-items-center gap-1">
+                  <!-- <img src="assets/images/receipt.png" height="20px" alt="" srcset=""> -->
+                  <div class="spinner-grow spinner-grow-sm" role="status" *ngIf="isRefreshing"></div>
+                  <strong class="text-nowrap">Refresh</strong>
+                </div>
+              </button>
+              <button type="button" class="btn btn-sm shadow-lg btn-secondary" (click)="showBillLockAlertPopUp($event)">
+                <div class="d-flex flex-row align-items-center gap-1">
+                  <img src="assets/images/bill-lock.png" height="20px" alt="" srcset="">
+                  <strong class="text-nowrap">Lock</strong>
+                </div>
+              </button>
+            </div>
+            <p-selectButton [options]="stateOptions" [(ngModel)]="value" optionLabel="label" optionValue="value" />
+            <div class="d-flex flex-row gap-1">
+              <button type="button" class="btn btn-sm shadow-lg btn-info">
+                <div class="d-flex flex-row align-items-center gap-1">
+                  <img src="assets/images/offer.png" height="20px" alt="" srcset="">
+                  <strong class="text-nowrap">Discount Notes</strong>
+                </div>
+              </button>
+              <button #addReceiptBtn type="button" class="btn btn-sm shadow-lg btn-info" (click)="showReceiptDialoge()"
+                [disabled]="!billItemDetails.length"
+                [pTooltip]="billItemDetails.length ? 'Add receipt' : 'Please add charges first!'"
+                tooltipPosition="bottom">
+                <div class="d-flex flex-row align-items-center gap-1">
+                  <img src="assets/images/receipt.png" height="20px" alt="" srcset="">
+                  <strong class="text-nowrap">Add Receipt</strong>
+                </div>
+              </button>
+              <button type="button" class="btn btn-sm shadow-lg btn-success" (click)="showBillSaveAlertPopUp($event)">
+                <div class="d-flex flex-row align-items-center gap-1">
+                  <img src="assets/images/purse.png" height="20px" alt="" srcset="">
+                  <strong class="text-nowrap">Save</strong>
+                </div>
+              </button>
+            </div>
+          </div>
+          <div class="" style="overflow-y: auto; max-height: 75vh; min-height: 75vh;">
+            <table class="table table-sm table-bordered"
+              *ngIf="value.toLowerCase() === 'bill' && billItemDetails.length">
+              <thead style="position: sticky; top: 0;">
+                <tr>
+                  <th>#</th>
+                  <th>Charges Name</th>
+                  <th>Rate</th>
+                  <th>Unit</th>
+                  <th>Total</th>
+                  <th>
+
+                  </th>
+                </tr>
+                <!-- <tr>
+                  <th></th>
+                  <th><input type="text" class="form-control form-control-sm"></th>
+                  <th><input type="text" class="form-control form-control-sm w-5rem"></th>
+                  <th><input type="text" class="form-control form-control-sm w-4rem"></th>
+                  <th><input type="text" class="form-control form-control-sm w-7rem"></th>
+                  <th>
+                    <button type="button" class="btn btn-sm btn-success shadow-lg">
+                      <i class="bi bi-plus"></i>
+                    </button>
+                  </th>
+                </tr> -->
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let item of billItemDetails; index as i">
+                  <tr *ngIf="item.Code !== 'Receipt'">
+                    <td>{{i+1}}></td>
+                    <td>{{item.HeadDesc | uppercase}}</td>
+                    <td><input type="text" class="form-control form-control-sm w-5rem" [(ngModel)]="item.Rate"></td>
+                    <td><input type="text" class="form-control form-control-sm w-4rem" [(ngModel)]="item.Unit"></td>
+                    <td><input type="text" class="form-control form-control-sm w-7rem" [(ngModel)]="item.Amount"></td>
+                    <td class="d-flex justify-content-around">
+                      <button type="button" class="btn btn-sm btn-outline-danger shadow-lg rounded-5"
+                        (click)="reasonForDeleteBillItem.toggle($event); selectedDeletingBillItemId = item.BillDetailId">
+                        <i class="bi bi-trash3-fill"></i>
+                      </button>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+            <div class="d-flex justify-content-center align-items-center h-100"
+              *ngIf="value.toLowerCase() === 'bill' && !billItemDetails.length">
+
+            </div>
+            <table class="table table-sm table-bordered"
+              *ngIf="value.toLowerCase() === 'receipt' && receiptList.length">
+              <thead style="position: sticky; top: 0;">
+                <tr>
+                  <th>#</th>
+                  <th>Entry Date</th>
+                  <th>Trans Date</th>
+                  <th>Payment Mode</th>
+                  <th>Payer</th>
+                  <th>Amount</th>
+                  <th></th>
+                </tr>
+                <!-- <tr>
+                <th></th>
+                <th><input type="text" class="form-control form-control-sm"></th>
+                <th><input type="text" class="form-control form-control-sm w-5rem"></th>
+                <th><input type="text" class="form-control form-control-sm w-4rem"></th>
+                <th><input type="text" class="form-control form-control-sm w-7rem"></th>
+                <th>
+                  <button type="button" class="btn btn-sm btn-success shadow-lg">
+                    <i class="bi bi-plus"></i>
+                  </button>
+                </th>
+              </tr> -->
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of receiptList; index as i">
+                  <td>{{i+1}}></td>
+                  <td>{{item.EntryAt | date:'dd/MM/yyyy'}}</td>
+                  <td>{{item.TranDate | date:'dd/MM/yyyy'}}</td>
+                  <td>{{item.PaymentMode | uppercase}}</td>
+                  <td>{{item.Payer | uppercase}}</td>
+                  <td>{{item.Receipts}}.00</td>
+                  <td class="d-flex flex-row justify-content-around gap-2">
+                    <button type="button"  class="btn btn-sm btn-outline-secondary shadow-lg rounded-5">
+                      <!-- <img src="assets/images/info.png" height="25px" alt="" srcset=""> -->
+                      <i class="bi bi-info-circle-fill text-primary"></i>
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger shadow-lg rounded-5"
+                      (click)="reasonForDeleteBillItem.toggle($event); selectedDeletingBillItemId = item.BillReceiptId">
+                      <i class="bi bi-trash3-fill"></i>
+                    </button>
+                    <!-- <button type="button" class="btn btn-sm btn-secondary shadow-lg"> -->
+                    <!-- </button> -->
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="d-flex flex-column justify-content-center align-items-center h-100"
+              *ngIf="value.toLowerCase() === 'receipt' && !receiptList.length">
+              <img src="assets/images/receipt.png" height="150px" alt="" srcset="">
+              <h4 style="font-weight: 600;"><i>There is no receipt yet...</i></h4>
+              <h6 style="color: red; font-weight: 600; cursor: pointer;" (click)="addReceiptBtn.click()"><u>Please add
+                  recepit!</u></h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="w-100 p-2" style="position: absolute; bottom: 0;">
+        <div class="card border-0 rounded-3 shadow-lg p-1">
+          <div class="d-flex justify-content-between">
+            <div class="d-flex flex-row gap-1">
+              <div class="d-flex flex-row gap-1 p-1 rounded-3 shadow-lg"
+                style="background-color: #6AD4DD; color: black;">
+                <strong class="text-nowrap">
+                  Total :
+                </strong>
+                <!-- <i><input type="text" class="form-control form-control-sm font-bold" [(ngModel)]="chargedAmount"
+                      disabled></i> -->
+                <strong>
+                  <i>{{chargedAmount}}</i>
+                </strong>
+              </div>
+              <div class="d-flex flex-row p-1 rounded-3 shadow-lg gap-1"
+                style="background-color: #FFC764; color: black;">
+
+                <strong class="text-nowrap">
+                  Discount :
+                </strong>
+
+
+                <strong>
+                  <i>
+                    {{billDetail.DiscountAmt}}
+                  </i>
+                </strong>
+
+                <!-- <input type="text" class="form-control form-control-sm font-bold" [(ngModel)]="billDetail.DiscountAmt"> -->
+              </div>
+            </div>
+            <div class="d-flex flex-row gap-1">
+              <div class="d-flex flex-row gap-1 p-1 rounded-3 shadow-lg"
+                style="background-color: #5BBCFF; color: black;">
+
+                <strong class="text-nowrap">
+                  Received :
+                </strong>
+
+
+                <strong>
+                  <i>
+                    {{patientGivenAmount}}
+                  </i>
+                </strong>
+
+              </div>
+              <div class="d-flex flex-row gap-1 p-1 rounded-3 shadow-lg"
+                style="background-color: #FF9B9B; color: black;">
+
+                <strong class="text-nowrap">
+                  Balance :
+                </strong>
+
+
+                <strong>
+                  <i>
+                    {{patientBalanceAmount}}
+                  </i>
+                </strong>
+
+
+              </div>
+            </div>
+            <div class="d-flex flex-row gap-1" *ngIf="false">
+              <!-- <div class="d-flex flex-column p-1 rounded-3 shadow-lg"
+                style="background-color: #4C3BCF; color: white;">
+                <small>
+                  <strong><h5>Charged Amount</h5></strong>
+                </small>
+                <i>0</i>
+              </div> -->
+              <div class="d-flex flex-column p-1 rounded-3 shadow-lg" style="background-color: #38E54D; color: white;">
+                <small>
+                  <strong class="text-nowrap">
+                    Balance :
+                  </strong>
+                </small>
+                <small>
+                  <strong>
+                    <i>
+                      {{patientBalanceAmount}}
+                    </i>
+                  </strong>
+                </small>
+                <small>
+                  <strong>
+                    <h5>Final Amount</h5>
+                  </strong>
+                </small>
+                <input type="text" class="form-control form-control-sm font-bold" [(ngModel)]="chargedAmount" disabled>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="d-flex p-1" style="min-width: 20%; max-width: 25%;">
+      <div class="card shadow-lg p-2 gap-1" style="min-height: 92vh; min-width: 100%;">
+        <div class="d-flex flex-row gap-1">
+          <div class="d-flex flex-column w-50">
+            <small><strong>Rate Type</strong></small>
+            <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedRateType"
+              [disabled]="!rateTypeList.length">
+              <option value="">Select Type...</option>
+              <option value="{{type}}" *ngFor="let type of rateTypeList">{{type | uppercase}}</option>
+            </select>
+          </div>
+          <div class="d-flex flex-column w-50">
+            <small><strong>Sub Type</strong></small>
+            <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedRateSubType"
+              [disabled]="!rateSubTypeList.length">
+              <option value="">Select Sub Type...</option>
+              <option value="{{subType}}" *ngFor="let subType of rateSubTypeList">{{subType | uppercase}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="d-flex flex-row gap-1 mt-1">
+          <input type="text" class="form-control form-control-sm" placeholder="Search charges here..." />
+          <button type="button" class="btn btn-sm btn-primary">Search</button>
+        </div>
+
+        <div class="mt-2 relative" style="overflow-y: auto; max-height: 80vh;" *ngIf="filteredList.length">
+          <div class="sticky sticky-top bg-white">
+            <strong>Charges List ({{filteredList.length}})</strong>
+          </div>
+          <div class="card shadow-lg border-0 rounded-2 mb-1 rate-charge" style="position: relative;"
+            *ngFor="let item of filteredList; index as i">
+            <div class="d-flex flex-row">
+              <div class="p-2 bg-primary text-white">
+                <strong><i>{{i+1}}</i></strong>
+              </div>
+              <small>
+                <div class="d-flex flex-column pl-2">
+                  <strong>{{item.ItemDesc | uppercase}}</strong>
+                  <strong style="color: red;">
+                    Rate : <u>{{item.Rate}}</u>
+                  </strong>
+                </div>
+              </small>
+            </div>
+            <div class="rate-charge-hover-effect" style="position: absolute; right: 0; cursor: pointer;">
+              <img src="./../../../../../assets/images/charge_add.png" height="50px" alt="img_not"
+                pTooltip="Add Charge!"
+                (click)="addChargeWithUnitNote.toggle($event); setSelectedBillItemChargeDetail(item)">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div style="position: relative; height: 100vh;">
+    <div class="d-flex flex-column p-1">
+      <div class="d-flex flex-row gap-1">
+        <small>
+          <strong>
+            Bill No :
+          </strong>
+        </small>
+        <small>
+          <i>
+            <u>
+              {{billDetail.IPCaseNo}}
+            </u>
+          </i>
+        </small>
+      </div>
+      <hr class="m-0 p-0">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+          <strong>
+            <small>Patient Name</small>
+          </strong>
+          <small>
+            <i>
+              {{patientDetail.EntityName}}
+            </i>
+          </small>
+        </div>
+        <img src="assets/images/info.png" height="30px" alt="" srcset="">
+      </div>
+      <hr class="m-0 p-0">
+      <div class="d-flex flex-row justify-content-between align-items-center">
+        <div class="d-flex flex-column">
+          <strong>
+            <small>
+              <span *ngIf="billType.toLowerCase().includes('ipd') && admissionDetails">
+                Admission Id
+              </span>
+              <span *ngIf="billType.toLowerCase().includes('opd') && appointmentDetails">
+                Appointment Id
+              </span>
+            </small>
+          </strong>
+          <small>
+            <span *ngIf="billType.toLowerCase().includes('ipd') && admissionDetails">
+              <i>{{admissionDetails.RegNo}}</i>
+            </span>
+            <span *ngIf="billType.toLowerCase().includes('opd') && appointmentDetails">
+              <i>{{appointmentDetails.RegNo}}</i>
+            </span>
+          </small>
+        </div>
+        <img src="assets/images/info.png" height="30px" alt="" srcset="">
+      </div>
+      <hr class="m-0 p-0">
+      <div class="d-flex justify-content-between align-items-center mt-1">
+        <p-selectButton [options]="stateOptions" (onChange)="setFloatingAmountCard()" [(ngModel)]="value"
+          optionLabel="label" optionValue="value" />
+        <div class="d-flex flex-row">
+          <!-- <small> -->
+          <strong>
+            <span style="color: #4C3BCF;">R</span>
+            <span>- Rate | </span>
+            <span style="color: #F97300;">U</span>
+            <span>- Unit | </span>
+            <span style="color: #38E54D;">C</span>
+            <span>- Cost </span>
+          </strong>
+          <!-- </small> -->
+        </div>
+      </div>
+      <div class="p-1" style="overflow-y: auto; min-height: 70dvh; max-height: 70dvh; position: relative;">
+        <ng-container *ngIf="value.toLowerCase()==='bill' && billItemDetails.length">
+          <ng-container *ngFor="let item of billItemDetails; index as i">
+            <div class="card mb-1 position-relative main-head" style="border: 2px solid #00A9FF;"
+              *ngIf="item.Code !== 'Receipt'">
+              <small>
+                <div class="d-flex flex-row align-items-center">
+                  <strong class="p-2 h-100" style="background-color: #00A9FF; color: white;">{{i+1}}</strong>
+                  <div class="d-flex flex-column p-1 w-100">
+                    <strong>{{item.HeadDesc | uppercase}}</strong>
+                    <div class="d-flex flex-row justify-content-between w-100">
+                      <div class="d-flex flex-row">
+                        <strong style="color: #4C3BCF;">R -</strong> <i>{{item.Rate}}</i>
+                      </div>
+                      <div class="d-flex flex-row">
+                        <strong style="color: #F97300;">U -</strong> <i>{{item.Unit}}</i>
+                      </div>
+                      <div class="d-flex flex-row">
+                        <strong style="color: #38E54D;">C -</strong> <i>{{item.Amount}}</i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </small>
+              <div class="btn-danger text-white h-100 p-2 d-flex align-items-center sub-head  rounded-1"
+                style="position: absolute; right: 0; top:0;" (click)="reasonForDeleteBillItem.toggle($event)">
+                <strong>Delete</strong>
+              </div>
+            </div>
+          </ng-container>
+
+        </ng-container>
+        <ng-container *ngIf="value.toLowerCase()==='bill' && !billItemDetails.length">
+          <div class="d-flex flex-column justify-content-center text-center align-items-center h-100"
+            style="min-height: 60dvh;">
+            <img src="./../../../../../assets/images/charge_add.png" height="100px" alt="" srcset="">
+            <h4>You have not charged <br> any charges.</h4>
+            <!-- <strong style="color: red;" (click)="addUpdateChargesReceiptBtn.click()"><i><u>Add Charges!</u></i></strong> -->
+          </div>
+        </ng-container>
+        <ng-container *ngIf="value.toLowerCase()==='receipt'">
+          <div class="card mb-1 position-relative main-head" style="border: 2px solid #00A9FF;"
+            *ngFor="let item of receiptList; index as i">
+            <div class="d-flex flex-row align-items-center gap-1">
+              <strong class="p-2 h-100" style="background-color: #00A9FF; color: white;">{{i+1}}</strong>
+              <div class="d-flex flex-column p-1 w-100">
+                <small>
+                  <div class="d-flex justify-content-between">
+                    <!-- <div class="d-flex flex-row gap-1">
+                      <strong>Entry At : </strong>
+                      <i><strong>{{item.EntryAt | date:'dd/MM/yyyy'}}</strong></i>
+                    </div> -->
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Pay Mode : </strong>
+                      <i><strong>{{item.PaymentMode | uppercase}}</strong></i>
+                    </div>
+
+                  </div>
+                  <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-row gap-1">
+                      <strong>Tranc. At : </strong>
+                      <i><strong>{{item.TranDate | date:'dd/MM/yyyy'}}</strong></i>
+                    </div>
+                    <div class="d-flex flex-row gap-1" style="color: red;">
+                      <strong><i class="bi bi-currency-rupee"></i> : </strong>
+                      <i><strong>{{item.Receipts}}</strong></i>
+                    </div>
+                  </div>
+                </small>
+              </div>
+              <img src="assets/images/info.png" height="30px" alt="" srcset="">
+            </div>
+            <div class="btn-danger text-white h-100 p-2 d-flex align-items-center sub-head  rounded-1"
+              style="position: absolute; right: 0; top:0;" (click)="reasonForDeleteBillItem.toggle($event)">
+              <strong>Delete</strong>
+            </div>
+          </div>
+        </ng-container>
+        <ng-container *ngIf="value.toLowerCase()==='receipt' && !receiptList.length">
+          <div class="d-flex flex-column justify-content-center text-center align-items-center h-100"
+            style="min-height: 60dvh;">
+            <img src="./../../../../../assets/images/receipt.png" height="100px" alt="" srcset="">
+            <h4>There is no receipt, yet!</h4>
+            <!-- <strong style="color: red;" (click)="addUpdateChargesReceiptBtn.click()"><i><u>Add Receipt!</u></i></strong> -->
+          </div>
+        </ng-container>
+        <div class="p-2" [style]="floatAmountCardPostion">
+          <div class="card border-0 rounded-3 p-2 shadow-lg" style="background-color: #DEF5E5;">
+            <div class="d-flex flex-row justify-content-between gap-2">
+              <div class="d-flex flex-column p-2 rounded-3 shadow-lg" style="background-color: #FDDE55;">
+                <small>
+                  <strong>Balance</strong>
+                </small>
+                <input type="text" class="form-control form-control-sm font-bold" [(ngModel)]="patientBalanceAmount"
+                  disabled>
+              </div>
+              <div class="d-flex flex-column p-2 rounded-3 shadow-lg" style="background-color: #5BBCFF;">
+                <small>
+                  <strong>Final</strong>
+                </small>
+                <input type="text" class="form-control form-control-sm font-bold" [(ngModel)]="billDetail.TotalAmt"
+                  disabled>
+              </div>
+              <div class="d-flex flex-column gap-1">
+                <!-- <button #addUpdateChargesReceiptBtn type="button" class="btn btn-success"
+                  (click)="value.toLowerCase()==='bill' ? billChargesPopup = true : showReceiptDialoge()">
+                  <i class="bi bi-plus-lg"></i>
+                </button>
+                <button type="button" class="btn btn-warning">
+                  <i class="bi bi-arrow-up"></i>
+                </button> -->
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</ng-container>
+
+<!-- View Mode only -->
+<ng-container *ngIf="false">
+  <div class="row" style="position: relative;" *ngIf="billItemDetails.length">
+    <div class="bg-white shadow-2 p-3" style="position: sticky; top: 0%;">
+
+      <!-- <div class="flex justify-content-between w-100">
+        <div class="flex flex-column w-100">
+          <small class="flex justify-content-between w-100">
+            <div class="flex flex-row gap-1">
+              <strong>Patient Name</strong> ({{patientDetail.EntityId}})
+            </div>
+          </small>
+          <i>{{patientDetail.EntityName | uppercase}}</i>
+        </div>
+      </div> -->
+      <div class="flex justify-content-between">
+        <div class="flex flex-column text-start">
+          <small><strong>Bill No</strong></small>
+          <i>{{billDetail.IPCaseNo | uppercase}}</i>
+        </div>
+        <div class="flex flex-column text-end">
+          <small><strong>Bill Date</strong></small>
+          <i>{{billDetail.BillDate | date: 'dd-MMM-yyyy'}}</i>
+        </div>
+      </div>
+      <div class="flex justify-content-between mt-2">
+        <div class="flex flex-column text-start">
+          <small><strong>Payer</strong></small>
+          <i>{{billDetail.PayerName | uppercase}}</i>
+        </div>
+        <div class="flex flex-column text-end">
+          <small><strong>TPA</strong></small>
+          <i class="flex flex-wrap">{{billDetail.TPA && billDetail.TPA.toLowerCase().includes('none') ? billDetail.TPA :
+            '-' | uppercase}}</i>
+        </div>
+      </div>
+    </div>
+    <div class="col-12" *ngIf="billItemDetails.length">
+      <div class="w-100" *ngFor="let item of billItemDetails; index as i">
+        <div class="flex flex-row gap-1 w-100 mb-1 rounded-3 p-2" style="border:2px solid black">
+          <div class=""><strong>{{i+1}}</strong></div>
+          <div class="flex flex-column w-100">
+            <strong>{{item.HeadDesc | uppercase}}</strong>
+            <div class="flex justify-content-between w-100">
+              <strong style="color: red; font-weight: 800;">R: {{item.Rate}}</strong>
+              <strong style="color: green; font-weight: 800;">U: {{item.Unit}}</strong>
+              <strong style="color: purple; font-weight: 800;">C: {{item.Amount}}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="bg-white shadow-2 p-3" style="position: sticky; bottom: -4%;">
+      <div class="d-flex justify-content-around rounded-5" style="border: 3px solid #021526;">
+        <label for=""><span style="color: red; font-weight: 800;">R</span><strong>: Rate</strong></label>
+        <label for=""><span style="color: green; font-weight: 800;">U</span><strong>: Unit</strong></label>
+        <label for=""><span style="color: purple; font-weight: 800;">C</span><strong>: Cost</strong></label>
+      </div>
+      <div class="flex justify-content-between">
+        <div class="flex flex-column text-start">
+          <small><strong>Balance</strong></small>
+          <i style="color: red;"><strong>{{billDetail.AmountToPatient}}</strong></i>
+        </div>
+        <div class="flex flex-column text-end">
+          <small><strong>Paid</strong></small>
+          <i style="color: green;"><strong>{{billDetail.AmountToPayer}}</strong></i>
+        </div>
+      </div>
+      <div class="flex justify-content-between mt-2">
+        <div class="flex flex-column text-start">
+          <small><strong>Discount</strong></small>
+          <i style="color: cornflowerblue;"><strong>{{billDetail.DiscountAmt}}</strong></i>
+        </div>
+        <div class="flex flex-column text-end">
+          <small><strong>Final</strong></small>
+          <i style="color: darkorange;"><strong>{{billDetail.TotalAmt}}</strong></i>
+        </div>
+      </div>
+      <div class="flex justify-content-end mt-1">
+        <div class="flex flex-row gap-1 btn btn-sm btn-secondary text-white rounded-3"
+          (click)="moreDetails = !moreDetails">
+          <img src="assets/images/info.png" height="20px" alt="" srcset="">
+          <strong>More detail</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+
+<p-dialog header="More Details" [modal]="true" [(visible)]="moreDetails" position="bottom" [style]="{ width: '25rem' }">
+  <div class="row" *ngIf="patientDetail.EntityId > 0">
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Patient Name</strong> ({{patientDetail.EntityId}})</small>
+        <strong>{{patientDetail.EntityName}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>UHID No</strong></small>
+        <strong>{{patientDetail.RegNo}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Department</strong></small>
+        <strong>{{billDetail.B_Department}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Hopital Section</strong></small>
+        <strong>{{billDetail.B_WhichOpd}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Patient Category</strong></small>
+        <strong>{{patientDetail.ExternalCategory}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Admission Date</strong></small>
+        <strong>{{billDetail.AdmissionDate | date : 'dd-MMM-yyyy hh:mm a'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Married Status</strong></small>
+        <strong>{{patientDetail.MaritalStatus ? patientDetail.MaritalStatus : '-' | uppercase }}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Reg No</strong></small>
+        <strong>{{patientDetail.RegNo | uppercase}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Contact No</strong></small>
+        <strong>{{patientDetail.PrimaryFld1 ? patientDetail.PrimaryFld1 : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Gender</strong></small>
+        <strong>{{patientDetail.PrimaryFld2 ? patientDetail.PrimaryFld2 : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Date of Birth</strong></small>
+        <strong>{{patientDetail.PrimaryFld3 ? patientDetail.PrimaryFld3 : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Age</strong></small>
+        <strong>{{patientDetail.PrimaryId1 ? patientDetail.PrimaryId1 : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>City/Village</strong></small>
+        <strong>{{patientDetail.PrimaryFld4 ? patientDetail.PrimaryFld4 : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>State</strong></small>
+        <strong>{{patientDetail.State ? patientDetail.State : '-'}}</strong>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-column ">
+        <small><strong>Country</strong></small>
+        <strong>{{patientDetail.Country ? patientDetail.Country : '-'}}</strong>
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Bill Charges" [modal]="true" [(visible)]="billChargesPopup" position="bottom"
+  [style]="{ width: '100%' }">
+  <div class="d-flex flex-row gap-1">
+    <div class="d-flex flex-column w-50">
+      <small><strong>Rate Type</strong></small>
+      <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedRateType"
+        [disabled]="!rateTypeList.length">
+        <option value="">Select Type...</option>
+        <option value="{{type}}" *ngFor="let type of rateTypeList">{{type | uppercase}}</option>
+      </select>
+    </div>
+    <div class="d-flex flex-column w-50">
+      <small><strong>Sub Type</strong></small>
+      <select name="" id="" class="form-select form-select-sm" [(ngModel)]="selectedRateSubType"
+        [disabled]="!rateSubTypeList.length">
+        <option value="">Select Sub Type...</option>
+        <option value="{{subType}}" *ngFor="let subType of rateSubTypeList">{{subType | uppercase}}</option>
+      </select>
+    </div>
+  </div>
+  <div class="d-flex flex-row gap-1 mt-1">
+    <input type="text" class="form-control form-control-sm" placeholder="Search charges here..." />
+    <button type="button" class="btn btn-sm btn-primary">Search</button>
+  </div>
+
+  <div class="mt-2 relative" style="overflow-y: auto; max-height: 60vh;">
+    <div class="sticky sticky-top bg-white">
+      <strong>Charges List ({{rateList.length}})</strong>
+    </div>
+    <div class="card shadow-lg border-0 rounded-2 mb-1 rate-charge" style="position: relative;"
+      *ngFor="let item of rateList; index as i">
+      <div class="d-flex flex-row">
+        <div class="p-2 bg-primary text-white">
+          <strong><i>{{i+1}}</i></strong>
+        </div>
+        <small>
+          <div class="d-flex flex-column pl-2">
+            <strong>{{item.ItemDesc | uppercase}}</strong>
+            <strong style="color: red;">
+              Rate : <u>{{item.Rate}}</u>
+            </strong>
+          </div>
+        </small>
+      </div>
+      <div class="rate-charge-hover-effect" style="position: absolute; right: 0; cursor: pointer;">
+        <img src="./../../../../../assets/images/charge_add.png" height="50px" alt="img_not" pTooltip="Add Charge!"
+          (click)="addChargeWithUnitNote.toggle($event); setSelectedBillItemChargeDetail(item)">
+      </div>
+    </div>
+  </div>
+</p-dialog>
+
+
+<!--
+<div class="row" *ngIf="!billItemDetails.length">
+  <div class="col-12">
+    <div class="d-flex flex-column text-center justify-content-center justify-items-center w-100">
+      <div class="">
+        <img src="./.././../../../../assets/images/system-invoice.png" height="150px" width="150px" alt="" srcset="">
+      </div>
+      <div class="d-flex flex-column gap-2 mt-2">
+        <strong>
+          <h2 style="font-weight: 900; color: red;" class="p-0 m-0">{{billType ? billType.toLowerCase().includes('path')
+            ? 'Pathology' : 'Hospital' : 'Hospital'}} charges has not been added.</h2>
+        </strong>
+        <strong><i>Please ask staff to add necessary hospital charges.</i></strong>
+      </div>
+    </div>
+  </div>
+</div> -->
+
+
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <span>{{ message.message }}</span>
+      <div class="flex align-items-center gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-success" (click)="confirmPopup.accept()">Yes</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="confirmPopup.reject()">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmPopup>
+
+
+
+<p-overlayPanel #addChargeWithUnitNote>
+  <div class="d-flex flex-column" style="max-width: 300px;">
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column">
+        <strong><small>Unit</small></strong>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="billItemCharge.Unit"
+          (keyup)="calculateFinalRateAmount()">
+      </div>
+      <div class="d-flex flex-column">
+        <strong><small>Rate (Per Unit)</small></strong>
+        <input type="text" class="form-control form-control-sm" [(ngModel)]="this.billItemCharge.Rate"
+          (keyup)="calculateFinalRateAmount()">
+      </div>
+    </div>
+
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column w-50">
+        <strong><small>Notes</small></strong>
+        <textarea name="" id="" rows="3" cols="3" class="form-control form-control-sm"
+          [(ngModel)]="billItemCharge.Notes"></textarea>
+      </div>
+      <div class="d-flex flex-column w-50">
+        <div class="d-flex flex-column">
+          <strong><small>Final Rate</small></strong>
+          <input type="text" class="form-control form-control-sm" [(ngModel)]="billItemCharge.Amount" disabled>
+        </div>
+        <div class="d-flex justify-content-around mt-2">
+          <button type="button" class="btn btn-sm btn-success" (click)="saveBillItem()">Add</button>
+          <button type="button" class="btn btn-sm btn-danger" id="addChargeWithUnitNoteHide"
+            (click)="addChargeWithUnitNote.hide()">Cancel</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</p-overlayPanel>
+
+<p-overlayPanel #reasonForDeleteBillItem>
+  <div class="d-flex flex-column" style="max-width: 300px;">
+    <div class="d-flex flex-row gap-1">
+      <div class="d-flex flex-column">
+        <strong><small>Reason for delete?</small></strong>
+        <input id="reasonForDeleteBillItemInput" type="text" class="form-control form-control-sm"
+          [(ngModel)]="reasonForDeleteBillItemDetail">
+      </div>
+    </div>
+    <div class="d-flex justify-content-around mt-2">
+      <button type="button" class="btn btn-sm btn-success" (click)="deleteEntryByBillReceipt()"
+        [disabled]="selectedDeletingBillItemId === 0 && !reasonForDeleteBillItemDetail.length">Delete</button>
+      <button type="button" class="btn btn-sm btn-danger" id="reasonForDeleteBillItemHide"
+        (click)="reasonForDeleteBillItem.hide()">Cancel</button>
+    </div>
+  </div>
+</p-overlayPanel>

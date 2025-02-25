@@ -1,0 +1,109 @@
+:host ::ng-deep .p-slidemenu-content ul {
+  padding: 0;
+  margin: 0;
+}
+
+:host ::ng-deep .p-menuitem-link {
+  width: 100%;
+}
+
+:host :ng-deep .p-slidemenu>.p-slidemenu-wrapper {
+  width: 100% !important;
+}
+
+a {
+  text-decoration: none !important;
+}
+
+:host ::ng-deep .p-menuitem-text {
+  text-decoration: none !important;
+}
+
+.card-bg {
+  background: linear-gradient(to bottom, #D5DEE7 0%, #E8EBF2 50%, #E2E7ED 100%), linear-gradient(to bottom, rgba(0, 0, 0, 0.02) 50%, rgba(255, 255, 255, 0.02) 61%, rgba(0, 0, 0, 0.02) 73%), linear-gradient(33deg, rgba(255, 255, 255, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%);
+  background-blend-mode: normal, color-burn;
+  border: 3px dotted linear-gradient(-45deg, #FFC796 0%, #FF6B95 100%) !important;
+  color: black;
+  cursor: pointer;
+}
+
+.card-bg:hover {
+  background-color: #0093E9;
+  background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+  border: 3px dotted linear-gradient(-45deg, #FFC796 0%, #FF6B95 100%) !important;
+  color: white !important;
+  transition: .3s ease-in-out;
+}
+
+.card-bg:hover span {
+  color: white !important;
+  transition: .3s ease-in-out;
+}
+
+
+.bg-amount {
+  background-image: linear-gradient(to top, #209cff 0%, #68e0cf 100%);
+}
+
+:host ::ng-deep .p-breadcrumb .p-breadcrumb-list {
+  padding: 0.2rem !important;
+  display: flex;
+  height: 100%;
+  flex-wrap: wrap !important;
+}
+
+:host ::ng-deep .p-breadcrumb {
+  padding: 0.2rem !important;
+  display: flex;
+  height: 100% !important;
+  flex-wrap: wrap !important;
+}
+
+
+.vertical-line {
+  border: 3px solid #03AED2;
+}
+
+:host ::ng-deep ol {
+  padding: 0;
+  margin: 0;
+}
+
+
+
+
+.main-head:hover .sub-head {
+  background-color: #5AB2FF !important;
+  color: white !important;
+  transition: .3s ease-in-out;
+  padding-left: 50px !important;
+}
+
+.sub-head{
+  background-color: #4C3BCF;
+  color: white;
+  visibility: visible !important;
+}
+
+
+:host ::ng-deep .p-dialog .p-dialog-header {
+  padding: 0.5rem !important;
+}
+
+.row-hover-effect:hover {
+  background-color: #B7B1F2 !important;
+  cursor: pointer;
+  list-style: none !important;
+}
+
+.searchPatientNameEleStyle{
+  border: none !important;
+}
+
+.searchPatientNameEleStyle {
+  border-bottom: 2px solid #3674B5 !important;
+}
+
+.searchPatientNameEleStyle:focus {
+  border-bottom: 2px solid #FA7070 !important;
+}

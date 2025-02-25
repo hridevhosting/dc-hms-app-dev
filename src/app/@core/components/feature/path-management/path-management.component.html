@@ -1,0 +1,212 @@
+<ng-container *ngIf="validPlatform('mac') || validPlatform('window')">
+  <div class="container-fluid">
+    <div class="d-flex flex-row p-1">
+      <div class="d-flex flex-column gap-2" style="width: 20vw;">
+        <div class="d-flex card shadow-lg rounded-3 p-2 justify-content-between align-items-center">
+          <h5 class="p-0 m-0" *ngIf="billDetail.IPCaseNo">{{billDetail.IPCaseNo | uppercase}}</h5>
+
+        </div>
+        <div class="d-flex flex-column card shadow-lg rounded-3 ">
+          <h5 class="pl-2 pt-2 pb-2 text-white bg-primary rounded-top-3">Patient Details</h5>
+          <div class="p-2 pt-0">
+            <div class="d-flex flex-column">
+              <strong name="p_name">Name</strong>
+              <label for="p_name">{{patientDetails.Salutation}} {{patientDetails.EntityName | uppercase}}</label>
+            </div>
+            <div class="d-flex flex-column">
+              <strong name="p_uhidno">UHID No</strong>
+              <label for="p_uhidno">{{patientDetails.RegNo | uppercase}}</label>
+            </div>
+            <div class="d-flex flex-column">
+              <strong name="p_uhidno">Contact No</strong>
+              <label for="p_uhidno">{{patientDetails.PrimaryFld1}}</label>
+            </div>
+            <div class="d-flex flex-row justify-content-between">
+              <div class="d-flex flex-column text-start">
+                <strong name="p_name">Age</strong>
+                <label for="p_name">{{patientDetails.PrimaryId1}}</label>
+              </div>
+              <div class="d-flex flex-column text-center">
+                <strong name="p_name">Gender</strong>
+                <label for="p_name">{{patientDetails.PrimaryFld2}}</label>
+              </div>
+              <div class="d-flex flex-column text-center">
+                <strong name="p_name">Category</strong>
+                <label for="p_name">{{patientDetails.ExternalCategory}}</label>
+              </div>
+            </div>
+          </div>
+
+        </div>
+        <div class="d-flex flex-column card shadow-lg rounded-3" *ngIf="caseDetail">
+          <h5 class="pl-2 pt-2 pb-2 text-white bg-primary rounded-top-3">Appointment Details</h5>
+          <div class="p-2 pt-0">
+            <div class="d-flex flex-row gap-1">
+              <strong name="p_name">Case No :</strong>
+              <label for="p_name">{{caseDetail.RegNo | uppercase}}</label>
+            </div>
+            <div class="d-flex flex-row gap-1" *ngIf="caseDetail.ArrivedAt">
+              <strong name="p_uhidno">Date :</strong>
+              <label for="p_uhidno">{{caseDetail.ArrivedAt | date:'dd/MMM/yyyy'}}</label>
+            </div>
+            <div class="d-flex flex-column">
+              <strong name="p_uhidno">Consultant</strong>
+              <label for="p_uhidno">{{caseDetail.BookedFor | uppercase}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="width: 80vw;">
+        <!-- <div class="card border-0 rounded-3 shadow-lg p-2">
+          <div class="d-flex flex-row justify-content-between gap-2" *ngIf="patientDetails">
+            <div class="d-flex flex-column">
+              <div class="d-flex flex-row gap-2">
+                <img src="assets/images/people.png" height="25px" alt="" srcset="">
+                <strong>
+                  {{patientDetails.EntityName}}
+                </strong>
+              </div>
+              <div class="d-flex flex-wrap">
+                <i>
+                  {{patientDetails.PrimaryFld2 | uppercase}} | {{patientDetails.PrimaryId1 | uppercase}} | <a
+                    href="tel:+91{{patientDetails.PrimaryFld1}}">{{patientDetails.PrimaryFld1 || ''}}</a> |
+                  {{patientDetails.ExternalCategory}}
+                </i>
+              </div>
+            </div>
+            <img src="assets/images/laboratory-testing.png" height="50px" alt="" srcset="">
+          </div>
+        </div>
+        -->
+        <div class="p-2" style="overflow-y: auto; max-height: 95dvh;">
+          <div class="d-flex justify-content-end p-1">
+            <button type="button" class="btn btn-sm {{isMinimizeAll ? 'btn-primary' : 'btn-danger'}}"
+              (click)="minimizeMaximizeAll()">
+              <strong>{{isMinimizeAll ? 'Expand' : 'Minimize'}} All</strong>
+            </button>
+          </div>
+          <ng-container *ngFor="let test of pathReportItemList">
+            <div class="card rounded-3 shadow-lg mb-1 p-1">
+              <div class="d-flex justify-content-between align-items-center rounded-3"
+                [style]="'background-color:'+changeBgColor(test.isOpened)+';'">
+                <div class="d-flex flex-wrap align-items-center gap-2">
+                  <img class="pl-2" src="assets/images/centrifuge.png" height="30px" alt="" srcset="">
+                  <strong class="text-white" style="font-size: 1.3rem;">
+                    {{test.testName | uppercase}}
+                  </strong>
+                </div>
+
+                <button type="button" class="btn btn-sm bg-transparent" (click)="test.isOpened = !test.isOpened">
+                  <i style="font-size: 1.1rem;" class="bi bi-chevron-down text-white" *ngIf="!test.isOpened"></i>
+                  <i style="font-size: 1.1rem;" class="bi bi-x-lg text-white" *ngIf="test.isOpened"></i>
+                </button>
+              </div>
+              <ng-container *ngIf="test.isOpened && test.testDataArray.length">
+                <ng-container *ngFor="let subTest of test.testDataArray; index as i">
+                  <div class="d-flex flex-column w-100 p-2">
+                    <strong style="font-size: 1.1rem;"
+                      *ngIf="!subTest.PathName.includes('_')"><i>{{subTest.PathName}}</i></strong>
+                    <div class="d-flex flex-row gap-2">
+                      <strong class="text-nowrap">Result :</strong>
+                      <span class="w-100 text-wrap">
+                        <strong> {{replaceString(subTest.Result)}} {{replaceString(subTest.Result) ? subTest.Unit : ''}}
+                        </strong>
+                      </span>
+                    </div>
+                    <div class="d-flex flex-row gap-2">
+                      <strong>
+                        Range :
+                      </strong>
+                      <i>
+                        <u>
+                          {{subTest.range}} {{subTest.Unit}}
+                        </u>
+                      </i>
+                    </div>
+                  </div>
+                  <hr class="m-0 p-0" *ngIf="!(i+1 === test.testDataArray.length)">
+                </ng-container>
+              </ng-container>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="validPlatform('iphone') || validPlatform('ipad') || validPlatform('andriod')">
+  <div class="card border-0 rounded-3 shadow-lg p-2">
+    <div class="d-flex flex-row justify-content-between gap-2" *ngIf="patientDetails">
+      <div class="d-flex flex-column">
+        <div class="d-flex flex-row gap-2">
+          <img src="assets/images/people.png" height="25px" alt="" srcset="">
+          <strong>
+            {{patientDetails.EntityName}}
+          </strong>
+        </div>
+        <div class="d-flex flex-wrap">
+          <i>
+            {{patientDetails.PrimaryFld2 | uppercase}} | {{patientDetails.PrimaryId1 | uppercase}} | <a
+              href="tel:+91{{patientDetails.PrimaryFld1}}">{{patientDetails.PrimaryFld1 || ''}}</a> |
+            {{patientDetails.ExternalCategory}}
+          </i>
+        </div>
+      </div>
+      <img src="assets/images/laboratory-testing.png" height="50px" alt="" srcset="">
+    </div>
+  </div>
+  <div class="d-flex justify-content-end p-1">
+    <button type="button" class="btn btn-sm {{isMinimizeAll ? 'btn-primary' : 'btn-danger'}}"
+      (click)="minimizeMaximizeAll()">
+      <strong>{{isMinimizeAll ? 'Expand' : 'Minimize'}} All</strong>
+    </button>
+  </div>
+  <div class="p-2" style="overflow-y: auto; max-height: 80dvh;">
+    <ng-container *ngFor="let test of pathReportItemList">
+      <div class="card rounded-3 shadow-lg mb-1 p-1">
+        <div class="d-flex justify-content-between align-items-center rounded-3"
+          [style]="'background-color:'+changeBgColor(test.isOpened)+';'">
+          <div class="d-flex flex-wrap align-items-center gap-2">
+            <img class="pl-2" src="assets/images/centrifuge.png" height="30px" alt="" srcset="">
+            <strong class="text-white" style="font-size: 1.3rem;">
+              {{test.testName | uppercase}}
+            </strong>
+          </div>
+
+          <button type="button" class="btn btn-sm bg-transparent" (click)="test.isOpened = !test.isOpened">
+            <i style="font-size: 1.1rem;" class="bi bi-chevron-down text-white" *ngIf="!test.isOpened"></i>
+            <i style="font-size: 1.1rem;" class="bi bi-x-lg text-white" *ngIf="test.isOpened"></i>
+          </button>
+        </div>
+        <ng-container *ngIf="test.isOpened && test.testDataArray.length">
+          <ng-container *ngFor="let subTest of test.testDataArray; index as i">
+            <div class="d-flex flex-column w-100 p-2">
+              <strong style="font-size: 1.1rem;"
+                *ngIf="!subTest.PathName.includes('_')"><i>{{subTest.PathName}}</i></strong>
+              <div class="d-flex flex-row gap-2">
+                <strong>
+                  Range :
+                </strong>
+                <i>
+                  <u>
+                    <strong>
+                      {{subTest.range}} {{subTest.Unit}}
+                    </strong>
+                  </u>
+                </i>
+              </div>
+              <div class="d-flex flex-column">
+                <strong>Result :</strong>
+                <span class="w-100 text-wrap">
+                  {{replaceString(subTest.Result)}} {{replaceString(subTest.Result) ? subTest.Unit : ''}}
+                </span>
+              </div>
+            </div>
+            <hr class="m-0 p-0" *ngIf="!(i+1 === test.testDataArray.length)">
+          </ng-container>
+        </ng-container>
+      </div>
+    </ng-container>
+  </div>
+</ng-container>

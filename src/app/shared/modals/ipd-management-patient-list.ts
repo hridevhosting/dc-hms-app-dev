@@ -1,0 +1,24 @@
+export class IpdManagementPatientList {
+  ADDITIONALDETAIL: string = ""
+  AdmissionDate: string = ""
+  AppointmentId: number = 0
+  Bed: string = ""
+  Charges: number = 0
+  DischargeDate: any = null
+  EntityId: number = 0
+  EntityName: string = ""
+  IPDNO: string = ""
+  LeftHosp: any = null
+  MLCNumber: string = ""
+  PrimaryFld1: string = ""
+  PrimaryId1: string = ""
+  ProcAdviced: string = ""
+  Receipts: number = 0
+  RegNo: string = ""
+  admissionid: number = 0
+  location: string = ""
+  salutation: string = ""
+  sex: string = ""
+  status: number = 0
+  ReferredBy: string = ''
+}

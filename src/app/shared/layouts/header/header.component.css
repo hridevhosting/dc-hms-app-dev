@@ -1,0 +1,8 @@
+.bg-color{
+  background-image: linear-gradient(to top, #4481eb 0%, #04befe 100%);
+}
+
+:host ::ng-deep .p-menu-list{
+  padding: 0px;
+  margin: 0px;
+}

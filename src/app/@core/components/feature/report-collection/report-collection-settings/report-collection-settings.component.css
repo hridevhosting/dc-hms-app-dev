@@ -1,0 +1,17 @@
+.menu{
+  padding: 2%;
+  background-color: #87A2FF;
+  color: white;
+  font-weight: 600;
+  width: 49%;
+  font-size: 2rem;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.hover-effect:hover {
+  background-color: var(--site-color-level-5);
+  color: var(--site-color-level-1);
+  cursor: pointer;
+  transition: .3s ease-in-out;
+}

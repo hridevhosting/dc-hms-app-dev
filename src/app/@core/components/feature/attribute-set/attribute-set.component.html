@@ -1,0 +1,42 @@
+<div class="row">
+  <div class="col-12" *ngIf="items.length">
+    <!-- <p-panelMenu [model]="items" styleClass="w-full" (click)="shoeSelectedAttribute($event)" /> -->
+    <p-accordion [activeIndex]="0">
+      <p-accordionTab [header]="tab.label" *ngFor="let tab of items">
+        <p class="m-0" *ngFor="let item of tab.items"
+          (click)="shoeSelectedAttribute(item.label || ''); showConfimPopUp($event,item.label ? item.label : '')">
+          {{ item.label }}
+        </p>
+      </p-accordionTab>
+    </p-accordion>
+  </div>
+</div>
+
+<p-overlayPanel #op>
+  <div class="flex flex-column gap-2">
+    <button type="button" class="btn btn-sm btn-outline-success" (click)="generateSet()">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/discharge_summary.png" alt="" height="20px" srcset="">
+        <strong>Load Set</strong>
+      </div>
+    </button>
+    <!-- <button type="button" class="btn btn-sm btn-outlined-danger" (click)="op.closeIconTemplate">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/cross.png" alt="" height="20px" srcset="">
+        <strong>Cancel</strong>
+      </div>
+    </button> -->
+  </div>
+</p-overlayPanel>
+
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <span>{{ message.message }}</span>
+      <div class="flex align-items-center gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-success" (click)="confirmPopup.accept()">Yes</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="confirmPopup.reject()">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmPopup>

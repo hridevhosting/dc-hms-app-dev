@@ -1,0 +1,44 @@
+:host  ::ng-deep .p-button{
+  padding: 0.3rem !important;
+}
+
+
+.card-bg{
+  background-color: #F6F4EB !important;
+  border-color: #008DDA;
+}
+
+
+.appointment-list-card-style{
+  background-color: #F1F1F1;
+  border: 2px solid #03AED2;
+}
+
+:host  ::ng-deep .p-datatable-table{
+  position: relative !important;
+}
+
+:host  ::ng-deep .p-datatable-thead{
+  position: sticky !important;
+  top: 0 !important;
+}
+
+:host ::ng-deep .p-datatable-table {
+  position: relative !important;
+}
+
+:host ::ng-deep .p-datatable-thead{
+  /* position: sticky !important;
+  top: 0 !important; */
+}
+
+:host ::ng-deep .p-datatable-thead tr{
+  position: sticky !important;
+  top: 0 !important;
+}
+
+.row-hover-effect:hover {
+  background-color: #B7B1F2 !important;
+  cursor: pointer;
+  list-style: none !important;
+}

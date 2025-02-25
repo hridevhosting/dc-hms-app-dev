@@ -1,0 +1,141 @@
+<div class="d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+  <div class="card border-0 rounded-3 shadow-lg p-3 gap-1"
+    style="min-width: 50% !important; max-height: 60vh !important; overflow-y: auto;">
+    <div class="d-flex flex-row">
+
+    </div>
+    <ng-container *ngIf="!showList">
+      <div class="d-flex flex-row align-items-center justify-content-between">
+        <h3 class="h3 p-0 m-0">Referral Doctor</h3>
+        <div class="d-flex flex-row gap-2">
+          <button type="button" class="btn btn-success" (click)="addNew()">
+            <strong>Add New</strong>
+          </button>
+          <button type="button" class="btn btn-secondary"
+            (click)="showList = true; filterReferralDoctorListByFilter()">
+            <strong>List</strong>
+          </button>
+        </div>
+      </div>
+      <div class="d-flex flex-row align-items-center justify-content-between">
+        <button type="button" class="btn btn-lg bg-transparent" pTooltip="Previous Doctor" tooltipPosition="bottom"
+          (click)="previousReferralDoctor()">
+          <i class="bi bi-arrow-left-circle-fill"></i>
+        </button>
+        <h5 class="h5 p-0 m-0">{{selectedReferralDoctorDetail.VendorName ? selectedReferralDoctorDetail.VendorName
+          : 'Referral Doctor'}}</h5>
+        <button type="button" class="btn btn-lg bg-transparent" pTooltip="Next Doctor" tooltipPosition="bottom"
+          (click)="nextReferralDoctor()">
+          <i class="bi bi-arrow-right-circle-fill"></i>
+        </button>
+      </div>
+      <div class="d-flex flex-column">
+        <strong>Doctor Name</strong>
+        <input type="text" class="form-control" placeholder="Enter doctor name here..."
+          [(ngModel)]="selectedReferralDoctorDetail.VendorName">
+      </div>
+      <div class="d-flex flex-row w-100 gap-1">
+        <div class="d-flex flex-column w-50">
+          <strong>Contact No</strong>
+          <input type="text" class="form-control" placeholder="Enter contact no here..."
+            [(ngModel)]="selectedReferralDoctorDetail.ContactNo">
+        </div>
+        <div class="d-flex flex-column w-50">
+          <strong>WhatsApp No</strong>
+          <input type="text" class="form-control" placeholder="Enter whatsapp no here..."
+            [(ngModel)]="selectedReferralDoctorDetail.TelNo">
+        </div>
+      </div>
+      <div class="d-flex flex-column">
+        <strong>Address</strong>
+        <textarea type="text" rows="3" class="form-control" placeholder="Enter contact no here..."
+          [(ngModel)]="selectedReferralDoctorDetail.Address"></textarea>
+      </div>
+      <div class="d-flex flex-row w-100 gap-1">
+        <div class="d-flex flex-column w-50">
+          <strong>Contact Name</strong>
+          <input type="text" class="form-control" [(ngModel)]="selectedReferralDoctorDetail.ContactName"
+            placeholder="Enter contact no here...">
+        </div>
+        <div class="d-flex flex-column w-50">
+          <strong>Alias</strong>
+          <input type="text" class="form-control" placeholder="Enter whatsapp no here..."
+            [(ngModel)]="selectedReferralDoctorDetail.Alias">
+        </div>
+      </div>
+      <div class="d-flex flex-column text-end mt-3">
+        <button type="button" class="btn btn-success shadow-lg w-20" (click)="saveReferralDoctorDetail()">
+          Save Details
+        </button>
+      </div>
+    </ng-container>
+    <ng-container class="" *ngIf="showList && referralDoctorList.length">
+      <div class="d-flex justify-content-between align-items-center">
+        <h4>Referral Doctor List</h4>
+        <button type="button" class="btn btn-success" (click)="showList = false; addNew()">
+          <strong>Add New</strong>
+        </button>
+      </div>
+      <table class="table table-bordered" style="position: relative;">
+        <thead style="position: sticky; top: 0; background-color: white;">
+          <tr>
+            <th>#</th>
+            <th>Doctor Name</th>
+            <th>Contact No</th>
+            <th>WhatsApp No</th>
+            <th>Address</th>
+            <th>Actions</th>
+          </tr>
+          <tr class="">
+            <th>#</th>
+            <th><input type="text" class="form-control form-control-sm" #docNameInput placeholder="Search doctor name"
+                (keyup)="filterReferralDoctorListByFilter(docNameInput.value,'VendorName')"></th>
+            <th><input type="text" class="form-control form-control-sm" #contInput placeholder="Search contact no"
+                (keyup)="filterReferralDoctorListByFilter(contInput.value,'ContactNo')"></th>
+            <th><input type="text" class="form-control form-control-sm" #whatsAppInput placeholder="Search whatsapp no"
+                (keyup)="filterReferralDoctorListByFilter(whatsAppInput.value,'TelNo')"></th>
+            <th><input type="text" class="form-control form-control-sm" #addressInput placeholder="Search address"
+                (keyup)="filterReferralDoctorListByFilter(addressInput.value,'Address')"></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of filteredReferralDoctorList; index as i">
+            <td>{{i+1}}</td>
+            <td>{{data.VendorName | uppercase}}</td>
+            <td>{{data.ContactNo}}</td>
+            <td>{{data.TelNo}}</td>
+            <td>{{data.Address}}</td>
+            <td class="d-flex flex-row gap-2">
+              <button type="button" class="btn btn-sm btn-primary" pTooltip="Edit Detail" tooltipPosition="bottom"
+                (click)="setSelectedReferralDoctorDetail(data,index)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-danger" pTooltip="Delete Detail" tooltipPosition="bottom"
+                (click)="selectedReferralDetailId =data.VendorId; op.toggle($event)">
+                <i class="bi bi-trash"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </ng-container>
+    <div #hide id="hide"></div>
+  </div>
+</div>
+
+<p-overlayPanel #op>
+  <ng-container *ngIf="selectedReferralDetailId">
+    <div class="d-flex flex-column gap-1">
+      <strong>Are you sure? You like to delete this detail!</strong>
+      <div class="d-flex justify-content-end gap-2" type="button" (click)="deleteReferralDetail()">
+        <button class="btn btn-sm btn-success">
+          <strong>Yes</strong>
+        </button>
+        <button class="btn btn-sm btn-danger" type="submit" (click)="hide.click()">
+          <strong>No</strong>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+</p-overlayPanel>

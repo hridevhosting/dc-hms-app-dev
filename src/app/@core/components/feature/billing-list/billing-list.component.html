@@ -1,0 +1,118 @@
+<ng-container *ngIf="billList.length">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-around">
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="viewOnlyRadio"
+            (change)="setViewRadioValue(true)" [checked]="isViewMode">
+          <label class="form-check-label" for="viewOnlyRadio">
+            View only
+          </label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="flexRadioDefault" id="viewAndEditRadio"
+            (change)="setViewRadioValue(false)" [checked]="!isViewMode">
+          <label class="form-check-label" for="viewAndEditRadio">
+            View & Edit
+          </label>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <div class="flex flex-row justify-content-between">
+        <div class="flex flex-row gap-1">
+          <strong class="pr-2 pl-2 bg-primary text-white">T</strong> - <strong>Total</strong>
+        </div>
+        <div class="flex flex-row gap-1">
+          <strong class="pr-2 pl-2 bg-purple-500 text-white">D</strong> - <strong>Discount</strong>
+        </div>
+        <div class="flex flex-row gap-1">
+          <strong class="pr-2 pl-2 bg-warning text-white">B</strong> - <strong>Balance</strong>
+        </div>
+      </div>
+    </div>
+    <!-- <ng-component *ngIf="billList.length"> -->
+    <div class="col-12" *ngFor="let bill of billList">
+      <div class="card shadow-8 rounded-3 p-2 w-100" (click)="op.toggle($event); setSelectingBillDetail(bill)">
+        <div class="flex flex-row gap-1 w-100 h-100 align-items-center">
+          <div class="flex flex-column w-100">
+            <h5>{{bill.IPCaseNo}}</h5>
+            <div class="flex flex-row justify-content-between w-100 gap-1">
+              <h6>{{bill.B_WhichOpd}}</h6>
+              <h6>{{bill.BillDate | date : 'dd/MM/yy hh:mm a'}}</h6>
+            </div>
+            <div class="flex flex-wrap justify-content-between gap-1">
+              <div class="flex flex-row gap-1">
+                <small><strong class="pr-2 pl-2 bg-primary text-white rounded-5">T</strong> -
+                  {{bill.AmountToPatient}}</small>
+              </div>
+              <div class="flex flex-row gap-1">
+                <small><strong class="pr-2 pl-2 bg-purple-500 text-white rounded-5">D</strong> -
+                  {{bill.AmountToPatient}}</small>
+              </div>
+              <div class="flex flex-row gap-1">
+                <small><strong class="pr-2 pl-2 bg-warning text-white rounded-5">B</strong> -
+                  {{bill.AmountToPatient}}</small>
+              </div>
+            </div>
+          </div>
+          <img src="assets/images/bills.png" height="50px" alt="" srcset="">
+        </div>
+      </div>
+      <!-- <button type="button" class="btn btn-sm btn-success" (click)="showBillDialoge()">Open</button> -->
+    </div>
+    <!-- </ng-component> -->
+  </div>
+</ng-container>
+
+<p-overlayPanel #op>
+  <div class="flex flex-column gap-2">
+    <button type="button" class="btn btn-sm btn-success" (click)="verifyViewEditMode()">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/open-folder.png" alt="" height="25px" srcset="">
+        <strong>Open bill</strong>
+      </div>
+    </button>
+    <button type="button" class="btn btn-sm btn-danger" (click)="showDeletePopUp($event)">
+      <div class="flex flex-row gap-2">
+        <img src="assets/images/delete-folder.png" alt="" height="25px" srcset="">
+        <strong>Delete bill</strong>
+      </div>
+    </button>
+  </div>
+</p-overlayPanel>
+
+<p-confirmPopup #confirmPopupRef>
+  <ng-template pTemplate="headless" let-message let-test>
+    <div class="border-round p-3">
+      <span>{{ message.message }}</span>
+      <div class="flex align-items-center gap-2 mt-3">
+        <button type="button" class="btn btn-sm btn-success" (click)="confirmPopup.accept()">Yes</button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="confirmPopup.reject()">No</button>
+      </div>
+    </div>
+  </ng-template>
+</p-confirmPopup>
+
+
+
+<div class="row" *ngIf="!billList.length">
+  <div class="col-12 text-end">
+    <button type="button" class="btn btn-primary shadow-lg" routerLink="feature/ipd/bill-management">
+      Create Bill
+    </button>
+  </div>
+  <div class="col-12">
+    <div class="d-flex flex-column text-center justify-content-center justify-items-center w-100">
+      <div class="">
+        <img src="./.././../../../../assets/images/invoice.png" height="150px" width="150px" alt="" srcset="">
+      </div>
+      <div class="d-flex flex-column gap-2 mt-2">
+        <strong>
+          <h2 style="font-weight: 900; color: red;" class="p-0 m-0">No invoice</h2>
+        </strong>
+        <strong><i>Please ask staff to create.</i></strong>
+      </div>
+    </div>
+  </div>
+</div>
